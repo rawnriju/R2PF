@@ -1,0 +1,44 @@
+Rawn Riju 
+rawnriju@gmail.com | 041 499 4257 | Tampere,Finland    
+OBJECTIVE 
+Current MSc student in Software, Web and Cloud at Tampere University with 4 years of professional 
+experience as a Software Engineer with a passion for building user-centric applications and a proven track 
+record in React, Node.js, and JavaScript frameworks. 
+WORK EXPERIENCE 
+view26 (Actiotech LLP)  (Germany)                                                    
+Sept. 2020 – July 2025  
+Senior Front-end Software Engineer 
+● Software Product Development (Scrum Manager App):  
+○ Served as Lead Developer and Product Owner for this application that secured 2nd place in Atlassian 
+Codegeist 2021 Hackathon. The app makes scrum management easier, from running daily scrum 
+ceremonies, to planning for estimation and conducting sprint retrospectives. 
+○ Improved application performance by 20% by optimizing state management and reducing initial load 
+times. 
+○ Built a companion Slack app and Chrome extension to facilitate synchronous daily scrum updates. 
+○ Technologies: React, Recoil.js, JavaScript, TypeScript, Node.js, MongoDB, Firebase 
+● Data Visualization & Reporting Tools: 
+○ Assisted in the development and maintenance of a proprietary charting library and “Charts & Reports” 
+web app used by over 1,000 customers on the Atlassian marketplace. 
+○ Helped in expanding the library with custom charts and enhanced customizability of charting in the app. 
+○ Technologies: React, D3.js, Javascript 
+● Cloud & Serverless Applications:  
+○ Architected “Attachment Tags for Jira” on Atlassian’s Forge (serverless platform) and “Planning in 
+Scrum Manager” for the monday marketplace which were ports for Scrum Manager on other platforms. 
+○ Focused on building user-centric features that allow collaborative work estimations and tag-based file 
+retrieval. 
+ADDITIONAL PROJECTS & LEADERSHIP  
+●  Q.E.D.: Developed an Augmented Reality crime-solving game application for the techno-managerial event 
+Excel 2018 conducted by Govt. Model Engineering College. (Tech: Unity3D,Vuforia) 
+● Technical Event Management : Also organized the event that the app was built for which had over 50+ 
+participants with great coordination. 
+EDUCATION    
+Tampere University (Tampere, Finland)                                       
+MSc. - Software,Web and Cloud 
+Govt. Model Engineering College (Ernakulam, Kerala )                                  
+B. Tech. - Computer Science and Engineering 
+SKILLS & INTERESTS  
+Aug 2025 – present   
+Aug 2016 – Aug 2020   
+● Soft Skills: Problem Solving, Team Management and Organization. 
+● Technical Skills: JavaScript, React, Node,MongoDB,D3.js.  
+● Interests: Football, Video Games, Reading, Fitness, Cooking 
