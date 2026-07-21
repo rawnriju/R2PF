@@ -1,0 +1,40 @@
+const CAPABILITIES = [
+  { k: "INTERFACE", v: "Design systems, motion, editorial layout" },
+  { k: "REALTIME", v: "WebSockets, live telemetry, collaborative UI" },
+  { k: "CREATIVE", v: "Canvas / WebGL, generative visuals, physics" },
+  { k: "PERFORMANCE", v: "60fps budgets, bundle discipline, a11y" },
+];
+
+export function About() {
+  return (
+    <section id="about" className="mx-auto max-w-[1200px] px-6 py-24">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+          <p className="font-mono mb-3" style={{ fontSize: 12, letterSpacing: "0.25em", color: "#FFE100" }}>
+            02 // ABOUT
+          </p>
+          <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", color: "#E2E8F0", letterSpacing: "-0.02em", lineHeight: 1.05 }}>
+            BUILDING INTERFACES THAT MOVE WITH INTENT
+          </h2>
+          <p className="mt-6 max-w-[440px]" style={{ fontFamily: "'Inter', sans-serif", fontSize: 16, lineHeight: 1.65, color: "#8A8F9E" }}>
+            I'm a senior frontend engineer obsessed with the seam between
+            performance and expression. I ship production React at scale while
+            treating every interaction — the boost, the bounce, the reset — as
+            a chance to make the web feel physical.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-px" style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.08)" }}>
+          {CAPABILITIES.map((c) => (
+            <div key={c.k} className="flex items-baseline gap-5 p-5" style={{ background: "#12161F" }}>
+              <span className="font-mono shrink-0" style={{ fontSize: 11, letterSpacing: "0.12em", color: "#FFE100", width: 108 }}>
+                {c.k}
+              </span>
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 15, color: "#E2E8F0" }}>{c.v}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

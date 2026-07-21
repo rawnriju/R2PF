@@ -1,16 +1,11 @@
-# R2PF
 
-Personal portfolio starter for a React + Vite site with a 3D-enabled hero, animated sections, and editable content data.
+  # Dark Mode Portfolio Landing Page
 
-## Run locally
+  This is a code bundle for Dark Mode Portfolio Landing Page. The original project is available at https://www.figma.com/design/5pePlOru3f9SXsDvZoARNh/Dark-Mode-Portfolio-Landing-Page.
 
-```bash
-npm install
-npm run dev
-```
+  ## Running the code
 
-## What’s in the base frontend
+  Run `npm i` to install the dependencies.
 
-- A themed landing page with a 3D hero scene.
-- Editable content in `src/content.ts` for experience, projects, skills, and blog posts.
-- A modular layout that can grow into full case studies and a Markdown or MDX blog later.
+  Run `npm run dev` to start the development server.
+  
