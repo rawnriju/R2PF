@@ -10,7 +10,7 @@ export function Footer() {
           © 2026 RAWN ABRAHAM RIJU — ALL SYSTEMS OPERATIONAL
         </span>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-6 md:pr-32">
           <a href="https://github.com/rawnriju" target="_blank" rel="noreferrer" className="transition-colors duration-200 hover:text-[#FFE100]" style={{ color: "#8A8F9E" }} aria-label="GitHub">
             <Github size={20} />
           </a>

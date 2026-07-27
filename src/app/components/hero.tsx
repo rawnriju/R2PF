@@ -283,22 +283,27 @@ export function Hero() {
         />
       ))}
 
-      {/* floating score bar */}
+      {/* floating score bar — tracks the same centered content column as the
+          headline, so it moves inward with it on wide screens instead of
+          staying pinned to the raw viewport edge */}
       {score > 0 && (
-        <div className="pointer-events-none absolute top-72 right-6 z-30">
-          <div
-            className="backdrop-blur-md font-mono flex items-center gap-2 px-4 py-2 rounded-full"
-            style={{
-              background: "rgba(18,22,31,0.55)",
-              border: "1px solid rgba(255,255,255,0.08)",
-            fontSize: 11,
-            letterSpacing: "0.08em",
-            color: "#8A8F9E",
-          }}
-        >
-          [ SCORE: <span style={{ color: "#FFE100" }}>{score}</span> ]
+        <div className="pointer-events-none absolute inset-x-0 top-72 z-30">
+          <div className="relative mx-auto max-w-[1200px] px-6">
+            <div
+              className="absolute right-0 top-0 backdrop-blur-md font-mono flex items-center gap-2 px-4 py-2 rounded-full"
+              style={{
+                background: "rgba(18,22,31,0.55)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                fontSize: 11,
+                letterSpacing: "0.08em",
+                color: "#8A8F9E",
+              }}
+            >
+              [ SCORE: <span style={{ color: "#FFE100" }}>{score}</span> ]
+            </div>
+          </div>
         </div>
-      </div>)}
+      )}
 
       {/* subtle yellow glow backdrop */}
       <div
