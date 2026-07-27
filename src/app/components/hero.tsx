@@ -1,8 +1,13 @@
-import { useRef, useEffect, useCallback } from "react";
-import { PlaygroundCanvas, Ball } from "./playground-canvas";
+import { useRef, useEffect, useCallback, useState } from "react";
+import { PlaygroundCanvas, Ball, Pointer, ScoreLine } from "./playground-canvas";
 
 const REPEL_RADIUS = 130;
 const MAX_OFFSET = 260;
+const POINTER_REPEL_RADIUS = 25;
+const POINTER_FORCE = 1.7;
+// Must be meaningfully larger than POINTER_REPEL_RADIUS, or a stationary
+// cursor sitting right at the boundary causes a push-out/ease-back buzz loop.
+const POINTER_RELEASE_RADIUS = POINTER_REPEL_RADIUS * 1.4;
 
 interface CharState {
   ox: number;
@@ -11,6 +16,11 @@ interface CharState {
   vy: number;
   hx: number; // cached home x (section-relative), NaN until measured
   hy: number;
+  pOwn: boolean; // true while displacement is pointer-attributable and should ease home on release
+}
+
+function newCharState(): CharState {
+  return { ox: 0, oy: 0, vx: 0, vy: 0, hx: NaN, hy: NaN, pOwn: false };
 }
 
 function ScatterText({
@@ -19,12 +29,14 @@ function ScatterText({
   style,
   ballsRef,
   resetSignalRef,
+  pointerRef,
 }: {
   text: string;
   className?: string;
   style?: React.CSSProperties;
   ballsRef: React.MutableRefObject<Ball[]>;
   resetSignalRef: React.MutableRefObject<number>;
+  pointerRef?: React.MutableRefObject<Pointer> | null;
 }) {
   const containerRef = useRef<HTMLSpanElement>(null);
   const charRefsRef = useRef<(HTMLSpanElement | null)[]>([]);
@@ -45,6 +57,7 @@ function ScatterText({
     if (!container) return;
     const chars = charRefsRef.current;
     const balls = ballsRef.current;
+    const pointer = pointerRef?.current;
 
     // Detect a Kawarimi reset — begin easing every char back home.
     if (resetSignalRef.current !== lastResetRef.current) {
@@ -59,7 +72,7 @@ function ScatterText({
       if (!containerRect) return;
       chars.forEach((el, i) => {
         if (!el) return;
-        const st = stateRef.current[i] || (stateRef.current[i] = { ox: 0, oy: 0, vx: 0, vy: 0, hx: NaN, hy: NaN });
+        const st = stateRef.current[i] || (stateRef.current[i] = newCharState());
         const r = el.getBoundingClientRect();
         st.hx = r.left + r.width / 2 - containerRect.left - st.ox;
         st.hy = r.top + r.height / 2 - containerRect.top - st.oy;
@@ -69,7 +82,7 @@ function ScatterText({
 
     chars.forEach((el, i) => {
       if (!el) return;
-      const st = stateRef.current[i] || (stateRef.current[i] = { ox: 0, oy: 0, vx: 0, vy: 0, hx: NaN, hy: NaN });
+      const st = stateRef.current[i] || (stateRef.current[i] = newCharState());
       if (Number.isNaN(st.hx)) return;
 
       if (resettingRef.current) {
@@ -83,25 +96,63 @@ function ScatterText({
         const px = st.hx + st.ox;
         const py = st.hy + st.oy;
 
+        let ballPush = false;
         for (const b of balls) {
           const dist = Math.hypot(b.x - px, b.y - py);
           if (dist < REPEL_RADIUS && dist > 0) {
+            ballPush = true;
             const force = (1 - dist / REPEL_RADIUS) ** 2;
             st.vx += ((px - b.x) / dist) * force * 6;
             st.vy += ((py - b.y) / dist) * force * 6;
           }
         }
 
-        // Friction, no spring — displacement is permanent until reset.
-        st.vx *= 0.88;
-        st.vy *= 0.88;
-        st.ox += st.vx;
-        st.oy += st.vy;
+        let pointerPush = false;
+        let pDist = Infinity;
+        if (pointer && pointer.active) {
+          pDist = Math.hypot(pointer.x - px, pointer.y - py);
+          if (pDist < POINTER_REPEL_RADIUS && pDist > 0) {
+            pointerPush = true;
+            const force = (1 - pDist / POINTER_REPEL_RADIUS) ** 2;
+            st.vx += ((px - pointer.x) / pDist) * force * POINTER_FORCE;
+            st.vy += ((py - pointer.y) / pDist) * force * POINTER_FORCE;
+          }
+        }
 
-        const mag = Math.hypot(st.ox, st.oy);
-        if (mag > MAX_OFFSET) {
-          st.ox = (st.ox / mag) * MAX_OFFSET;
-          st.oy = (st.oy / mag) * MAX_OFFSET;
+        // A ball touching this character claims it — it reverts to the
+        // permanent-until-Kawarimi behavior even if the pointer nudged it first.
+        if (pointerPush) st.pOwn = true;
+        if (ballPush) st.pOwn = false;
+
+        const shouldEaseHome =
+          !pointerPush &&
+          !ballPush &&
+          st.pOwn &&
+          (!pointer || !pointer.active || pDist > POINTER_RELEASE_RADIUS);
+
+        if (shouldEaseHome) {
+          // Pointer-only displacement springs back once the cursor is genuinely away.
+          st.ox += (0 - st.ox) * 0.18;
+          st.oy += (0 - st.oy) * 0.18;
+          st.vx = 0;
+          st.vy = 0;
+          if (Math.abs(st.ox) < 0.4 && Math.abs(st.oy) < 0.4) {
+            st.ox = 0;
+            st.oy = 0;
+            st.pOwn = false;
+          }
+        } else {
+          // Friction, no spring — displacement is permanent until reset.
+          st.vx *= 0.88;
+          st.vy *= 0.88;
+          st.ox += st.vx;
+          st.oy += st.vy;
+
+          const mag = Math.hypot(st.ox, st.oy);
+          if (mag > MAX_OFFSET) {
+            st.ox = (st.ox / mag) * MAX_OFFSET;
+            st.oy = (st.oy / mag) * MAX_OFFSET;
+          }
         }
       }
 
@@ -115,10 +166,14 @@ function ScatterText({
       );
       if (settled) {
         resettingRef.current = false;
-        stateRef.current.forEach((s) => s && (s.ox = s.oy = s.vx = s.vy = 0));
+        stateRef.current.forEach((s) => {
+          if (!s) return;
+          s.ox = s.oy = s.vx = s.vy = 0;
+          s.pOwn = false;
+        });
       }
     }
-  }, [ballsRef, resetSignalRef]);
+  }, [ballsRef, resetSignalRef, pointerRef]);
 
   useEffect(() => {
     let raf: number;
@@ -154,10 +209,96 @@ function ScatterText({
 export function Hero() {
   const sharedBallsRef = useRef<Ball[]>([]);
   const resetSignalRef = useRef<number>(0);
+  const sharedPointerRef = useRef<Pointer>({ x: 0, y: 0, active: false });
+  const scoreLineRef = useRef<ScoreLine | null>(null);
+  const scoreLineElRef = useRef<HTMLDivElement>(null);
+  const [score, setScore] = useState(0);
+  const [pulses, setPulses] = useState<{ id: number; x: number; y: number }[]>([]);
+  const pulseIdRef = useRef(0);
+
+  const handleScore = useCallback(() => {
+    setScore((s) => s + 1);
+    const line = scoreLineRef.current;
+    const id = ++pulseIdRef.current;
+    setPulses((p) => [...p, { id, x: line?.x ?? 0, y: line ? (line.top + line.bottom) / 2 : 0 }]);
+    window.setTimeout(() => {
+      setPulses((p) => p.filter((pu) => pu.id !== id));
+    }, 900);
+  }, []);
+
+  // Measure the scoring line's position (canvas-local / section-relative,
+  // same space as Ball.x/y) on mount and whenever layout changes.
+  useEffect(() => {
+    const measure = () => {
+      const el = scoreLineElRef.current;
+      const section = el?.closest("section");
+      if (!el || !section) return;
+      const r = el.getBoundingClientRect();
+      const sectionRect = section.getBoundingClientRect();
+      scoreLineRef.current = {
+        x: r.left + r.width / 2 - sectionRect.left,
+        top: r.top - sectionRect.top,
+        bottom: r.bottom - sectionRect.top,
+      };
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   return (
     <section className="relative min-h-screen flex flex-col justify-center overflow-hidden pt-16">
-      <PlaygroundCanvas sharedBallsRef={sharedBallsRef} resetSignalRef={resetSignalRef} />
+      <style>{`
+        @keyframes goalPulse {
+          0% { transform: translate(-50%, -50%) scale(0); opacity: 0.9; }
+          60% { opacity: 0.45; }
+          100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+      `}</style>
+
+      <PlaygroundCanvas
+        sharedBallsRef={sharedBallsRef}
+        resetSignalRef={resetSignalRef}
+        sharedPointerRef={sharedPointerRef}
+        scoreLineRef={scoreLineRef}
+        onScore={handleScore}
+      />
+
+      {/* goal celebration — glowing circle expanding outward from the score line */}
+      {pulses.map((p) => (
+        <div
+          key={p.id}
+          aria-hidden="true"
+          className="pointer-events-none absolute z-40"
+          style={{
+            left: p.x,
+            top: p.y,
+            width: 640,
+            height: 640,
+            borderRadius: "9999px",
+            background: "radial-gradient(circle, rgba(255,225,0,0.55), rgba(255,225,0,0.12) 45%, transparent 70%)",
+            boxShadow: "0 0 120px 40px rgba(255,225,0,0.35)",
+            animation: "goalPulse 0.9s ease-out forwards",
+          }}
+        />
+      ))}
+
+      {/* floating score bar */}
+      {score > 0 && (
+        <div className="pointer-events-none absolute top-72 right-6 z-30">
+          <div
+            className="backdrop-blur-md font-mono flex items-center gap-2 px-4 py-2 rounded-full"
+            style={{
+              background: "rgba(18,22,31,0.55)",
+              border: "1px solid rgba(255,255,255,0.08)",
+            fontSize: 11,
+            letterSpacing: "0.08em",
+            color: "#8A8F9E",
+          }}
+        >
+          [ SCORE: <span style={{ color: "#FFE100" }}>{score}</span> ]
+        </div>
+      </div>)}
 
       {/* subtle yellow glow backdrop */}
       <div
@@ -167,11 +308,12 @@ export function Hero() {
 
       <div className="pointer-events-none relative z-10 mx-auto w-full max-w-[1200px] px-6 py-24">
         <p className="font-mono mb-6" style={{ fontSize: 12, letterSpacing: "0.25em", color: "#FFE100" }}>
-          // SENIOR CREATIVE FRONTEND ENGINEER
+          // SENIOR FRONTEND SOFTWARE ENGINEER
         </p>
 
         <h1
           style={{
+            position: "relative",
             fontFamily: "'Space Grotesk', sans-serif",
             fontWeight: 700,
             lineHeight: 0.92,
@@ -180,10 +322,25 @@ export function Hero() {
             letterSpacing: "-0.02em",
           }}
         >
+          <div
+            ref={scoreLineElRef}
+            aria-hidden="true"
+            className="absolute"
+            style={{
+              left: -20,
+              top: 0,
+              bottom: 0,
+              width: 3,
+              borderRadius: 2,
+              background: "#FFE100",
+              boxShadow: "0 0 12px rgba(255,225,0,0.6), 0 0 28px rgba(255,225,0,0.3)",
+            }}
+          />
           <ScatterText
             text="RAWN ABRAHAM"
             ballsRef={sharedBallsRef}
             resetSignalRef={resetSignalRef}
+            pointerRef={sharedPointerRef}
             style={{ display: "block" }}
           />
           <br />
@@ -191,6 +348,7 @@ export function Hero() {
             text="RIJU"
             ballsRef={sharedBallsRef}
             resetSignalRef={resetSignalRef}
+            pointerRef={sharedPointerRef}
             style={{ color: "#FFE100", textShadow: "0 0 40px rgba(255,225,0,0.35)" }}
           />
         </h1>
@@ -206,7 +364,7 @@ export function Hero() {
           }}
         >
           <ScatterText
-            text="FRONTEND ENGINEER & CREATIVE DEVELOPER"
+            text="FRONTEND ENGINEER & MSC STUDENT"
             ballsRef={sharedBallsRef}
             resetSignalRef={resetSignalRef}
           />
@@ -216,9 +374,10 @@ export function Hero() {
           className="mt-8 max-w-[560px]"
           style={{ fontFamily: "'Inter', sans-serif", fontSize: 17, lineHeight: 1.6, color: "#8A8F9E" }}
         >
-          I engineer high-performance, expressive web interfaces and creative
-          canvas systems — blending precise motion, real-time interaction, and
-          editorial minimalism into experiences that feel alive.
+          4 years building production React and Node.js applications — from a
+          2nd-place Atlassian Codegeist hackathon product to charting tools
+          used by 1,000+ customers. Currently pursuing an MSc in Software,
+          Web and Cloud at Tampere University.
         </p>
       </div>
 

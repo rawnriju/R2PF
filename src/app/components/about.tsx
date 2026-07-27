@@ -1,8 +1,8 @@
 const CAPABILITIES = [
-  { k: "INTERFACE", v: "Design systems, motion, editorial layout" },
-  { k: "REALTIME", v: "WebSockets, live telemetry, collaborative UI" },
-  { k: "CREATIVE", v: "Canvas / WebGL, generative visuals, physics" },
-  { k: "PERFORMANCE", v: "60fps budgets, bundle discipline, a11y" },
+  { k: "FRONTEND", v: "React, Recoil.js, TypeScript, JavaScript" },
+  { k: "DATA VIZ", v: "D3.js, custom charting libraries & reporting tools" },
+  { k: "CLOUD", v: "Node.js, MongoDB, Firebase, Atlassian Forge (serverless)" },
+  { k: "LEADERSHIP", v: "Lead Developer & Product Owner, team management" },
 ];
 
 export function About() {
@@ -14,13 +14,15 @@ export function About() {
             02 // ABOUT
           </p>
           <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", color: "#E2E8F0", letterSpacing: "-0.02em", lineHeight: 1.05 }}>
-            BUILDING INTERFACES THAT MOVE WITH INTENT
+            BUILDING USER-CENTRIC APPLICATIONS AT SCALE
           </h2>
           <p className="mt-6 max-w-[440px]" style={{ fontFamily: "'Inter', sans-serif", fontSize: 16, lineHeight: 1.65, color: "#8A8F9E" }}>
-            I'm a senior frontend engineer obsessed with the seam between
-            performance and expression. I ship production React at scale while
-            treating every interaction — the boost, the bounce, the reset — as
-            a chance to make the web feel physical.
+            I spent 4 years as Senior Front-end Software Engineer at view26
+            (Actiotech LLP), leading development on a Scrum management app
+            that took 2nd place at Atlassian's Codegeist 2021 hackathon, and
+            building data visualization tools used by 1,000+ Atlassian
+            Marketplace customers. I'm now an MSc student in Software, Web
+            and Cloud at Tampere University, based in Tampere, Finland.
           </p>
         </div>
 

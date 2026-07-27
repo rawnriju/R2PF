@@ -11,10 +11,10 @@ export function Footer() {
         </span>
 
         <div className="flex items-center gap-6">
-          <a href="https://github.com" target="_blank" rel="noreferrer" className="transition-colors duration-200 hover:text-[#FFE100]" style={{ color: "#8A8F9E" }} aria-label="GitHub">
+          <a href="https://github.com/rawnriju" target="_blank" rel="noreferrer" className="transition-colors duration-200 hover:text-[#FFE100]" style={{ color: "#8A8F9E" }} aria-label="GitHub">
             <Github size={20} />
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="transition-colors duration-200 hover:text-[#FFE100]" style={{ color: "#8A8F9E" }} aria-label="LinkedIn">
+          <a href="https://www.linkedin.com/in/rawn-riju-b5b199183/" target="_blank" rel="noreferrer" className="transition-colors duration-200 hover:text-[#FFE100]" style={{ color: "#8A8F9E" }} aria-label="LinkedIn">
             <Linkedin size={20} />
           </a>
 

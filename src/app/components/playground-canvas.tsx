@@ -10,10 +10,28 @@ export interface Ball {
   life: number;
 }
 
+export interface Pointer {
+  x: number;
+  y: number;
+  active: boolean;
+}
+
+export interface ScoreLine {
+  x: number;
+  top: number;
+  bottom: number;
+}
+
 interface Props {
   sharedBallsRef: React.MutableRefObject<Ball[]>;
   /** Incremented every time a Kawarimi reset happens, so text can un-scatter. */
   resetSignalRef: React.MutableRefObject<number>;
+  /** Live cursor/touch position in canvas-local space, for hover-driven text repulsion. */
+  sharedPointerRef: React.MutableRefObject<Pointer>;
+  /** Canvas-local position of the scoring line, or null until measured. */
+  scoreLineRef: React.MutableRefObject<ScoreLine | null>;
+  /** Called once per ball that hits the scoring line. */
+  onScore: () => void;
 }
 
 const MAX_CHARGE_R = 46;
@@ -27,14 +45,15 @@ interface Smoke {
   x: number; y: number; vx: number; vy: number; r: number; alpha: number; spin: number; rot: number;
 }
 
-export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef }: Props) {
+export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointerRef, scoreLineRef, onScore }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pulseRef = useRef<{ x: number; y: number; r: number; alpha: number }[]>([]);
   const pixelsRef = useRef<Pixel[]>([]);
   const smokeRef = useRef<Smoke[]>([]);
   const mouseRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   // The ball currently being charged (grows while left button is held).
-  const chargingRef = useRef<{ x: number; y: number; r: number; color: string } | null>(null);
+  // overcharge counts frames spent sitting at MAX_CHARGE_R — drives the burst-warning flash.
+  const chargingRef = useRef<{ x: number; y: number; r: number; color: string; overcharge: number } | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -79,12 +98,16 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef }: Props) {
 
     const startCharge = (x: number, y: number) => {
       mouseRef.current = { x, y };
+      sharedPointerRef.current.x = x;
+      sharedPointerRef.current.y = y;
+      sharedPointerRef.current.active = true;
       const orange = Math.random() > 0.6;
       chargingRef.current = {
         x,
         y,
         r: MIN_CHARGE_R,
         color: orange ? "#FF5500" : "#FFE100",
+        overcharge: 0,
       };
     };
 
@@ -99,6 +122,17 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef }: Props) {
       const { x, y } = getPos(e);
       mouseRef.current.x = x;
       mouseRef.current.y = y;
+      sharedPointerRef.current.x = x;
+      sharedPointerRef.current.y = y;
+      sharedPointerRef.current.active = true;
+    };
+
+    const onMouseLeave = () => {
+      sharedPointerRef.current.active = false;
+    };
+
+    const onWindowBlurOrScroll = () => {
+      sharedPointerRef.current.active = false;
     };
 
     const launch = () => {
@@ -157,6 +191,7 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef }: Props) {
 
       sharedBallsRef.current = [];
       chargingRef.current = null;
+      sharedPointerRef.current.active = false;
       resetSignalRef.current += 1;
     };
 
@@ -188,20 +223,27 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef }: Props) {
       const { x, y } = getPosXY(t.clientX, t.clientY);
       mouseRef.current.x = x;
       mouseRef.current.y = y;
+      sharedPointerRef.current.x = x;
+      sharedPointerRef.current.y = y;
+      sharedPointerRef.current.active = true;
     };
 
     const onTouchEnd = () => {
       launch();
+      sharedPointerRef.current.active = false;
     };
 
     canvas.addEventListener("mousedown", onMouseDown);
     canvas.addEventListener("mousemove", onMouseMove);
+    canvas.addEventListener("mouseleave", onMouseLeave);
     canvas.addEventListener("contextmenu", onContextMenu);
     canvas.addEventListener("touchstart", onTouchStart, { passive: true });
     canvas.addEventListener("touchmove", onTouchMove, { passive: true });
     canvas.addEventListener("touchend", onTouchEnd);
     canvas.addEventListener("touchcancel", onTouchEnd);
     window.addEventListener("mouseup", launch);
+    window.addEventListener("blur", onWindowBlurOrScroll);
+    window.addEventListener("scroll", onWindowBlurOrScroll, { passive: true });
 
     const render = () => {
       const rect = canvas.getBoundingClientRect();
@@ -257,6 +299,18 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef }: Props) {
         b.x += b.vx;
         b.y += b.vy;
 
+        const line = scoreLineRef.current;
+        if (line) {
+          const closestY = Math.min(Math.max(b.y, line.top), line.bottom);
+          const lineDist = Math.hypot(b.x - line.x, b.y - closestY);
+          if (lineDist < b.r) {
+            // Scored — the ball is consumed; the celebration is a DOM-level
+            // glowing pulse (see Hero), not a canvas particle burst.
+            onScore();
+            continue;
+          }
+        }
+
         if (b.y + b.r >= rect.height) {
           // Impact splash + pixel shatter where the ball vanishes.
           const iy = rect.height - b.r;
@@ -295,6 +349,8 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef }: Props) {
       const charge = chargingRef.current;
       if (charge) {
         charge.r = Math.min(MAX_CHARGE_R, charge.r + CHARGE_GROW);
+        const isFull = charge.r >= MAX_CHARGE_R;
+        charge.overcharge = isFull ? charge.overcharge + 1 : 0;
 
         // aim line
         ctx.save();
@@ -307,13 +363,35 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef }: Props) {
         ctx.stroke();
         ctx.restore();
 
+        // Held past full — flash faster/brighter the longer it's overcharged,
+        // like it's about to burst.
+        let fillColor = charge.color;
+        let glowBlur = 34;
+        let ballAlpha = 0.9;
+        if (isFull) {
+          const flashSpeed = 0.12 + Math.min(charge.overcharge / 90, 1) * 0.3;
+          const flash = (Math.sin(charge.overcharge * flashSpeed) + 1) / 2; // 0..1
+          glowBlur = 34 + flash * 46;
+          ballAlpha = 0.7 + flash * 0.3;
+          fillColor = flash > 0.55 ? "#FFFFFF" : charge.color;
+
+          // Warning ring pulsing outward around the ball.
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(charge.x, charge.y, charge.r + 6 + flash * 14, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(255,255,255,${0.5 * flash})`;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.restore();
+        }
+
         ctx.save();
-        ctx.shadowBlur = 34;
+        ctx.shadowBlur = glowBlur;
         ctx.shadowColor = charge.color;
-        ctx.globalAlpha = 0.9;
+        ctx.globalAlpha = ballAlpha;
         ctx.beginPath();
         ctx.arc(charge.x, charge.y, charge.r, 0, Math.PI * 2);
-        ctx.fillStyle = charge.color;
+        ctx.fillStyle = fillColor;
         ctx.fill();
         // charge ring
         ctx.globalAlpha = 1;
@@ -333,15 +411,18 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef }: Props) {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
       window.removeEventListener("mouseup", launch);
+      window.removeEventListener("blur", onWindowBlurOrScroll);
+      window.removeEventListener("scroll", onWindowBlurOrScroll);
       canvas.removeEventListener("mousedown", onMouseDown);
       canvas.removeEventListener("mousemove", onMouseMove);
+      canvas.removeEventListener("mouseleave", onMouseLeave);
       canvas.removeEventListener("contextmenu", onContextMenu);
       canvas.removeEventListener("touchstart", onTouchStart);
       canvas.removeEventListener("touchmove", onTouchMove);
       canvas.removeEventListener("touchend", onTouchEnd);
       canvas.removeEventListener("touchcancel", onTouchEnd);
     };
-  }, [sharedBallsRef, resetSignalRef]);
+  }, [sharedBallsRef, resetSignalRef, sharedPointerRef, scoreLineRef, onScore]);
 
   return (
     <canvas
