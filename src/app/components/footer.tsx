@@ -1,4 +1,5 @@
 import { Github, Linkedin } from "lucide-react";
+import { Link } from "react-router";
 
 export function Footer() {
   const toTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
@@ -11,6 +12,20 @@ export function Footer() {
         </span>
 
         <div className="flex items-center gap-6 md:pr-32">
+          <Link
+            to="/resume"
+            className="font-mono transition-colors duration-200 hover:text-[#FFE100]"
+            style={{ fontSize: 12, letterSpacing: "0.1em", color: "#8A8F9E" }}
+          >
+            RESUME
+          </Link>
+          <Link
+            to="/blog"
+            className="font-mono transition-colors duration-200 hover:text-[#FFE100]"
+            style={{ fontSize: 12, letterSpacing: "0.1em", color: "#8A8F9E" }}
+          >
+            BLOG
+          </Link>
           <a href="https://github.com/rawnriju" target="_blank" rel="noreferrer" className="transition-colors duration-200 hover:text-[#FFE100]" style={{ color: "#8A8F9E" }} aria-label="GitHub">
             <Github size={20} />
           </a>

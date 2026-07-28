@@ -65,7 +65,7 @@ export function BoostGauge({ value }: BoostGaugeProps) {
       >
         <span
           className="font-mono"
-          style={{ fontSize: 9, letterSpacing: "0.15em", color: "#8A8F9E" }}
+          style={{ fontSize: 9, letterSpacing: "0.15em", color: "#8A8F9E", }}
         >
           BOOST
         </span>

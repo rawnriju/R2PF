@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Routes, Route } from "react-router";
 import { Header } from "./components/header";
 import { Hero } from "./components/hero";
 import { StatsBar } from "./components/stats-bar";
@@ -6,8 +7,10 @@ import { FeaturedWork } from "./components/featured-work";
 import { About } from "./components/about";
 import { Footer } from "./components/footer";
 import { BoostGauge } from "./components/boost-gauge";
+import { ResumePage } from "./components/resume";
+import { BlogPage } from "./components/blog";
 
-export default function App() {
+function HomePage() {
   const [boost, setBoost] = useState(0);
 
   useEffect(() => {
@@ -37,5 +40,15 @@ export default function App() {
       <Footer />
       <BoostGauge value={boost} />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/resume" element={<ResumePage />} />
+      <Route path="/blog" element={<BlogPage />} />
+    </Routes>
   );
 }

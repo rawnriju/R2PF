@@ -17,7 +17,7 @@ export function About() {
             BUILDING USER-CENTRIC APPLICATIONS AT SCALE
           </h2>
           <p className="mt-6 max-w-[440px]" style={{ fontFamily: "'Inter', sans-serif", fontSize: 16, lineHeight: 1.65, color: "#8A8F9E" }}>
-            I spent 4 years as Senior Front-end Software Engineer at view26
+            I spent almost 5 years as Senior Fullstack Software Engineer at view26
             (Actiotech LLP), leading development on a Scrum management app
             that took 2nd place at Atlassian's Codegeist 2021 hackathon, and
             building data visualization tools used by 1,000+ Atlassian
