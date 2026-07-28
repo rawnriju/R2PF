@@ -1,5 +1,5 @@
 const STATS = [
-  { label: "EXP", value: "4+ YRS" },
+  { label: "EXP", value: "5 YRS" },
   { label: "STACK", value: "REACT / NODE.JS / TYPESCRIPT / D3.JS" },
   { label: "LOC", value: "TAMPERE, FINLAND" },
 ];

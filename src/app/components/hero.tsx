@@ -313,7 +313,7 @@ export function Hero() {
 
       <div className="pointer-events-none relative z-10 mx-auto w-full max-w-[1200px] px-6 py-24">
         <p className="font-mono mb-6" style={{ fontSize: 12, letterSpacing: "0.25em", color: "#FFE100" }}>
-          // SENIOR FRONTEND SOFTWARE ENGINEER
+          // SENIOR FULLSTACK SOFTWARE ENGINEER
         </p>
 
         <h1
@@ -369,7 +369,7 @@ export function Hero() {
           }}
         >
           <ScatterText
-            text="FRONTEND ENGINEER & MSC STUDENT"
+            text="FULLSTACK SOFTWARE ENGINEER & MSC STUDENT"
             ballsRef={sharedBallsRef}
             resetSignalRef={resetSignalRef}
           />
@@ -379,7 +379,7 @@ export function Hero() {
           className="mt-8 max-w-[560px]"
           style={{ fontFamily: "'Inter', sans-serif", fontSize: 17, lineHeight: 1.6, color: "#8A8F9E" }}
         >
-          4 years building production React and Node.js applications — from a
+          I have almost 5 years building production React and Node.js applications which include leading a
           2nd-place Atlassian Codegeist hackathon product to charting tools
           used by 1,000+ customers. Currently pursuing an MSc in Software,
           Web and Cloud at Tampere University.
