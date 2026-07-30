@@ -1,3 +1,5 @@
+import { FileText, PenLine } from "lucide-react";
+import { NavChip } from "./chip";
 import { ThemeToggle } from "./theme-toggle";
 
 const NAV = [
@@ -40,26 +42,11 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Theme switch + CTA */}
-        <div className="flex items-center gap-3">
+        {/* Route links + theme switch */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <NavChip to="/resume" icon={FileText} label="RESUME" />
+          <NavChip to="/blog" icon={PenLine} label="BLOG" />
           <ThemeToggle />
-          <a
-            href="#contact"
-            className="group relative font-mono transition-all duration-200"
-            style={{ fontSize: 12, letterSpacing: "0.1em" }}
-          >
-            <span
-              className="block px-5 py-2.5 transition-all duration-200"
-              style={{
-                color: "var(--brand)",
-                border: "1px solid var(--brand)",
-                clipPath: "polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)",
-                boxShadow: "0 0 12px rgba(var(--brand-rgb), calc(0.25 * var(--glow)))",
-              }}
-            >
-              GET IN TOUCH
-            </span>
-          </a>
         </div>
       </div>
     </header>

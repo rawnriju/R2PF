@@ -6,6 +6,7 @@ import { StatsBar } from "./components/stats-bar";
 import { About } from "./components/about";
 import { Work } from "./components/work";
 import { Extras } from "./components/extras";
+import { Contact } from "./components/contact";
 import { Footer } from "./components/footer";
 import { BoostGauge } from "./components/boost-gauge";
 import { ResumePage } from "./components/resume";
@@ -38,6 +39,7 @@ function HomePage() {
         <About />
         <Work />
         <Extras />
+        <Contact />
       </main>
       <Footer />
       <BoostGauge value={boost} />
