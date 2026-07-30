@@ -3,8 +3,9 @@ import { Routes, Route } from "react-router";
 import { Header } from "./components/header";
 import { Hero } from "./components/hero";
 import { StatsBar } from "./components/stats-bar";
-import { FeaturedWork } from "./components/featured-work";
 import { About } from "./components/about";
+import { Work } from "./components/work";
+import { Extras } from "./components/extras";
 import { Footer } from "./components/footer";
 import { BoostGauge } from "./components/boost-gauge";
 import { ResumePage } from "./components/resume";
@@ -34,8 +35,9 @@ function HomePage() {
       <main>
         <Hero />
         <StatsBar />
-        <FeaturedWork />
         <About />
+        <Work />
+        <Extras />
       </main>
       <Footer />
       <BoostGauge value={boost} />

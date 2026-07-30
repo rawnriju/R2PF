@@ -384,14 +384,10 @@ export function Hero() {
         </p>
 
         <p
-          className="mt-8 max-w-[560px]"
+          className="mt-8 max-w-[800px]"
           style={{ fontFamily: "'Inter', sans-serif", fontSize: 17, lineHeight: 1.6, color: "var(--text-muted)" }}
         >
-          I have almost 5 years building production React and Node.js applications which include leading a
-          2nd-place Atlassian Codegeist hackathon product to charting tools
-          used by 1,000+ customers. Currently pursuing an MSc in Software,
-          Web and Cloud at Tampere University.
-        </p>
+       Hey there! I'm Rawn, and I like to learn, build, and question things. I'm a full-stack software engineer with nearly 5 years of professional experience, specializing in data visualization and building accessible, user-friendly experiences. </p>
       </div>
 
       {/* HUD control banner */}
