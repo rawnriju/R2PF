@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { ThemeToggle } from "./theme-toggle";
 
 const experience = [
   {
@@ -103,7 +104,7 @@ const education = [
 const interests =
   "Web accessibiltiy, psychology, working out, Rocket League, anime";
 
-const accent = "text-[#06CE3F]";
+const accent = "text-[var(--resume-accent)]";
 
 function SectionHeading({
   children,
@@ -121,13 +122,32 @@ function SectionHeading({
 
 export function Resume() {
   return (
-    <div className="min-h-screen print:min-h-0 w-full bg-[#f4f5f7] py-10 px-4 print:bg-white print:py-0 print:px-0 font-['Inter',sans-serif]">
+    <div className="min-h-screen print:min-h-0 w-full bg-[var(--paper-bg)] py-10 px-4 print:py-0 print:px-0 font-['Inter',sans-serif]">
       <style>{`
         @media print {
           @page { size: A4; margin: 12mm; }
+
+          /* A resume prints on white paper in either theme — force the light
+             ink/paper values back, overriding whatever .dark set. */
+          :root, .dark {
+            --paper-bg: #ffffff;
+            --paper: #ffffff;
+            --paper-shadow: transparent;
+            --ink: #171717;
+            --ink-2: #404040;
+            --ink-3: #525252;
+            --ink-4: #737373;
+            --resume-accent: #06CE3F;
+          }
+          html, body { background: #ffffff !important; }
+          * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
       `}</style>
-      <div className="mx-auto max-w-[900px] print:max-w-none bg-white shadow-sm print:shadow-none px-10 py-12 md:px-14 md:py-14 print:px-0 print:py-0">
+      <div
+        className="mx-auto max-w-[900px] print:max-w-none bg-[var(--paper)] px-10 py-12 md:px-14 md:py-14 print:px-0 print:py-0"
+        // --paper-shadow is transparent in print, so the card flattens on paper.
+        style={{ boxShadow: "0 1px 2px 0 var(--paper-shadow)" }}
+      >
         {/* Header */}
         <header className="flex flex-col md:flex-row print:flex-row md:items-start print:items-start md:justify-between print:justify-between gap-6 print:gap-4 mb-12 print:mb-5">
           <div className="max-w-md">
@@ -136,13 +156,13 @@ export function Resume() {
             >
               Rawn Riju
             </h1>
-            <p className="text-[15px] print:text-[15.5px] text-neutral-600 leading-snug">
+            <p className="text-[15px] print:text-[15.5px] text-[var(--ink-3)] leading-snug">
               Software engineer with 4 years of experience
               building user-centric web applications with React,
               Node.js, and modern JavaScript frameworks
             </p>
           </div>
-          <div className="text-[13px] print:text-[14.5px] text-neutral-600 space-y-1 print:space-y-0.5 md:text-right print:text-right md:pt-3 print:pt-1">
+          <div className="text-[13px] print:text-[14.5px] text-[var(--ink-3)] space-y-1 print:space-y-0.5 md:text-right print:text-right md:pt-3 print:pt-1">
             <p>rawnriju@gmail.com</p>
             <p>041 499 4257</p>
             <p>Tampere, Finland</p>
@@ -164,31 +184,31 @@ export function Resume() {
                     key={role.title}
                     className="flex flex-wrap items-baseline gap-x-2 mb-0.5"
                   >
-                    <span className="text-[15px] print:text-[15.5px] text-neutral-700">
+                    <span className="text-[15px] print:text-[15.5px] text-[var(--ink-2)]">
                       {role.title} ·
                     </span>
-                    <span className="text-[15px] print:text-[15.5px] font-semibold text-neutral-900">
+                    <span className="text-[15px] print:text-[15.5px] font-semibold text-[var(--ink)]">
                       {job.company}
                     </span>
-                    <span className="text-[12px] print:text-[14px] text-neutral-500">
+                    <span className="text-[12px] print:text-[14px] text-[var(--ink-4)]">
                       {role.period}
                     </span>
                   </div>
                 ))}
-                <p className="text-[12px] print:text-[14px] text-neutral-500 mb-4 print:mb-1.5">
+                <p className="text-[12px] print:text-[14px] text-[var(--ink-4)] mb-4 print:mb-1.5">
                   {job.location}
                 </p>
 
                 {job.groups.map((group) => (
                   <div key={group.heading} className="mb-4 print:mb-2">
-                    <p className="text-[13px] print:text-[15px] font-semibold text-neutral-800 mb-1.5 print:mb-1">
+                    <p className="text-[13px] print:text-[15px] font-semibold text-[var(--ink-2)] mb-1.5 print:mb-1">
                       {group.heading}
                     </p>
                     <ul className="space-y-1.5 print:space-y-0.5">
                       {group.points.map((pt, i) => (
                         <li
                           key={i}
-                          className="flex gap-2 text-[13px] print:text-[14.5px] text-neutral-600 leading-relaxed print:leading-snug"
+                          className="flex gap-2 text-[13px] print:text-[14.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug"
                         >
                           <span className={`${accent} mt-0.5`}>
                             •
@@ -198,7 +218,7 @@ export function Resume() {
                       ))}
                     </ul>
                     {group.tech && (
-                      <p className="text-[12px] print:text-[13.5px] text-neutral-500 italic mt-1.5 print:mt-1 pl-4">
+                      <p className="text-[12px] print:text-[13.5px] text-[var(--ink-4)] italic mt-1.5 print:mt-1 pl-4">
                         {group.tech}
                       </p>
                     )}
@@ -213,14 +233,14 @@ export function Resume() {
               </SectionHeading>
               {additional.map((item) => (
                 <div key={item.title} className="mb-4 print:mb-2">
-                  <p className="text-[15px] print:text-[15.5px] font-semibold text-neutral-900 mb-1.5 print:mb-1">
+                  <p className="text-[15px] print:text-[15.5px] font-semibold text-[var(--ink)] mb-1.5 print:mb-1">
                     {item.title}
                   </p>
                   <ul className="space-y-1.5 print:space-y-0.5">
                     {item.points.map((pt, i) => (
                       <li
                         key={i}
-                        className="flex gap-2 text-[13px] print:text-[14.5px] text-neutral-600 leading-relaxed print:leading-snug"
+                        className="flex gap-2 text-[13px] print:text-[14.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug"
                       >
                         <span className={`${accent} mt-0.5`}>
                           •
@@ -241,10 +261,10 @@ export function Resume() {
               <div className="space-y-4 print:space-y-2">
                 {skills.map((s) => (
                   <div key={s.label}>
-                    <p className="text-[13px] print:text-[15px] font-semibold text-neutral-900 mb-1 print:mb-0.5">
+                    <p className="text-[13px] print:text-[15px] font-semibold text-[var(--ink)] mb-1 print:mb-0.5">
                       {s.label}
                     </p>
-                    <p className="text-[13px] print:text-[14.5px] text-neutral-600 leading-relaxed print:leading-snug">
+                    <p className="text-[13px] print:text-[14.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug">
                       {s.value}
                     </p>
                   </div>
@@ -258,13 +278,13 @@ export function Resume() {
                 {projects.map((p) => (
                   <div key={p.name}>
                     {p.url ? (
-                      <a href={p.url} target="_blank" rel="noopener noreferrer" className="text-[13px] print:text-[15px] font-semibold text-neutral-900 hover:underline mb-1 print:mb-0.5 block">
+                      <a href={p.url} target="_blank" rel="noopener noreferrer" className="text-[13px] print:text-[15px] font-semibold text-[var(--ink)] hover:underline mb-1 print:mb-0.5 block">
                         {p.name}
                       </a>
                     ) : (
-                      <p className="text-[13px] print:text-[15px] font-semibold text-neutral-900 mb-1 print:mb-0.5">{p.name}</p>
+                      <p className="text-[13px] print:text-[15px] font-semibold text-[var(--ink)] mb-1 print:mb-0.5">{p.name}</p>
                     )}
-                    <p className="text-[13px] print:text-[14.5px] text-neutral-600 leading-relaxed print:leading-snug">
+                    <p className="text-[13px] print:text-[14.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug">
                       {p.desc}
                     </p>
                   </div>
@@ -277,16 +297,16 @@ export function Resume() {
               <div className="space-y-4 print:space-y-2">
                 {education.map((e) => (
                   <div key={e.school}>
-                    <p className="text-[13px] print:text-[15px] font-semibold text-neutral-900">
+                    <p className="text-[13px] print:text-[15px] font-semibold text-[var(--ink)]">
                       {e.school}
                     </p>
-                    <p className="text-[12px] print:text-[14px] text-neutral-500 mb-1 print:mb-0.5">
+                    <p className="text-[12px] print:text-[14px] text-[var(--ink-4)] mb-1 print:mb-0.5">
                       {e.period}
                     </p>
-                    <p className="text-[13px] print:text-[14.5px] text-neutral-600 leading-relaxed print:leading-snug">
+                    <p className="text-[13px] print:text-[14.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug">
                       {e.degree}
                     </p>
-                    <p className="text-[12px] print:text-[14px] text-neutral-500">
+                    <p className="text-[12px] print:text-[14px] text-[var(--ink-4)]">
                       {e.place}
                     </p>
                   </div>
@@ -296,7 +316,7 @@ export function Resume() {
 
             <section>
               <SectionHeading>Interests</SectionHeading>
-              <p className="text-[13px] print:text-[14.5px] text-neutral-600 leading-relaxed print:leading-snug">
+              <p className="text-[13px] print:text-[14.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug">
                 {interests}
               </p>
             </section>
@@ -309,21 +329,27 @@ export function Resume() {
 
 export function ResumePage() {
   return (
-    <div className="min-h-screen print:min-h-0 w-full bg-[#f4f5f7] print:bg-white">
-      <div className="print:hidden sticky top-0 z-10 bg-[#090B10] border-b border-white/10">
+    <div className="min-h-screen print:min-h-0 w-full bg-[var(--paper-bg)]">
+      <div
+        className="print:hidden sticky top-0 z-10"
+        style={{ background: "var(--bg)", borderBottom: "1px solid var(--hairline)" }}
+      >
         <div className="mx-auto max-w-[900px] px-4 py-3 flex items-center justify-between">
           <Link
             to="/"
-            className="font-mono text-[12px] tracking-[0.12em] text-[#8A8F9E] hover:text-[#FFE100] transition-colors duration-200"
+            className="font-mono text-[12px] tracking-[0.12em] text-[var(--text-muted)] hover:text-[var(--brand)] transition-colors duration-200"
           >
             ← BACK TO HOME
           </Link>
-          <button
-            onClick={() => window.print()}
-            className="font-mono text-[12px] tracking-[0.12em] text-[#FFE100] border border-[#FFE100] px-3 py-1.5 hover:bg-[#FFE100] hover:text-[#090B10] transition-colors duration-200"
-          >
-            PRINT / SAVE PDF
-          </button>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <button
+              onClick={() => window.print()}
+              className="font-mono text-[12px] tracking-[0.12em] text-[var(--brand)] border border-[var(--brand)] px-3 py-1.5 cursor-pointer hover:bg-[var(--brand)] hover:text-[var(--on-brand)] transition-colors duration-200"
+            >
+              PRINT / SAVE PDF
+            </button>
+          </div>
         </div>
       </div>
       <Resume />

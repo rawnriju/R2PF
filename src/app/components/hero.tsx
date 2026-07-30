@@ -276,8 +276,9 @@ export function Hero() {
             width: 640,
             height: 640,
             borderRadius: "9999px",
-            background: "radial-gradient(circle, rgba(255,225,0,0.55), rgba(255,225,0,0.12) 45%, transparent 70%)",
-            boxShadow: "0 0 120px 40px rgba(255,225,0,0.35)",
+            background:
+              "radial-gradient(circle, rgba(var(--brand-rgb), calc(0.55 * var(--glow))), rgba(var(--brand-rgb), calc(0.12 * var(--glow))) 45%, transparent 70%)",
+            boxShadow: "0 0 120px 40px rgba(var(--brand-rgb), calc(0.35 * var(--glow)))",
             animation: "goalPulse 0.9s ease-out forwards",
           }}
         />
@@ -292,27 +293,30 @@ export function Hero() {
             <div
               className="absolute right-0 top-0 backdrop-blur-md font-mono flex items-center gap-2 px-4 py-2 rounded-full"
               style={{
-                background: "rgba(18,22,31,0.55)",
-                border: "1px solid rgba(255,255,255,0.08)",
+                background: "var(--surface-glass)",
+                border: "1px solid var(--hairline)",
                 fontSize: 11,
                 letterSpacing: "0.08em",
-                color: "#8A8F9E",
+                color: "var(--text-muted)",
               }}
             >
-              [ SCORE: <span style={{ color: "#FFE100" }}>{score}</span> ]
+              [ SCORE: <span style={{ color: "var(--brand)" }}>{score}</span> ]
             </div>
           </div>
         </div>
       )}
 
-      {/* subtle yellow glow backdrop */}
+      {/* subtle accent glow backdrop */}
       <div
         className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[520px] w-[520px] rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(255,225,0,0.07), transparent 70%)" }}
+        style={{
+          background:
+            "radial-gradient(circle, rgba(var(--brand-rgb), calc(0.07 * var(--glow))), transparent 70%)",
+        }}
       />
 
       <div className="pointer-events-none relative z-10 mx-auto w-full max-w-[1200px] px-6 py-24">
-        <p className="font-mono mb-6" style={{ fontSize: 12, letterSpacing: "0.25em", color: "#FFE100" }}>
+        <p className="font-mono mb-6" style={{ fontSize: 12, letterSpacing: "0.25em", color: "var(--brand)" }}>
           // SENIOR FULLSTACK SOFTWARE ENGINEER
         </p>
 
@@ -323,7 +327,7 @@ export function Hero() {
             fontWeight: 700,
             lineHeight: 0.92,
             fontSize: "clamp(48px, 9vw, 128px)",
-            color: "#E2E8F0",
+            color: "var(--fg)",
             letterSpacing: "-0.02em",
           }}
         >
@@ -337,8 +341,9 @@ export function Hero() {
               bottom: 0,
               width: 3,
               borderRadius: 2,
-              background: "#FFE100",
-              boxShadow: "0 0 12px rgba(255,225,0,0.6), 0 0 28px rgba(255,225,0,0.3)",
+              background: "var(--brand)",
+              boxShadow:
+                "0 0 12px rgba(var(--brand-rgb), calc(0.6 * var(--glow))), 0 0 28px rgba(var(--brand-rgb), calc(0.3 * var(--glow)))",
             }}
           />
           <ScatterText
@@ -354,7 +359,10 @@ export function Hero() {
             ballsRef={sharedBallsRef}
             resetSignalRef={resetSignalRef}
             pointerRef={sharedPointerRef}
-            style={{ color: "#FFE100", textShadow: "0 0 40px rgba(255,225,0,0.35)" }}
+            style={{
+              color: "var(--brand)",
+              textShadow: "0 0 40px rgba(var(--brand-rgb), calc(0.35 * var(--glow)))",
+            }}
           />
         </h1>
 
@@ -364,7 +372,7 @@ export function Hero() {
             fontFamily: "'Space Grotesk', sans-serif",
             fontWeight: 500,
             fontSize: "clamp(18px, 2.4vw, 30px)",
-            color: "#8A8F9E",
+            color: "var(--text-muted)",
             letterSpacing: "0.02em",
           }}
         >
@@ -377,7 +385,7 @@ export function Hero() {
 
         <p
           className="mt-8 max-w-[560px]"
-          style={{ fontFamily: "'Inter', sans-serif", fontSize: 17, lineHeight: 1.6, color: "#8A8F9E" }}
+          style={{ fontFamily: "'Inter', sans-serif", fontSize: 17, lineHeight: 1.6, color: "var(--text-muted)" }}
         >
           I have almost 5 years building production React and Node.js applications which include leading a
           2nd-place Atlassian Codegeist hackathon product to charting tools
@@ -391,16 +399,16 @@ export function Hero() {
         <div
           className="backdrop-blur-md font-mono flex flex-wrap items-center justify-center gap-x-4 gap-y-1 px-5 py-3 rounded-full"
           style={{
-            background: "rgba(18,22,31,0.55)",
-            border: "1px solid rgba(255,255,255,0.08)",
+            background: "var(--surface-glass)",
+            border: "1px solid var(--hairline)",
             fontSize: 11,
             letterSpacing: "0.08em",
-            color: "#8A8F9E",
+            color: "var(--text-muted)",
           }}
         >
-          <span>[ 🖱️ HOLD LEFT-CLICK: <span style={{ color: "#FFE100" }}>CHARGE & AIM BALL</span> ]</span>
-          <span style={{ color: "rgba(255,255,255,0.2)" }}>•</span>
-          <span>[ 🖱️ RIGHT-CLICK: <span style={{ color: "#FF5500" }}>KAWARIMI RESET</span> ]</span>
+          <span>[ 🖱️ HOLD LEFT-CLICK: <span style={{ color: "var(--brand)" }}>CHARGE & AIM BALL</span> ]</span>
+          <span style={{ color: "var(--hairline-strong)" }}>•</span>
+          <span>[ 🖱️ RIGHT-CLICK: <span style={{ color: "var(--brand-2)" }}>KAWARIMI RESET</span> ]</span>
         </div>
       </div>
     </section>

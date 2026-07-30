@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useTheme } from "../theme";
 
 export interface Ball {
   x: number;
@@ -6,7 +7,9 @@ export interface Ball {
   vx: number;
   vy: number;
   r: number;
-  color: string;
+  /** Which of the two accents this ball uses. Resolved to a color at draw time
+   *  so in-flight balls recolor with the theme instead of freezing their hex. */
+  orange: boolean;
   life: number;
 }
 
@@ -39,27 +42,64 @@ const MIN_CHARGE_R = 6;
 const CHARGE_GROW = 0.9; // radius gained per frame while held
 
 interface Pixel {
-  x: number; y: number; vx: number; vy: number; size: number; color: string; life: number;
+  x: number; y: number; vx: number; vy: number; size: number; orange: boolean; life: number;
 }
 interface Smoke {
   x: number; y: number; vx: number; vy: number; r: number; alpha: number; spin: number; rot: number;
 }
 
+interface Palette {
+  accent: string;
+  accent2: string;
+  accentRgb: string;
+  trailCore: string;
+  trailMid: string;
+  trailEdge: string;
+  flash: string;
+  flashRingRgb: string;
+}
+
+/**
+ * A 2D context takes color strings, not var() — so pull the current values off
+ * the document once per theme instead of hard-coding them.
+ */
+function resolvePalette(): Palette {
+  const cs = getComputedStyle(document.documentElement);
+  const read = (name: string, fallback: string) =>
+    cs.getPropertyValue(name).trim() || fallback;
+  return {
+    accent: read("--brand", "#FFE100"),
+    accent2: read("--brand-2", "#FF5500"),
+    accentRgb: read("--brand-rgb", "255,225,0"),
+    trailCore: read("--trail-core", "rgba(190,195,205,0.9)"),
+    trailMid: read("--trail-mid", "rgba(140,143,158,0.5)"),
+    trailEdge: read("--trail-edge", "rgba(140,143,158,0)"),
+    flash: read("--flash", "#FFFFFF"),
+    flashRingRgb: read("--flash-ring-rgb", "255,255,255"),
+  };
+}
+
 export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointerRef, scoreLineRef, onScore }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { theme } = useTheme();
   const pulseRef = useRef<{ x: number; y: number; r: number; alpha: number }[]>([]);
   const pixelsRef = useRef<Pixel[]>([]);
   const smokeRef = useRef<Smoke[]>([]);
   const mouseRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   // The ball currently being charged (grows while left button is held).
   // overcharge counts frames spent sitting at MAX_CHARGE_R — drives the burst-warning flash.
-  const chargingRef = useRef<{ x: number; y: number; r: number; color: string; overcharge: number } | null>(null);
+  const chargingRef = useRef<{ x: number; y: number; r: number; orange: boolean; overcharge: number } | null>(null);
 
+  // Re-runs on theme change, which is what re-resolves the palette and rebuilds
+  // the smoke sprite. The simulation itself lives in refs, so nothing is lost.
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    const palette = resolvePalette();
+    const ballColor = (orange: boolean) => (orange ? palette.accent2 : palette.accent);
 
     let raf = 0;
     // Cap the backing-store scale — dpr 3 phones repaint ~2x the pixels of dpr 2
@@ -83,9 +123,9 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
     const sctx = smokeSprite.getContext("2d");
     if (sctx) {
       const grad = sctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-      grad.addColorStop(0, "rgba(190,195,205,0.9)");
-      grad.addColorStop(0.6, "rgba(140,143,158,0.5)");
-      grad.addColorStop(1, "rgba(140,143,158,0)");
+      grad.addColorStop(0, palette.trailCore);
+      grad.addColorStop(0.6, palette.trailMid);
+      grad.addColorStop(1, palette.trailEdge);
       sctx.fillStyle = grad;
       sctx.fillRect(0, 0, 128, 128);
     }
@@ -101,12 +141,11 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
       sharedPointerRef.current.x = x;
       sharedPointerRef.current.y = y;
       sharedPointerRef.current.active = true;
-      const orange = Math.random() > 0.6;
       chargingRef.current = {
         x,
         y,
         r: MIN_CHARGE_R,
-        color: orange ? "#FF5500" : "#FFE100",
+        orange: Math.random() > 0.6,
         overcharge: 0,
       };
     };
@@ -158,7 +197,7 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
         vx: (dx / dist) * speed,
         vy: (dy / dist) * speed,
         r: charge.r,
-        color: charge.color,
+        orange: charge.orange,
         life: 1,
       });
       if (sharedBallsRef.current.length > 60) sharedBallsRef.current.shift();
@@ -256,7 +295,7 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
         p.alpha *= 0.92;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(255,225,0,${p.alpha})`;
+        ctx.strokeStyle = `rgba(${palette.accentRgb},${p.alpha})`;
         ctx.lineWidth = 2;
         ctx.stroke();
       }
@@ -286,8 +325,8 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
         ctx.save();
         ctx.globalAlpha = Math.max(0, p.life);
         ctx.shadowBlur = 14;
-        ctx.shadowColor = p.color;
-        ctx.fillStyle = p.color;
+        ctx.shadowColor = ballColor(p.orange);
+        ctx.fillStyle = ballColor(p.orange);
         ctx.fillRect(p.x, p.y, p.size, p.size); // square = pixel
         ctx.restore();
       }
@@ -323,7 +362,7 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
               vx: (Math.random() - 0.5) * 20,
               vy: -Math.random() * 17 - 3,
               size: 4 + Math.random() * 7,
-              color: b.color,
+              orange: b.orange,
               life: 1,
             });
           }
@@ -334,10 +373,10 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
 
         ctx.save();
         ctx.shadowBlur = 24;
-        ctx.shadowColor = b.color;
+        ctx.shadowColor = ballColor(b.orange);
         ctx.beginPath();
         ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-        ctx.fillStyle = b.color;
+        ctx.fillStyle = ballColor(b.orange);
         ctx.fill();
         ctx.restore();
 
@@ -357,7 +396,7 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
         ctx.beginPath();
         ctx.moveTo(charge.x, charge.y);
         ctx.lineTo(mouseRef.current.x, mouseRef.current.y);
-        ctx.strokeStyle = "rgba(255,225,0,0.35)";
+        ctx.strokeStyle = `rgba(${palette.accentRgb},0.35)`;
         ctx.setLineDash([4, 6]);
         ctx.lineWidth = 1.5;
         ctx.stroke();
@@ -365,7 +404,7 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
 
         // Held past full — flash faster/brighter the longer it's overcharged,
         // like it's about to burst.
-        let fillColor = charge.color;
+        let fillColor = ballColor(charge.orange);
         let glowBlur = 34;
         let ballAlpha = 0.9;
         if (isFull) {
@@ -373,13 +412,13 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
           const flash = (Math.sin(charge.overcharge * flashSpeed) + 1) / 2; // 0..1
           glowBlur = 34 + flash * 46;
           ballAlpha = 0.7 + flash * 0.3;
-          fillColor = flash > 0.55 ? "#FFFFFF" : charge.color;
+          fillColor = flash > 0.55 ? palette.flash : ballColor(charge.orange);
 
           // Warning ring pulsing outward around the ball.
           ctx.save();
           ctx.beginPath();
           ctx.arc(charge.x, charge.y, charge.r + 6 + flash * 14, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(255,255,255,${0.5 * flash})`;
+          ctx.strokeStyle = `rgba(${palette.flashRingRgb},${0.5 * flash})`;
           ctx.lineWidth = 2;
           ctx.stroke();
           ctx.restore();
@@ -387,7 +426,7 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
 
         ctx.save();
         ctx.shadowBlur = glowBlur;
-        ctx.shadowColor = charge.color;
+        ctx.shadowColor = ballColor(charge.orange);
         ctx.globalAlpha = ballAlpha;
         ctx.beginPath();
         ctx.arc(charge.x, charge.y, charge.r, 0, Math.PI * 2);
@@ -397,7 +436,7 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
         ctx.globalAlpha = 1;
         ctx.beginPath();
         ctx.arc(charge.x, charge.y, charge.r + 5, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (charge.r / MAX_CHARGE_R));
-        ctx.strokeStyle = "#FF5500";
+        ctx.strokeStyle = palette.accent2;
         ctx.lineWidth = 2.5;
         ctx.stroke();
         ctx.restore();
@@ -422,7 +461,7 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
       canvas.removeEventListener("touchend", onTouchEnd);
       canvas.removeEventListener("touchcancel", onTouchEnd);
     };
-  }, [sharedBallsRef, resetSignalRef, sharedPointerRef, scoreLineRef, onScore]);
+  }, [sharedBallsRef, resetSignalRef, sharedPointerRef, scoreLineRef, onScore, theme]);
 
   return (
     <canvas

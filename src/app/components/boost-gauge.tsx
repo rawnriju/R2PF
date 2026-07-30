@@ -13,7 +13,8 @@ const SEGMENTS = 40;
 export function BoostGauge({ value }: BoostGaugeProps) {
   const pct = Math.max(0, Math.min(100, value));
   const full = pct >= 100;
-  const accent = full ? "#FF5500" : "#FFE100";
+  const accent = full ? "var(--brand-2)" : "var(--brand)";
+  const accentRgb = full ? "var(--brand-2-rgb)" : "var(--brand-rgb)";
   const activeSegments = Math.round((pct / 100) * SEGMENTS);
   const size = 96;
   const center = size / 2;
@@ -27,8 +28,8 @@ export function BoostGauge({ value }: BoostGaugeProps) {
         width: size,
         height: size,
         boxShadow: full
-          ? "0 0 32px 4px rgba(255,85,0,0.55)"
-          : "0 0 18px 0 rgba(255,225,0,0.25)",
+          ? `0 0 32px 4px rgba(${accentRgb}, calc(0.55 * var(--glow)))`
+          : `0 0 18px 0 rgba(${accentRgb}, calc(0.25 * var(--glow)))`,
       }}
     >
       <svg width={size} height={size} className="absolute inset-0">
@@ -46,10 +47,15 @@ export function BoostGauge({ value }: BoostGaugeProps) {
               y1={y1}
               x2={x2}
               y2={y2}
-              stroke={active ? accent : "rgba(255,255,255,0.10)"}
               strokeWidth={2.5}
               strokeLinecap="round"
-              style={active ? { filter: `drop-shadow(0 0 3px ${accent})` } : undefined}
+              // stroke lives in `style`, not as a presentation attribute:
+              // SVG attributes don't resolve var().
+              style={
+                active
+                  ? { stroke: accent, filter: `drop-shadow(0 0 3px ${accent})` }
+                  : { stroke: "var(--hairline-strong)" }
+              }
             />
           );
         })}
@@ -59,13 +65,13 @@ export function BoostGauge({ value }: BoostGaugeProps) {
         style={{
           width: inner * 2 - 8,
           height: inner * 2 - 8,
-          background: "#12161F",
-          border: "1px solid rgba(255,255,255,0.08)",
+          background: "var(--surface)",
+          border: "1px solid var(--hairline)",
         }}
       >
         <span
           className="font-mono"
-          style={{ fontSize: 9, letterSpacing: "0.15em", color: "#8A8F9E", }}
+          style={{ fontSize: 9, letterSpacing: "0.15em", color: "var(--text-muted)", }}
         >
           BOOST
         </span>

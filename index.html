@@ -5,10 +5,19 @@
       
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Dark Mode Portfolio Landing Page</title>
-      <meta name="description" content="Showcases a Senior Creative Frontend Engineer&#39;s portfolio with a sleek dark-mode cyberpunk design featuring interactive elements and dynamic project displays." />
+      <title>Rawn Abraham Riju — Fullstack Software Engineer</title>
+      <meta name="description" content="Portfolio of Rawn Abraham Riju, fullstack software engineer &amp; MSc student — production React and Node.js work, projects, and resume." />
       <meta name="robots" content="noindex, nofollow" />
       <style>html, body { height: 100%; margin: 0; } #root { height: 100%; }</style>
+      <script>
+        // Apply the saved theme before first paint, otherwise a light-mode
+        // visitor gets a dark flash on every load. Dark is the default.
+        (function () {
+          var t = "dark";
+          try { t = localStorage.getItem("r2pf-theme") === "light" ? "light" : "dark"; } catch (e) {}
+          document.documentElement.classList.add(t);
+        })();
+      </script>
       
     </head>
 

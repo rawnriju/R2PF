@@ -1,0 +1,109 @@
+/*
+ * Brand tokens for the site's own palette.
+ *
+ * theme.css holds the stock shadcn token set (used only by src/app/components/ui);
+ * everything the site actually renders reads from the variables below.
+ *
+ * Light values live on :root, dark overrides on .dark. Both selectors have the
+ * same specificity, so the .dark block MUST stay after :root. The theme class is
+ * written onto <html> by the bootstrap script in index.html and by ThemeProvider.
+ *
+ * Names deliberately avoid --accent and --muted: theme.css already owns those,
+ * and redefining them here would silently repaint every shadcn utility.
+ */
+
+:root {
+  color-scheme: light;
+
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --surface-glass: rgba(255, 255, 255, 0.7);
+  --header-bg: rgba(255, 255, 255, 0.78);
+
+  --fg: #0e1420;
+  --text-muted: #5b6373;
+
+  --hairline: rgba(14, 20, 32, 0.1);
+  --hairline-strong: rgba(14, 20, 32, 0.25);
+  --chip-bg: rgba(14, 20, 32, 0.05);
+
+  --brand: #0057ff;
+  --brand-rgb: 0, 87, 255;
+  --brand-2: #d94a00;
+  --brand-2-rgb: 217, 74, 0;
+  --on-brand: #ffffff;
+
+  --online: #16a34a;
+
+  /* Glows read as haze on a light background, so scale every bloom down. */
+  --glow: 0.45;
+
+  /* Canvas-only (see playground-canvas.tsx — 2D context can't resolve var()). */
+  --trail-core: rgba(70, 78, 92, 0.55);
+  --trail-mid: rgba(90, 98, 112, 0.3);
+  --trail-edge: rgba(90, 98, 112, 0);
+  --flash: #0e1420;
+  --flash-ring-rgb: 14, 20, 32;
+
+  /* Resume "paper". Kept separate from the site tokens: the resume is a
+     document, not a page of the site, and it has to print on white. */
+  --paper-bg: #f4f5f7;
+  --paper: #ffffff;
+  --paper-shadow: rgba(14, 20, 32, 0.08);
+  --ink: #171717;
+  --ink-2: #404040;
+  --ink-3: #525252;
+  --ink-4: #737373;
+  --resume-accent: #06ce3f;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --bg: #090b10;
+  --surface: #12161f;
+  --surface-glass: rgba(18, 22, 31, 0.55);
+  --header-bg: rgba(9, 11, 16, 0.72);
+
+  --fg: #e2e8f0;
+  --text-muted: #8a8f9e;
+
+  --hairline: rgba(255, 255, 255, 0.08);
+  --hairline-strong: rgba(255, 255, 255, 0.2);
+  --chip-bg: rgba(255, 255, 255, 0.06);
+
+  --brand: #ffe100;
+  --brand-rgb: 255, 225, 0;
+  --brand-2: #ff5500;
+  --brand-2-rgb: 255, 85, 0;
+  --on-brand: #090b10;
+
+  --online: #22c55e;
+
+  --glow: 1;
+
+  --trail-core: rgba(190, 195, 205, 0.9);
+  --trail-mid: rgba(140, 143, 158, 0.5);
+  --trail-edge: rgba(140, 143, 158, 0);
+  --flash: #ffffff;
+  --flash-ring-rgb: 255, 255, 255;
+
+  --paper-bg: #090b10;
+  --paper: #12161f;
+  --paper-shadow: rgba(0, 0, 0, 0.4);
+  --ink: #e2e8f0;
+  --ink-2: #c4cad6;
+  --ink-3: #a8aebc;
+  --ink-4: #8a8f9e;
+  --resume-accent: #06ce3f;
+}
+
+/* Keep the page chrome from flashing the old theme mid-swap. Scoped to the two
+   properties that actually change, so it can't interfere with hover/transform
+   transitions on individual components. */
+@media (prefers-reduced-motion: no-preference) {
+  html,
+  body {
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+}

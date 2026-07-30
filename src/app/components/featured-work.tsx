@@ -16,7 +16,7 @@ const PROJECTS: Project[] = [
     title: "Scrum Manager App",
     desc: "Lead Developer & Product Owner for a scrum management app — daily ceremonies, estimation planning, and sprint retrospectives. Took 2nd place at Atlassian's Codegeist 2021 Hackathon. Shipped a companion Slack app and Chrome extension, and cut load times to improve performance by 20%.",
     tags: ["REACT", "RECOIL.JS", "NODE.JS", "MONGODB", "FIREBASE"],
-    accent: "#FFE100",
+    accent: "var(--brand)",
     span: "md:col-span-2",
   },
   {
@@ -25,7 +25,7 @@ const PROJECTS: Project[] = [
     title: "Charts & Reports",
     desc: "A proprietary charting library and reporting web app on the Atlassian Marketplace, used by 1,000+ customers, with custom charts and enhanced customizability.",
     tags: ["REACT", "D3.JS", "JAVASCRIPT"],
-    accent: "#FF5500",
+    accent: "var(--brand-2)",
     span: "md:col-span-1",
   },
   {
@@ -34,7 +34,7 @@ const PROJECTS: Project[] = [
     title: "Attachment Tags for Jira",
     desc: "A serverless app built on Atlassian Forge, plus a companion 'Planning in Scrum Manager' port for the monday.com marketplace, enabling collaborative work estimation and tag-based file retrieval.",
     tags: ["FORGE", "SERVERLESS", "JIRA"],
-    accent: "#FFE100",
+    accent: "var(--brand)",
     span: "md:col-span-1",
   },
   {
@@ -43,7 +43,7 @@ const PROJECTS: Project[] = [
     title: "Q.E.D. — AR Crime-Solving Game",
     desc: "An Augmented Reality crime-solving game built for Excel 2018, a techno-managerial event at Govt. Model Engineering College with 50+ participants.",
     tags: ["UNITY3D", "VUFORIA", "AR"],
-    accent: "#FF5500",
+    accent: "var(--brand-2)",
     span: "md:col-span-2",
   },
 ];
@@ -57,8 +57,8 @@ function Card({ project }: { project: Project }) {
       href="#work"
       className={`group relative block p-7 min-h-[220px] transition-all duration-300 ${project.span}`}
       style={{
-        background: "#12161F",
-        border: "1px solid rgba(255,255,255,0.08)",
+        background: "var(--surface)",
+        border: "1px solid var(--hairline)",
         clipPath: CHAMFER,
       }}
     >
@@ -86,7 +86,7 @@ function Card({ project }: { project: Project }) {
         </span>
         <span
           className="font-mono transition-transform duration-300 group-hover:translate-x-1"
-          style={{ fontSize: 14, color: "#8A8F9E" }}
+          style={{ fontSize: 14, color: "var(--text-muted)" }}
         >
           →
         </span>
@@ -94,11 +94,11 @@ function Card({ project }: { project: Project }) {
 
       <h3
         className="mt-8"
-        style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 22, color: "#E2E8F0", lineHeight: 1.15 }}
+        style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 22, color: "var(--fg)", lineHeight: 1.15 }}
       >
         {project.title}
       </h3>
-      <p className="mt-3" style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, lineHeight: 1.55, color: "#8A8F9E" }}>
+      <p className="mt-3" style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, lineHeight: 1.55, color: "var(--text-muted)" }}>
         {project.desc}
       </p>
 
@@ -110,9 +110,9 @@ function Card({ project }: { project: Project }) {
             style={{
               fontSize: 10,
               letterSpacing: "0.1em",
-              color: "#8A8F9E",
+              color: "var(--text-muted)",
               padding: "4px 8px",
-              border: "1px solid rgba(255,255,255,0.08)",
+              border: "1px solid var(--hairline)",
             }}
           >
             {t}
@@ -128,14 +128,14 @@ export function FeaturedWork() {
     <section id="work" className="mx-auto max-w-[1200px] px-6 py-24">
       <div className="mb-12 flex items-end justify-between">
         <div>
-          <p className="font-mono mb-3" style={{ fontSize: 12, letterSpacing: "0.25em", color: "#FFE100" }}>
+          <p className="font-mono mb-3" style={{ fontSize: 12, letterSpacing: "0.25em", color: "var(--brand)" }}>
             01 // FEATURED WORK
           </p>
-          <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: "clamp(32px, 5vw, 52px)", color: "#E2E8F0", letterSpacing: "-0.02em" }}>
+          <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: "clamp(32px, 5vw, 52px)", color: "var(--fg)", letterSpacing: "-0.02em" }}>
             SELECTED PROJECTS
           </h2>
         </div>
-        <span className="font-mono hidden sm:block" style={{ fontSize: 12, color: "#8A8F9E" }}>
+        <span className="font-mono hidden sm:block" style={{ fontSize: 12, color: "var(--text-muted)" }}>
           [ 04 ENTRIES ]
         </span>
       </div>
