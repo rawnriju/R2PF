@@ -254,6 +254,38 @@ export function About() {
           pointer-events: none;
           transition: opacity 320ms ease;
         }
+        /* Thin square brand rail. Chrome/Safari only — and deliberately without
+           scrollbar-width/-color on the element, because setting either makes
+           Chrome ignore these pseudo-elements and fall back to the native
+           scrollbar (which brings back the stepper arrows). */
+        .about-panel__content::-webkit-scrollbar {
+          width: 3px;
+          height: 3px;
+        }
+        .about-panel__content::-webkit-scrollbar-track {
+          background: var(--hairline);
+          border-radius: 0;
+        }
+        .about-panel__content::-webkit-scrollbar-thumb {
+          background: var(--brand);
+          border-radius: 0;
+        }
+        .about-panel__content::-webkit-scrollbar-button {
+          display: none;
+          width: 0;
+          height: 0;
+        }
+        .about-panel__content::-webkit-scrollbar-corner {
+          background: transparent;
+        }
+        /* Firefox has no ::-webkit- pseudos; give it the nearest native match.
+           It draws no stepper arrows, so nothing to hide here. */
+        @supports not selector(::-webkit-scrollbar) {
+          .about-panel__content {
+            scrollbar-width: thin;
+            scrollbar-color: var(--brand) var(--hairline);
+          }
+        }
         .about-panel[data-active="true"] .about-panel__content {
           opacity: 1;
           pointer-events: auto;
