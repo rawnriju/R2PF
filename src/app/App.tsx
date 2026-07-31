@@ -31,7 +31,7 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen w-full" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+    <div className="page-shell min-h-screen w-full">
       <Header />
       <main>
         <Hero />

@@ -1,0 +1,64 @@
+/* ============================================================
+   project-card.tsx — work / extras grid cards
+
+   Each card's accent comes from its data, passed in as the
+   --card-accent custom property so the rules below stay static.
+   Named --card-accent rather than --accent because theme.css
+   (shadcn) already owns that token; see the note in brand.css.
+   ============================================================ */
+
+/* -- card surface; .chamfer supplies the clipped corners -- */
+.project-card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+}
+
+/* -- corner brackets that light up on hover -- */
+.project-card__corner {
+  filter: drop-shadow(0 0 6px var(--card-accent));
+}
+.project-card__corner--tr {
+  border-top: 2px solid var(--card-accent);
+  border-right: 2px solid var(--card-accent);
+}
+.project-card__corner--bl {
+  border-bottom: 2px solid var(--card-accent);
+  border-left: 2px solid var(--card-accent);
+}
+
+/* -- PRJ_01 index, in the card's own accent -- */
+.project-card__index {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--card-accent);
+}
+
+/* -- the → that slides right on hover -- */
+.project-card__arrow {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* -- title and description -- */
+.project-card__title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--fg);
+  line-height: 1.15;
+}
+.project-card__desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+/* -- tech tags -- */
+.project-card__tag {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  padding: 4px 8px;
+  border: 1px solid var(--hairline);
+}

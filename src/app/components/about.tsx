@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
+import "./about.css";
 
 type PanelKey = "technical" | "personal";
 
@@ -110,7 +111,7 @@ function Panel({
 }) {
   return (
     <div
-      className={`about-panel${active && justSwitched ? " is-sweeping" : ""}`}
+      className={`about-panel${active && justSwitched ? " about-panel--sweeping" : ""}`}
       data-active={active}
       data-side={side}
     >
@@ -136,7 +137,7 @@ function Panel({
 
       <div className="about-panel__content" aria-hidden={!active}>
         <p
-          className={`about-panel__label${active && justSwitched ? " is-glitching" : ""}`}
+          className={`about-panel__label${active && justSwitched ? " about-panel__label--glitching" : ""}`}
           data-text={data.label}
         >
           {data.label}
@@ -167,6 +168,7 @@ export function About() {
       if (current === side) return current;
       setJustSwitched(true);
       window.clearTimeout(timeoutRef.current);
+      // 620ms must stay in sync with the aboutSweep animation in about.css.
       timeoutRef.current = window.setTimeout(() => setJustSwitched(false), 620);
       return side;
     });
@@ -174,264 +176,8 @@ export function About() {
 
   return (
     <section id="about" className="mx-auto max-w-[1200px] px-6 py-24">
-      <style>{`
-        .about-accordion {
-          display: flex;
-          flex-direction: column;
-          gap: 1px;
-          background: var(--hairline);
-          border: 1px solid var(--hairline);
-          /* Bounded so the section never dominates the page scroll — the open
-             panel scrolls its own text instead of stretching to fit it. */
-          height: min(72vh, 800px);
-          min-height: 420px;
-        }
-        .about-panel {
-          position: relative;
-          overflow: hidden;
-          flex: 0 0 64px;
-          background: var(--surface);
-          transition: flex-grow 520ms cubic-bezier(0.16, 1, 0.3, 1),
-            flex-basis 520ms cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .about-panel[data-active="true"] {
-          flex: 1 1 0%;
-        }
-
-        .about-panel__strip {
-          position: absolute;
-          inset: 0;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-          background: transparent;
-          border: 0;
-          cursor: pointer;
-          opacity: 1;
-          transition: opacity 260ms ease 160ms;
-        }
-        .about-panel[data-active="true"] .about-panel__strip {
-          opacity: 0;
-          pointer-events: none;
-          transition-delay: 0ms;
-        }
-        .about-panel__strip:hover .about-panel__strip-txt {
-          color: var(--brand);
-        }
-        .about-panel__strip-txt {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 11px;
-          letter-spacing: 0.15em;
-          color: var(--text-muted);
-          white-space: nowrap;
-          transition: color 200ms ease;
-        }
-
-        /* Rotation only — direction comes from data-side. Colour tracks the
-           label so the whole strip lights up as one on hover. */
-        .about-panel__strip-arrow {
-          display: flex;
-          color: var(--text-muted);
-          transition: color 200ms ease;
-        }
-        .about-panel[data-side="start"] .about-panel__strip-arrow {
-          transform: rotate(90deg);
-        }
-        .about-panel[data-side="end"] .about-panel__strip-arrow {
-          transform: rotate(-90deg);
-        }
-        .about-panel__strip:hover .about-panel__strip-arrow {
-          color: var(--brand);
-        }
-
-        .about-panel__content {
-          height: 100%;
-          overflow-y: auto;
-          padding: 28px 24px;
-          opacity: 0;
-          pointer-events: none;
-          transition: opacity 320ms ease;
-        }
-        /* Thin square brand rail. Chrome/Safari only — and deliberately without
-           scrollbar-width/-color on the element, because setting either makes
-           Chrome ignore these pseudo-elements and fall back to the native
-           scrollbar (which brings back the stepper arrows). */
-        .about-panel__content::-webkit-scrollbar {
-          width: 3px;
-          height: 3px;
-        }
-        .about-panel__content::-webkit-scrollbar-track {
-          background: var(--hairline);
-          border-radius: 0;
-        }
-        .about-panel__content::-webkit-scrollbar-thumb {
-          background: var(--brand);
-          border-radius: 0;
-        }
-        .about-panel__content::-webkit-scrollbar-button {
-          display: none;
-          width: 0;
-          height: 0;
-        }
-        .about-panel__content::-webkit-scrollbar-corner {
-          background: transparent;
-        }
-        /* Firefox has no ::-webkit- pseudos; give it the nearest native match.
-           It draws no stepper arrows, so nothing to hide here. */
-        @supports not selector(::-webkit-scrollbar) {
-          .about-panel__content {
-            scrollbar-width: thin;
-            scrollbar-color: var(--brand) var(--hairline);
-          }
-        }
-        .about-panel[data-active="true"] .about-panel__content {
-          opacity: 1;
-          pointer-events: auto;
-          transition-delay: 180ms;
-        }
-
-        .about-panel__label {
-          position: relative;
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 12px;
-          letter-spacing: 0.2em;
-          color: var(--brand);
-          margin-bottom: 20px;
-        }
-        .about-panel__label.is-glitching::before,
-        .about-panel__label.is-glitching::after {
-          content: attr(data-text);
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-        }
-        .about-panel__label.is-glitching::before {
-          color: var(--brand);
-          animation: aboutGlitchA 480ms steps(2, end);
-        }
-        .about-panel__label.is-glitching::after {
-          color: var(--brand-2);
-          animation: aboutGlitchB 480ms steps(2, end);
-        }
-
-        .about-panel__body {
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
-        }
-        .about-panel__tag {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px;
-          letter-spacing: 0.15em;
-          color: var(--text-muted);
-          margin-bottom: 6px;
-        }
-        .about-panel__text {
-          font-family: 'Inter', sans-serif;
-          font-size: 14px;
-          line-height: 1.65;
-          color: var(--fg);
-        }
-        .about-panel__hl {
-          color: var(--brand);
-          font-weight: 600;
-        }
-
-        .about-panel__sweep {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          background: linear-gradient(90deg, transparent, rgba(var(--brand-rgb), 0.22), transparent);
-          transform: translateX(-120%);
-          opacity: 0;
-        }
-        .about-panel.is-sweeping .about-panel__sweep {
-          animation: aboutSweep 620ms ease-out;
-        }
-
-        @keyframes aboutGlitchA {
-          0% { clip-path: inset(0 0 80% 0); transform: translate(-4px, 0); opacity: 1; }
-          30% { clip-path: inset(30% 0 40% 0); transform: translate(4px, 0); }
-          60% { clip-path: inset(60% 0 10% 0); transform: translate(-3px, 0); }
-          100% { clip-path: inset(100% 0 0 0); transform: translate(0, 0); opacity: 0; }
-        }
-        @keyframes aboutGlitchB {
-          0% { clip-path: inset(80% 0 0 0); transform: translate(4px, 0); opacity: 1; }
-          30% { clip-path: inset(40% 0 30% 0); transform: translate(-4px, 0); }
-          60% { clip-path: inset(10% 0 60% 0); transform: translate(3px, 0); }
-          100% { clip-path: inset(0 0 100% 0); transform: translate(0, 0); opacity: 0; }
-        }
-        @keyframes aboutSweep {
-          0% { transform: translateX(-120%); opacity: 0.9; }
-          60% { opacity: 0.5; }
-          100% { transform: translateX(120%); opacity: 0; }
-        }
-
-        @media (min-width: 768px) {
-          .about-accordion {
-            flex-direction: row;
-          }
-          .about-panel[data-active="false"] {
-            flex-basis: 76px;
-          }
-          .about-panel__strip {
-            flex-direction: column;
-            gap: 14px;
-          }
-          .about-panel__strip-txt {
-            writing-mode: vertical-rl;
-            transform: rotate(180deg);
-          }
-          .about-panel[data-side="start"] .about-panel__strip-arrow {
-            transform: rotate(0deg);
-          }
-          .about-panel[data-side="end"] .about-panel__strip-arrow {
-            transform: rotate(180deg);
-          }
-          .about-panel__content {
-            padding: 44px;
-          }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .about-panel,
-          .about-panel__strip,
-          .about-panel__content {
-            transition-duration: 1ms;
-          }
-          .about-panel__label.is-glitching::before,
-          .about-panel__label.is-glitching::after {
-            content: none;
-            animation: none;
-          }
-          .about-panel__sweep {
-            animation: none;
-          }
-        }
-      `}</style>
-
-      <p
-        className="font-mono mb-3"
-        style={{ fontSize: 12, letterSpacing: "0.25em", color: "var(--brand)" }}
-      >
-        01 // ABOUT
-      </p>
-      <h2
-        className="mb-10"
-        style={{
-          fontFamily: "'Space Grotesk', sans-serif",
-          fontWeight: 700,
-          fontSize: "clamp(28px, 4vw, 44px)",
-          color: "var(--fg)",
-          letterSpacing: "-0.02em",
-          lineHeight: 1.05,
-        }}
-      >
-        THE PERSON BEHIND THE CODE
-      </h2>
+      <p className="section-eyebrow font-mono mb-3">01 // ABOUT</p>
+      <h2 className="section-title mb-10">THE PERSON BEHIND THE CODE</h2>
 
       <div className="about-accordion">
         <Panel

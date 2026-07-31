@@ -1,4 +1,5 @@
 import { ProjectCard, type Project } from "./project-card";
+import "./work.css";
 
 const CAPABILITIES = [
   { k: "FRONTEND", v: "React, Recoil.js, TypeScript, JavaScript" },
@@ -41,60 +42,37 @@ export function Work() {
   return (
     <section id="work" className="mx-auto max-w-[1200px] px-6 py-24">
       <div className="mb-8">
-        <p className="font-mono mb-3" style={{ fontSize: 12, letterSpacing: "0.25em", color: "var(--brand)" }}>
-          02 // WORK
-        </p>
-        <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", color: "var(--fg)", letterSpacing: "-0.02em", lineHeight: 1.05 }}>
-          EXPERIENCE
-        </h2>
+        <p className="section-eyebrow font-mono mb-3">02 // WORK</p>
+        <h2 className="section-title">EXPERIENCE</h2>
       </div>
 
-      <div
-        className="mb-16 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center"
-        style={{
-          padding: "18px 24px",
-          border: "1px solid var(--hairline)",
-          background: "var(--chip-bg)",
-        }}
-      >
-        <span className="font-mono" style={{ fontSize: 11, letterSpacing: "0.1em" }}>
-          <span style={{ color: "var(--text-muted)" }}>[ COMPANY: </span>
-          <span style={{ color: "var(--brand)" }}>View26 GmbH (Actiotech LLP)</span>
-          <span style={{ color: "var(--text-muted)" }}> ]</span>
+      <div className="work-infobar mb-16 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center">
+        <span className="stat-span font-mono">
+          [ COMPANY: <span className="stat-span__value">View26 GmbH (Actiotech LLP)</span> ]
         </span>
-        <span className="hidden sm:inline" style={{ color: "var(--hairline-strong)" }}>•</span>
-        <span className="font-mono" style={{ fontSize: 11, letterSpacing: "0.1em" }}>
-          <span style={{ color: "var(--text-muted)" }}>[ ROLE: </span>
-          <span style={{ color: "var(--brand)" }}>Senior Full-Stack Software Engineer</span>
-          <span style={{ color: "var(--text-muted)" }}> ]</span>
+        <span className="dot-sep hidden sm:inline">•</span>
+        <span className="stat-span font-mono">
+          [ ROLE: <span className="stat-span__value">Senior Full-Stack Software Engineer</span> ]
         </span>
-        <span className="hidden sm:inline" style={{ color: "var(--hairline-strong)" }}>•</span>
-        <span className="font-mono" style={{ fontSize: 11, letterSpacing: "0.1em" }}>
-          <span style={{ color: "var(--text-muted)" }}>[ PERIOD: </span>
-          <span style={{ color: "var(--brand)" }}>Sept 2020 – July 2025</span>
-          <span style={{ color: "var(--text-muted)" }}> ]</span>
+        <span className="dot-sep hidden sm:inline">•</span>
+        <span className="stat-span font-mono">
+          [ PERIOD: <span className="stat-span__value">Sept 2020 – July 2025</span> ]
         </span>
       </div>
 
-      <h3 className="mb-8" style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: "clamp(22px, 3vw, 32px)", color: "var(--fg)", letterSpacing: "-0.02em" }}>
-        TECHNICAL ARSENAL
-      </h3>
-      <div className="flex flex-col gap-px mb-16" style={{ background: "var(--hairline)", border: "1px solid var(--hairline)" }}>
+      <h3 className="section-subtitle mb-8">TECHNICAL ARSENAL</h3>
+      <div className="hairline-list flex flex-col gap-px mb-16">
         {CAPABILITIES.map((c) => (
-          <div key={c.k} className="flex items-baseline gap-5 p-5" style={{ background: "var(--surface)" }}>
-            <span className="font-mono shrink-0" style={{ fontSize: 11, letterSpacing: "0.12em", color: "var(--brand)", width: 108 }}>
-              {c.k}
-            </span>
-            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 15, color: "var(--fg)" }}>{c.v}</span>
+          <div key={c.k} className="hairline-row flex items-baseline gap-5 p-5">
+            <span className="work-capability__key font-mono shrink-0">{c.k}</span>
+            <span className="work-capability__value">{c.v}</span>
           </div>
         ))}
       </div>
 
       <div className="mb-8 flex items-end justify-between">
-        <h3 style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: "clamp(22px, 3vw, 32px)", color: "var(--fg)", letterSpacing: "-0.02em" }}>
-          SELECTED PROJECTS
-        </h3>
-        <span className="font-mono hidden sm:block" style={{ fontSize: 12, color: "var(--text-muted)" }}>
+        <h3 className="section-subtitle">SELECTED PROJECTS</h3>
+        <span className="work-entry-count font-mono hidden sm:block">
           [ 03 ENTRIES ]
         </span>
       </div>

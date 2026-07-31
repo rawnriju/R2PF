@@ -1,0 +1,55 @@
+/* ============================================================
+   resume.tsx — /resume route
+
+   Everything visual on this page is Tailwind arbitrary values
+   reading the paper and ink tokens from brand.css. Only the
+   print rules and the paper card's shadow live here.
+   ============================================================ */
+
+/* -- paper card; --paper-shadow goes transparent in print, so
+      the card flattens onto the page -- */
+.resume-doc__paper {
+  box-shadow: 0 1px 2px 0 var(--paper-shadow);
+}
+
+/* -- sticky toolbar above the paper (screen only) -- */
+.resume-toolbar {
+  background: var(--bg);
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* ------------------------------------------------------------
+   Print
+   Gated behind :has(.resume-doc) so these only bite when a
+   resume is actually mounted. This file is in the same bundle
+   as every other route, so an unscoped :root/html rule here
+   would change how the home page prints too — which is exactly
+   what the old route-local <style> block prevented.
+   ------------------------------------------------------------ */
+
+@media print {
+  @page { size: A4; margin: 12mm; }
+
+  /* A resume prints on white paper in either theme — force the light
+     ink/paper values back, overriding whatever .dark set. The selector
+     scores 0,1,1 so it outranks brand.css's .dark (0,1,0). */
+  html:has(.resume-doc) {
+    --paper-bg: #ffffff;
+    --paper: #ffffff;
+    --paper-shadow: transparent;
+    --ink: #171717;
+    --ink-2: #404040;
+    --ink-3: #525252;
+    --ink-4: #737373;
+    --resume-accent: #06ce3f;
+    background: #ffffff !important;
+  }
+  html:has(.resume-doc) body {
+    background: #ffffff !important;
+  }
+  .resume-doc,
+  .resume-doc * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

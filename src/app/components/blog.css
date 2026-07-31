@@ -1,0 +1,31 @@
+/* ============================================================
+   blog.tsx — /blog route
+   ============================================================ */
+
+/* -- sticky route header; the home page's is fixed, see header.css -- */
+.blog-header {
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* -- BACK TO HOME link -- */
+.blog-header__back {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+}
+
+/* -- RAWN.DEV wordmark -- */
+.blog-header__wordmark {
+  color: var(--fg);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* -- intro paragraph under the title -- */
+.blog-intro {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-muted);
+}

@@ -1,3 +1,6 @@
+import type { CSSProperties } from "react";
+import "./boost-gauge.css";
+
 interface BoostGaugeProps {
   /** 0 - 100 */
   value: number;
@@ -23,14 +26,16 @@ export function BoostGauge({ value }: BoostGaugeProps) {
 
   return (
     <div
-      className="fixed bottom-6 right-6 z-50 grid place-items-center rounded-full transition-shadow duration-300"
+      className="boost-gauge fixed bottom-6 right-6 z-50 grid place-items-center rounded-full transition-shadow duration-300"
+      data-full={full}
+      // Colours come from boost-gauge.css; only the JS-derived geometry
+      // stays inline.
       style={{
         width: size,
         height: size,
-        boxShadow: full
-          ? `0 0 32px 4px rgba(${accentRgb}, calc(0.55 * var(--glow)))`
-          : `0 0 18px 0 rgba(${accentRgb}, calc(0.25 * var(--glow)))`,
-      }}
+        "--gauge-accent": accent,
+        "--gauge-accent-rgb": accentRgb,
+      } as CSSProperties}
     >
       <svg width={size} height={size} className="absolute inset-0">
         {Array.from({ length: SEGMENTS }).map((_, i) => {
@@ -49,38 +54,20 @@ export function BoostGauge({ value }: BoostGaugeProps) {
               y2={y2}
               strokeWidth={2.5}
               strokeLinecap="round"
-              // stroke lives in `style`, not as a presentation attribute:
-              // SVG attributes don't resolve var().
-              style={
-                active
-                  ? { stroke: accent, filter: `drop-shadow(0 0 3px ${accent})` }
-                  : { stroke: "var(--hairline-strong)" }
-              }
+              // stroke is set in boost-gauge.css, not as a presentation
+              // attribute: SVG attributes don't resolve var().
+              className="boost-gauge__tick"
+              data-active={active}
             />
           );
         })}
       </svg>
       <div
-        className="grid place-items-center rounded-full"
-        style={{
-          width: inner * 2 - 8,
-          height: inner * 2 - 8,
-          background: "var(--surface)",
-          border: "1px solid var(--hairline)",
-        }}
+        className="boost-gauge__face grid place-items-center rounded-full"
+        style={{ width: inner * 2 - 8, height: inner * 2 - 8 }}
       >
-        <span
-          className="font-mono"
-          style={{ fontSize: 9, letterSpacing: "0.15em", color: "var(--text-muted)", }}
-        >
-          BOOST
-        </span>
-        <span
-          className="font-mono"
-          style={{ fontSize: 22, color: accent, fontWeight: 700, lineHeight: 1 }}
-        >
-          {Math.round(pct)}
-        </span>
+        <span className="boost-gauge__label font-mono">BOOST</span>
+        <span className="boost-gauge__value font-mono">{Math.round(pct)}</span>
       </div>
     </div>
   );

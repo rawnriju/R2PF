@@ -1,0 +1,41 @@
+/* ============================================================
+   footer.tsx — site footer
+   ============================================================ */
+
+/* -- top hairline + raised surface -- */
+.site-footer {
+  border-top: 1px solid var(--hairline);
+  background: var(--surface);
+}
+
+/* -- copyright line -- */
+.site-footer__copy {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+/* -- GitHub / LinkedIn icons -- */
+.site-footer__social {
+  color: var(--text-muted);
+}
+
+/* -- BACK TO TOP button --
+   Its own 8px chamfer on the opposite corners from the 18px
+   .chamfer the cards use; deliberately not shared. */
+.site-footer__top {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+.site-footer__top-face {
+  color: var(--brand);
+  border: 1px solid rgba(var(--brand-rgb), 0.5);
+  clip-path: polygon(
+    8px 0,
+    100% 0,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    0 100%,
+    0 8px
+  );
+}

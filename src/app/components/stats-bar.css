@@ -1,0 +1,10 @@
+/* ============================================================
+   stats-bar.tsx — the rule between the hero and the about section
+   ============================================================ */
+
+/* -- full-bleed band; hairlines top and bottom -- */
+.stats-bar {
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  background: var(--surface);
+}

@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { ThemeToggle } from "./theme-toggle";
+import "./resume.css";
 
 const experience = [
   {
@@ -122,32 +123,11 @@ function SectionHeading({
 
 export function Resume() {
   return (
-    <div className="min-h-screen print:min-h-0 w-full bg-[var(--paper-bg)] py-10 px-4 print:py-0 print:px-0 font-['Inter',sans-serif]">
-      <style>{`
-        @media print {
-          @page { size: A4; margin: 12mm; }
-
-          /* A resume prints on white paper in either theme — force the light
-             ink/paper values back, overriding whatever .dark set. */
-          :root, .dark {
-            --paper-bg: #ffffff;
-            --paper: #ffffff;
-            --paper-shadow: transparent;
-            --ink: #171717;
-            --ink-2: #404040;
-            --ink-3: #525252;
-            --ink-4: #737373;
-            --resume-accent: #06CE3F;
-          }
-          html, body { background: #ffffff !important; }
-          * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        }
-      `}</style>
-      <div
-        className="mx-auto max-w-[900px] print:max-w-none bg-[var(--paper)] px-10 py-12 md:px-14 md:py-14 print:px-0 print:py-0"
-        // --paper-shadow is transparent in print, so the card flattens on paper.
-        style={{ boxShadow: "0 1px 2px 0 var(--paper-shadow)" }}
-      >
+    // resume-doc is what scopes the @media print block in resume.css — that
+    // stylesheet is bundled globally, so without this hook the home page
+    // would print with resume paper tokens too.
+    <div className="resume-doc min-h-screen print:min-h-0 w-full bg-[var(--paper-bg)] py-10 px-4 print:py-0 print:px-0 font-['Inter',sans-serif]">
+      <div className="resume-doc__paper mx-auto max-w-[900px] print:max-w-none bg-[var(--paper)] px-10 py-12 md:px-14 md:py-14 print:px-0 print:py-0">
         {/* Header */}
         <header className="flex flex-col md:flex-row print:flex-row md:items-start print:items-start md:justify-between print:justify-between gap-6 print:gap-4 mb-12 print:mb-5">
           <div className="max-w-md">
@@ -330,10 +310,7 @@ export function Resume() {
 export function ResumePage() {
   return (
     <div className="min-h-screen print:min-h-0 w-full bg-[var(--paper-bg)]">
-      <div
-        className="print:hidden sticky top-0 z-10"
-        style={{ background: "var(--bg)", borderBottom: "1px solid var(--hairline)" }}
-      >
+      <div className="resume-toolbar print:hidden sticky top-0 z-10">
         <div className="mx-auto max-w-[900px] px-4 py-3 flex items-center justify-between">
           <Link
             to="/"

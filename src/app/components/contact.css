@@ -1,0 +1,57 @@
+/* ============================================================
+   contact.tsx — email / GitHub / LinkedIn cards
+
+   Same shape as the project cards, with each channel's accent
+   arriving as --chan-accent. Named --chan-accent rather than
+   --accent because theme.css (shadcn) owns that token.
+   ============================================================ */
+
+/* -- intro paragraph under the section heading -- */
+.contact-intro {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+/* -- channel card; .chamfer supplies the clipped corners -- */
+.contact-card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+}
+
+/* -- corner brackets that light up on hover, matching project cards -- */
+.contact-card__corner {
+  filter: drop-shadow(0 0 6px var(--chan-accent));
+}
+.contact-card__corner--tr {
+  border-top: 2px solid var(--chan-accent);
+  border-right: 2px solid var(--chan-accent);
+}
+.contact-card__corner--bl {
+  border-bottom: 2px solid var(--chan-accent);
+  border-left: 2px solid var(--chan-accent);
+}
+
+/* -- icon tile, in the channel's accent -- */
+.contact-card__icon {
+  width: 44px;
+  height: 44px;
+  color: var(--chan-accent);
+  border: 1px solid var(--hairline);
+  background: var(--chip-bg);
+}
+
+/* -- EMAIL / GITHUB / LINKEDIN tag above the value -- */
+.contact-card__tag {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+/* -- the address / handle itself -- */
+.contact-card__value {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: var(--fg);
+}

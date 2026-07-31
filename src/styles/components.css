@@ -1,0 +1,132 @@
+/* ============================================================
+   components.css — primitives shared by 3+ components
+
+   Only patterns that were literally copy-pasted across several
+   components live here. Anything used once or twice belongs in
+   that component's own .css file next to its .tsx.
+
+   Imported by index.css (after brand.css, so the tokens exist).
+   Per-component files load later in the bundle and therefore win
+   ties against these — don't rely on that, keep selectors flat.
+   ============================================================ */
+
+/* -- page shell: App.tsx, blog.tsx -- */
+.page-shell {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* ------------------------------------------------------------
+   Section headings
+   The numbered eyebrow + big title pair that opens every
+   section: about, work, extras, contact, blog, hero.
+   ------------------------------------------------------------ */
+
+/* -- `01 // ABOUT` eyebrow -- */
+.section-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.25em;
+  color: var(--brand);
+}
+
+/* -- section <h2> -- */
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(28px, 4vw, 44px);
+  color: var(--fg);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+/* -- section <h3>: extras' SubHeading, work's two -- */
+.section-subtitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(22px, 3vw, 32px);
+  color: var(--fg);
+  letter-spacing: -0.02em;
+}
+
+/* ------------------------------------------------------------
+   Hairline list
+   Stacked rows separated by 1px gaps that show the container
+   colour through: work's capabilities, extras' and blog's SOON
+   placeholders.
+   ------------------------------------------------------------ */
+
+.hairline-list {
+  background: var(--hairline);
+  border: 1px solid var(--hairline);
+}
+
+.hairline-row {
+  background: var(--surface);
+}
+
+/* -- "SOON" placeholder row: extras' volunteering, blog's posts --
+   A mono tag beside a pulsing bar standing in for the missing copy. */
+.soon-row__tag {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--brand);
+  width: 72px;
+}
+.soon-row__bar {
+  width: 100%;
+  max-width: 360px;
+  height: 14px;
+  background: var(--chip-bg);
+  border-radius: 2px;
+}
+
+/* ------------------------------------------------------------
+   Mono HUD text
+   ------------------------------------------------------------ */
+
+/* -- `[ LABEL: value ]` stat: stats-bar, work ×3 --
+   The wrapper is muted; only the value opts into the accent. */
+.stat-span {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+.stat-span__value {
+  color: var(--brand);
+}
+
+/* -- separator bullet between stats: stats-bar, work ×2, hero -- */
+.dot-sep {
+  color: var(--hairline-strong);
+}
+
+/* ------------------------------------------------------------
+   Chip — header route links + theme toggle
+   These three sit side by side, so any drift in padding or
+   border would be obvious. Kept in one rule for that reason.
+   ------------------------------------------------------------ */
+
+.chip {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  border: 1px solid var(--hairline);
+  background: var(--chip-bg);
+}
+
+/* ------------------------------------------------------------
+   Chamfer — clipped corner used by project cards and contact
+   cards. footer.tsx has its own 8px variant on different
+   corners; that one stays local to footer.css.
+   ------------------------------------------------------------ */
+
+.chamfer {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 18px) 0,
+    100% 18px,
+    100% 100%,
+    18px 100%,
+    0 calc(100% - 18px)
+  );
+}

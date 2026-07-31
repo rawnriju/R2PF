@@ -1,0 +1,29 @@
+/* ============================================================
+   work.tsx — experience section
+   ============================================================ */
+
+/* -- company / role / period summary bar under the heading -- */
+.work-infobar {
+  padding: 18px 24px;
+  border: 1px solid var(--hairline);
+  background: var(--chip-bg);
+}
+
+/* -- technical arsenal rows (see .hairline-list in components.css) -- */
+.work-capability__key {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--brand);
+  width: 108px;
+}
+.work-capability__value {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: var(--fg);
+}
+
+/* -- `[ 03 ENTRIES ]` count beside SELECTED PROJECTS -- */
+.work-entry-count {
+  font-size: 12px;
+  color: var(--text-muted);
+}

@@ -1,5 +1,6 @@
 import { useRef, useEffect, useCallback, useState } from "react";
 import { PlaygroundCanvas, Ball, Pointer, ScoreLine } from "./playground-canvas";
+import "./hero.css";
 
 const REPEL_RADIUS = 130;
 const MAX_OFFSET = 260;
@@ -26,14 +27,12 @@ function newCharState(): CharState {
 function ScatterText({
   text,
   className,
-  style,
   ballsRef,
   resetSignalRef,
   pointerRef,
 }: {
   text: string;
   className?: string;
-  style?: React.CSSProperties;
   ballsRef: React.MutableRefObject<Ball[]>;
   resetSignalRef: React.MutableRefObject<number>;
   pointerRef?: React.MutableRefObject<Pointer> | null;
@@ -188,15 +187,15 @@ function ScatterText({
   const chars = text.split("");
 
   return (
-    <span ref={containerRef} className={className} style={{ ...style, display: "inline" }}>
+    <span ref={containerRef} className={`hero-scatter ${className ?? ""}`}>
       {chars.map((char, i) =>
         char === " " ? (
-          <span key={i} style={{ display: "inline-block", width: "0.3em" }}>&nbsp;</span>
+          <span key={i} className="hero-scatter__space">&nbsp;</span>
         ) : (
           <span
             key={i}
             ref={(el) => { charRefsRef.current[i] = el; }}
-            style={{ display: "inline-block", willChange: "transform" }}
+            className="hero-scatter__char"
           >
             {char}
           </span>
@@ -221,6 +220,7 @@ export function Hero() {
     const line = scoreLineRef.current;
     const id = ++pulseIdRef.current;
     setPulses((p) => [...p, { id, x: line?.x ?? 0, y: line ? (line.top + line.bottom) / 2 : 0 }]);
+    // 900ms must stay in sync with the hero-goal-pulse animation in hero.css.
     window.setTimeout(() => {
       setPulses((p) => p.filter((pu) => pu.id !== id));
     }, 900);
@@ -248,14 +248,6 @@ export function Hero() {
 
   return (
     <section className="relative min-h-screen flex flex-col justify-center overflow-hidden pt-16">
-      <style>{`
-        @keyframes goalPulse {
-          0% { transform: translate(-50%, -50%) scale(0); opacity: 0.9; }
-          60% { opacity: 0.45; }
-          100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
-        }
-      `}</style>
-
       <PlaygroundCanvas
         sharedBallsRef={sharedBallsRef}
         resetSignalRef={resetSignalRef}
@@ -269,18 +261,9 @@ export function Hero() {
         <div
           key={p.id}
           aria-hidden="true"
-          className="pointer-events-none absolute z-40"
-          style={{
-            left: p.x,
-            top: p.y,
-            width: 640,
-            height: 640,
-            borderRadius: "9999px",
-            background:
-              "radial-gradient(circle, rgba(var(--brand-rgb), calc(0.55 * var(--glow))), rgba(var(--brand-rgb), calc(0.12 * var(--glow))) 45%, transparent 70%)",
-            boxShadow: "0 0 120px 40px rgba(var(--brand-rgb), calc(0.35 * var(--glow)))",
-            animation: "goalPulse 0.9s ease-out forwards",
-          }}
+          className="hero-goal-pulse pointer-events-none absolute z-40"
+          // Position is measured DOM geometry, so it can't live in CSS.
+          style={{ left: p.x, top: p.y }}
         />
       ))}
 
@@ -290,68 +273,32 @@ export function Hero() {
       {score > 0 && (
         <div className="pointer-events-none absolute inset-x-0 top-72 z-30">
           <div className="relative mx-auto max-w-[1200px] px-6">
-            <div
-              className="absolute right-0 top-0 backdrop-blur-md font-mono flex items-center gap-2 px-4 py-2 rounded-full"
-              style={{
-                background: "var(--surface-glass)",
-                border: "1px solid var(--hairline)",
-                fontSize: 11,
-                letterSpacing: "0.08em",
-                color: "var(--text-muted)",
-              }}
-            >
-              [ SCORE: <span style={{ color: "var(--brand)" }}>{score}</span> ]
+            <div className="hero-hud absolute right-0 top-0 backdrop-blur-md font-mono flex items-center gap-2 px-4 py-2 rounded-full">
+              [ SCORE: <span className="hero-hud__brand">{score}</span> ]
             </div>
           </div>
         </div>
       )}
 
       {/* subtle accent glow backdrop */}
-      <div
-        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[520px] w-[520px] rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(var(--brand-rgb), calc(0.07 * var(--glow))), transparent 70%)",
-        }}
-      />
+      <div className="hero-glow pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[520px] w-[520px] rounded-full" />
 
       <div className="pointer-events-none relative z-10 mx-auto w-full max-w-[1200px] px-6 py-24">
-        <p className="font-mono mb-6" style={{ fontSize: 12, letterSpacing: "0.25em", color: "var(--brand)" }}>
+        <p className="section-eyebrow font-mono mb-6">
           // SENIOR FULLSTACK SOFTWARE ENGINEER
         </p>
 
-        <h1
-          style={{
-            position: "relative",
-            fontFamily: "'Space Grotesk', sans-serif",
-            fontWeight: 700,
-            lineHeight: 0.92,
-            fontSize: "clamp(48px, 9vw, 128px)",
-            color: "var(--fg)",
-            letterSpacing: "-0.02em",
-          }}
-        >
+        <h1 className="hero-title">
           <div
             ref={scoreLineElRef}
             aria-hidden="true"
-            className="absolute"
-            style={{
-              left: -20,
-              top: 0,
-              bottom: 0,
-              width: 3,
-              borderRadius: 2,
-              background: "var(--brand)",
-              boxShadow:
-                "0 0 12px rgba(var(--brand-rgb), calc(0.6 * var(--glow))), 0 0 28px rgba(var(--brand-rgb), calc(0.3 * var(--glow)))",
-            }}
+            className="hero-score-line absolute"
           />
           <ScatterText
             text="RAWN ABRAHAM"
             ballsRef={sharedBallsRef}
             resetSignalRef={resetSignalRef}
             pointerRef={sharedPointerRef}
-            style={{ display: "block" }}
           />
           <br />
           <ScatterText
@@ -359,23 +306,11 @@ export function Hero() {
             ballsRef={sharedBallsRef}
             resetSignalRef={resetSignalRef}
             pointerRef={sharedPointerRef}
-            style={{
-              color: "var(--brand)",
-              textShadow: "0 0 40px rgba(var(--brand-rgb), calc(0.35 * var(--glow)))",
-            }}
+            className="hero-title__accent"
           />
         </h1>
 
-        <p
-          className="mt-6"
-          style={{
-            fontFamily: "'Space Grotesk', sans-serif",
-            fontWeight: 500,
-            fontSize: "clamp(18px, 2.4vw, 30px)",
-            color: "var(--text-muted)",
-            letterSpacing: "0.02em",
-          }}
-        >
+        <p className="hero-subtitle mt-6">
           <ScatterText
             text="FULLSTACK SOFTWARE ENGINEER & MSC STUDENT"
             ballsRef={sharedBallsRef}
@@ -383,28 +318,16 @@ export function Hero() {
           />
         </p>
 
-        <p
-          className="mt-8 max-w-[800px]"
-          style={{ fontFamily: "'Inter', sans-serif", fontSize: 17, lineHeight: 1.6, color: "var(--text-muted)" }}
-        >
+        <p className="hero-blurb mt-8 max-w-[800px]">
        Hey there! I'm Rawn, and I like to learn, build, and question things. I'm a full-stack software engineer with nearly 5 years of professional experience, specializing in data visualization and building accessible, user-friendly experiences. </p>
       </div>
 
       {/* HUD control banner */}
       <div className="pointer-events-none absolute bottom-8 inset-x-0 z-30 flex justify-center px-6">
-        <div
-          className="backdrop-blur-md font-mono flex flex-wrap items-center justify-center gap-x-4 gap-y-1 px-5 py-3 rounded-full"
-          style={{
-            background: "var(--surface-glass)",
-            border: "1px solid var(--hairline)",
-            fontSize: 11,
-            letterSpacing: "0.08em",
-            color: "var(--text-muted)",
-          }}
-        >
-          <span>[ 🖱️ HOLD LEFT-CLICK: <span style={{ color: "var(--brand)" }}>CHARGE & AIM BALL</span> ]</span>
-          <span style={{ color: "var(--hairline-strong)" }}>•</span>
-          <span>[ 🖱️ RIGHT-CLICK: <span style={{ color: "var(--brand-2)" }}>KAWARIMI RESET</span> ]</span>
+        <div className="hero-hud backdrop-blur-md font-mono flex flex-wrap items-center justify-center gap-x-4 gap-y-1 px-5 py-3 rounded-full">
+          <span>[ 🖱️ HOLD LEFT-CLICK: <span className="hero-hud__brand">CHARGE & AIM BALL</span> ]</span>
+          <span className="dot-sep">•</span>
+          <span>[ 🖱️ RIGHT-CLICK: <span className="hero-hud__brand-2">KAWARIMI RESET</span> ]</span>
         </div>
       </div>
     </section>

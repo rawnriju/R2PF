@@ -1,6 +1,6 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "../theme";
-import { CHIP_CLASS, CHIP_STYLE } from "./chip";
+import { CHIP_CLASS } from "./chip";
 
 /**
  * Light/dark switch. Styled to sit next to the site's other mono `[ LABEL ]`
@@ -18,7 +18,6 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       aria-pressed={theme === "light"}
       title={`Switch to ${goingTo} mode`}
       className={`${CHIP_CLASS} ${className}`}
-      style={CHIP_STYLE}
     >
       {theme === "dark" ? (
         <Sun size={13} strokeWidth={2} aria-hidden="true" />

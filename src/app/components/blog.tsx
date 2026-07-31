@@ -1,24 +1,21 @@
 import { Link } from "react-router";
 import { ThemeToggle } from "./theme-toggle";
+import "./blog.css";
 
 export function BlogPage() {
   return (
-    <div className="min-h-screen w-full" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <header
-        className="sticky top-0 z-40 backdrop-blur-md"
-        style={{ background: "var(--header-bg)", borderBottom: "1px solid var(--hairline)" }}
-      >
+    <div className="page-shell min-h-screen w-full">
+      <header className="blog-header sticky top-0 z-40 backdrop-blur-md">
         <div className="mx-auto max-w-[1200px] px-6 h-16 flex items-center justify-between">
           <Link
             to="/"
-            className="font-mono transition-colors duration-200 hover:text-[var(--brand)]"
-            style={{ fontSize: 12, letterSpacing: "0.12em", color: "var(--text-muted)" }}
+            className="blog-header__back font-mono transition-colors duration-200 hover:text-[var(--brand)]"
           >
             ← BACK TO HOME
           </Link>
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <span className="font-mono tracking-wide" style={{ color: "var(--fg)", fontWeight: 700, fontSize: 15 }}>
+            <span className="blog-header__wordmark font-mono tracking-wide">
               RAWN.DEV
             </span>
           </div>
@@ -26,54 +23,18 @@ export function BlogPage() {
       </header>
 
       <main className="mx-auto max-w-[1200px] px-6 py-24">
-        <p className="font-mono mb-3" style={{ fontSize: 12, letterSpacing: "0.25em", color: "var(--brand)" }}>
-          04 // BLOG
-        </p>
-        <h1
-          style={{
-            fontFamily: "'Space Grotesk', sans-serif",
-            fontWeight: 700,
-            fontSize: "clamp(28px, 4vw, 44px)",
-            color: "var(--fg)",
-            letterSpacing: "-0.02em",
-            lineHeight: 1.05,
-          }}
-        >
-          WRITING — UNDER CONSTRUCTION
-        </h1>
-        <p
-          className="mt-6 max-w-[520px]"
-          style={{ fontFamily: "'Inter', sans-serif", fontSize: 16, lineHeight: 1.65, color: "var(--text-muted)" }}
-        >
+        <p className="section-eyebrow font-mono mb-3">04 // BLOG</p>
+        <h1 className="section-title">WRITING — UNDER CONSTRUCTION</h1>
+        <p className="blog-intro mt-6 max-w-[520px]">
           Posts on frontend engineering, data visualization, and whatever else I'm
           learning will show up here. Nothing published yet — check back soon.
         </p>
 
-        <div
-          className="mt-16 flex flex-col gap-px"
-          style={{ background: "var(--hairline)", border: "1px solid var(--hairline)" }}
-        >
+        <div className="hairline-list mt-16 flex flex-col gap-px">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="flex items-baseline gap-5 p-5" style={{ background: "var(--surface)" }}>
-              <span
-                className="font-mono shrink-0"
-                style={{ fontSize: 11, letterSpacing: "0.12em", color: "var(--brand)", width: 72 }}
-              >
-                SOON
-              </span>
-              <span
-                className="animate-pulse"
-                style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: 15,
-                  color: "var(--text-muted)",
-                  width: "100%",
-                  maxWidth: 360,
-                  height: 14,
-                  background: "var(--chip-bg)",
-                  borderRadius: 2,
-                }}
-              />
+            <div key={i} className="hairline-row flex items-baseline gap-5 p-5">
+              <span className="soon-row__tag font-mono shrink-0">SOON</span>
+              <span className="soon-row__bar animate-pulse" />
             </div>
           ))}
         </div>

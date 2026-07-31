@@ -1,0 +1,41 @@
+/* ============================================================
+   header.tsx — fixed site header
+   The blog route has its own sticky variant of this chrome; see
+   blog.css. They're intentionally separate (fixed vs sticky).
+   ============================================================ */
+
+/* -- translucent bar over the hero canvas -- */
+.site-header {
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* -- RAWN.DEV wordmark -- */
+.site-header__wordmark {
+  color: var(--fg);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* -- `[ ONLINE ]` status, with its pinging dot -- */
+.site-header__status {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
+.site-header__dot {
+  background: var(--online);
+}
+.site-header__dot--lit {
+  box-shadow: 0 0 8px var(--online);
+}
+
+/* -- `01 // ABOUT` anchor nav; the number takes the accent -- */
+.site-header__link {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+}
+.site-header__link-num {
+  color: var(--brand);
+}

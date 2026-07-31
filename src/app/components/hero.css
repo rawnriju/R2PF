@@ -1,0 +1,129 @@
+/* ============================================================
+   hero.tsx — landing section over the playground canvas
+
+   Anything positioned from measured DOM geometry (the goal
+   pulse's left/top, the per-character transforms ScatterText
+   writes each frame) necessarily stays inline in the component.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   ScatterText — headline characters the balls knock around
+   ------------------------------------------------------------ */
+
+/* The wrapper must stay inline so the headline still wraps and the
+   <br /> between the two names behaves. */
+.hero-scatter {
+  display: inline;
+}
+
+/* Each character is its own inline-block so it can be transformed
+   independently; the animation loop writes transform on these
+   directly, hence the will-change hint. */
+.hero-scatter__char {
+  display: inline-block;
+  will-change: transform;
+}
+.hero-scatter__space {
+  display: inline-block;
+  width: 0.3em;
+}
+
+/* ------------------------------------------------------------
+   Goal celebration
+   NOTE: 0.9s must stay in sync with the setTimeout in hero.tsx
+   that drops the pulse from state.
+   ------------------------------------------------------------ */
+
+.hero-goal-pulse {
+  width: 640px;
+  height: 640px;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    rgba(var(--brand-rgb), calc(0.55 * var(--glow))),
+    rgba(var(--brand-rgb), calc(0.12 * var(--glow))) 45%,
+    transparent 70%
+  );
+  box-shadow: 0 0 120px 40px rgba(var(--brand-rgb), calc(0.35 * var(--glow)));
+  animation: hero-goal-pulse 0.9s ease-out forwards;
+}
+
+@keyframes hero-goal-pulse {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0.9; }
+  60% { opacity: 0.45; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+
+/* ------------------------------------------------------------
+   Glass HUD pills — the score readout and the controls banner
+   ------------------------------------------------------------ */
+
+.hero-hud {
+  background: var(--surface-glass);
+  border: 1px solid var(--hairline);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+.hero-hud__brand {
+  color: var(--brand);
+}
+.hero-hud__brand-2 {
+  color: var(--brand-2);
+}
+
+/* ------------------------------------------------------------
+   Headline stack
+   ------------------------------------------------------------ */
+
+/* -- soft accent wash behind the headline -- */
+.hero-glow {
+  background: radial-gradient(
+    circle,
+    rgba(var(--brand-rgb), calc(0.07 * var(--glow))),
+    transparent 70%
+  );
+}
+
+.hero-title {
+  position: relative;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  line-height: 0.92;
+  font-size: clamp(48px, 9vw, 128px);
+  color: var(--fg);
+  letter-spacing: -0.02em;
+}
+
+/* -- the scoring line balls have to cross, left of the headline -- */
+.hero-score-line {
+  left: -20px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--brand);
+  box-shadow: 0 0 12px rgba(var(--brand-rgb), calc(0.6 * var(--glow))),
+    0 0 28px rgba(var(--brand-rgb), calc(0.3 * var(--glow)));
+}
+
+/* -- "RIJU", the accent half of the name -- */
+.hero-title__accent {
+  color: var(--brand);
+  text-shadow: 0 0 40px rgba(var(--brand-rgb), calc(0.35 * var(--glow)));
+}
+
+.hero-subtitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 500;
+  font-size: clamp(18px, 2.4vw, 30px);
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.hero-blurb {
+  font-family: 'Inter', sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
