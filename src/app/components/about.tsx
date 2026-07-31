@@ -1,3 +1,4 @@
+import { ChevronRight } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 
 type PanelKey = "technical" | "personal";
@@ -5,6 +6,8 @@ type PanelKey = "technical" | "personal";
 interface Block {
   tag: string;
   text: string;
+  /** Exact substrings of `text` to render in the brand accent. */
+  highlight?: string[];
 }
 interface PanelData {
   label: string;
@@ -18,14 +21,26 @@ const TECHNICAL: PanelData = {
     {
       tag: "EDUCATION",
       text: "I'm currently pursuing my Master's in Software, Web and Cloud at Tampere University in Finland. The program has given me the opportunity to explore a wide range of subjects, from AI and cloud computing to embedded systems. I've even found myself wandering into psychology along the way because, to me, understanding people is just as valuable as understanding technology. Great software is about solving real problems for real people, not just about building good code.",
+      highlight: ["Master's in Software, Web and Cloud", "Tampere University"],
     },
     {
       tag: "CAREER — VIEW26",
       text: "Before moving to Finland, I spent almost five years at View26 GmbH (Actiotech LLP), where I left as a Senior Full-Stack Software Engineer. During my time there, I led development on a Scrum management app that went on to win 2nd place in Atlassian's Codegeist 2021 hackathon. I also built data visualization tools used by over 1,000 customers on the Atlassian Marketplace and contributed to the company's core proprietary charting library, helping maintain and expand one of the key pieces of technology behind several of our products.",
+      highlight: [
+        "View26 GmbH (Actiotech LLP)",
+        "Senior Full-Stack Software Engineer",
+        "2nd place in Atlassian's Codegeist 2021 hackathon",
+        "over 1,000 customers on the Atlassian Marketplace",
+      ],
     },
     {
       tag: "GROWTH",
       text: 'As I gained experience, my role naturally grew beyond writing code. I mentored new engineers, helped onboard teammates, reviewed code, and enjoyed teaching people "the ways of the code." Towards my final year, I was introduced to product management, where I got hands-on experience with product strategy, design, customer feedback, and even product marketing. That experience gave me a much broader perspective on software development and helped me appreciate how engineering, design, and business all work together to build successful products.',
+      highlight: [
+        "mentored new engineers",
+        "product management",
+        "product strategy, design, customer feedback, and even product marketing",
+      ],
     },
   ],
 };
@@ -56,13 +71,39 @@ const PERSONAL: PanelData = {
   ],
 };
 
+const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/** Wraps every occurrence of `highlight` in the brand accent, leaving the rest
+    of the copy as plain text. Kept as string data + a match list rather than
+    inline JSX so the paragraphs stay readable in the source. */
+function renderText(text: string, highlight?: string[]) {
+  if (!highlight?.length) return text;
+  // Longest first so a short term can't consume part of a longer one.
+  const terms = [...highlight].sort((a, b) => b.length - a.length).map(escapeRe);
+  const re = new RegExp(`(${terms.join("|")})`, "g");
+  // split() with a capture group interleaves the matches at the odd indices.
+  return text
+    .split(re)
+    .map((part, i) =>
+      i % 2 === 1 ? (
+        <span key={i} className="about-panel__hl">
+          {part}
+        </span>
+      ) : (
+        part
+      ),
+    );
+}
+
 function Panel({
   data,
+  side,
   active,
   justSwitched,
   onOpen,
 }: {
   data: PanelData;
+  side: "start" | "end";
   active: boolean;
   justSwitched: boolean;
   onOpen: () => void;
@@ -71,6 +112,7 @@ function Panel({
     <div
       className={`about-panel${active && justSwitched ? " is-sweeping" : ""}`}
       data-active={active}
+      data-side={side}
     >
       {/* Collapsed edge strip — the click target that opens this panel. Stays
           in the DOM (rather than mounting on demand) so the open/close is a
@@ -82,6 +124,11 @@ function Panel({
         tabIndex={active ? -1 : 0}
         className="about-panel__strip"
       >
+        {/* Points into the space the panel expands into; direction comes from
+            data-side in CSS, so one icon covers all four orientations. */}
+        <span className="about-panel__strip-arrow" aria-hidden="true">
+          <ChevronRight size={16} strokeWidth={2.5} />
+        </span>
         <span className="about-panel__strip-txt">
           {data.label}
         </span>
@@ -98,7 +145,9 @@ function Panel({
           {data.blocks.map((b) => (
             <div key={b.tag} className="about-panel__block">
               <p className="about-panel__tag">{b.tag}</p>
-              <p className="about-panel__text">{b.text}</p>
+              <p className="about-panel__text">
+                {renderText(b.text, b.highlight)}
+              </p>
             </div>
           ))}
         </div>
@@ -153,8 +202,10 @@ export function About() {
           position: absolute;
           inset: 0;
           display: flex;
+          flex-direction: row;
           align-items: center;
           justify-content: center;
+          gap: 10px;
           background: transparent;
           border: 0;
           cursor: pointer;
@@ -176,6 +227,23 @@ export function About() {
           color: var(--text-muted);
           white-space: nowrap;
           transition: color 200ms ease;
+        }
+
+        /* Rotation only — direction comes from data-side. Colour tracks the
+           label so the whole strip lights up as one on hover. */
+        .about-panel__strip-arrow {
+          display: flex;
+          color: var(--text-muted);
+          transition: color 200ms ease;
+        }
+        .about-panel[data-side="start"] .about-panel__strip-arrow {
+          transform: rotate(90deg);
+        }
+        .about-panel[data-side="end"] .about-panel__strip-arrow {
+          transform: rotate(-90deg);
+        }
+        .about-panel__strip:hover .about-panel__strip-arrow {
+          color: var(--brand);
         }
 
         .about-panel__content {
@@ -235,6 +303,10 @@ export function About() {
           line-height: 1.65;
           color: var(--fg);
         }
+        .about-panel__hl {
+          color: var(--brand);
+          font-weight: 600;
+        }
 
         .about-panel__sweep {
           position: absolute;
@@ -273,8 +345,18 @@ export function About() {
           .about-panel[data-active="false"] {
             flex-basis: 76px;
           }
+          .about-panel__strip {
+            flex-direction: column;
+            gap: 14px;
+          }
           .about-panel__strip-txt {
             writing-mode: vertical-rl;
+            transform: rotate(180deg);
+          }
+          .about-panel[data-side="start"] .about-panel__strip-arrow {
+            transform: rotate(0deg);
+          }
+          .about-panel[data-side="end"] .about-panel__strip-arrow {
             transform: rotate(180deg);
           }
           .about-panel__content {
@@ -322,12 +404,14 @@ export function About() {
       <div className="about-accordion">
         <Panel
           data={TECHNICAL}
+          side="start"
           active={active === "technical"}
           justSwitched={justSwitched}
           onOpen={() => open("technical")}
         />
         <Panel
           data={PERSONAL}
+          side="end"
           active={active === "personal"}
           justSwitched={justSwitched}
           onOpen={() => open("personal")}

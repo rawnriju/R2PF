@@ -3,8 +3,8 @@ import { NavChip } from "./chip";
 import { ThemeToggle } from "./theme-toggle";
 
 const NAV = [
-  { id: "01", label: "WORK", href: "#work" },
-  { id: "02", label: "ABOUT", href: "#about" },
+  { id: "01", label: "ABOUT", href: "#about" },
+  { id: "02", label: "WORK", href: "#work" },
   { id: "03", label: "EXTRAS", href: "#extras" },
   { id: "04", label: "CONTACT", href: "#contact" },
 ]; // #about targets the Technical/Personal panels section (about.tsx), which
