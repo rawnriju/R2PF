@@ -247,7 +247,7 @@ export function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden pt-16">
+    <section id="hero" className="relative min-h-screen flex flex-col justify-center overflow-hidden pt-16">
       <PlaygroundCanvas
         sharedBallsRef={sharedBallsRef}
         resetSignalRef={resetSignalRef}

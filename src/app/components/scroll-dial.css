@@ -1,0 +1,152 @@
+/* ============================================================
+   scroll-dial.tsx — section progress dial, bottom right
+
+   Five arcs, one per page section, each filling as you scroll
+   through its section. The centre is a stage that swaps to a
+   themed scene per section.
+
+   Every stroke/fill below lives in CSS rather than as an SVG
+   presentation attribute: attributes don't resolve var().
+   ============================================================ */
+
+.scroll-dial {
+  width: 96px;
+  height: 96px;
+}
+
+/* -- the ring -- */
+.scroll-dial__ring {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+
+.scroll-dial__track,
+.scroll-dial__fill {
+  fill: none;
+  stroke-width: 5;
+  stroke-linecap: butt;
+}
+
+.scroll-dial__track {
+  stroke: var(--hairline-strong);
+}
+
+/* pathLength="1" is set on the element, so dasharray 1 spans the whole
+   arc and dashoffset is a straight 1→0 progress value. */
+.scroll-dial__fill {
+  stroke: var(--brand);
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  filter: drop-shadow(0 0 4px rgba(var(--brand-rgb), calc(0.6 * var(--glow))));
+}
+
+/* The last arc lands on the secondary accent, so reaching the bottom of
+   the page reads as an arrival rather than just one more segment. */
+.scroll-dial__fill[data-index="4"] {
+  stroke: var(--brand-2);
+  filter: drop-shadow(0 0 4px rgba(var(--brand-2-rgb), calc(0.6 * var(--glow))));
+}
+
+/* -- centre stage -- */
+.scroll-dial__stage {
+  position: absolute;
+  inset: 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 9999px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  /* Scenes are sized to the stage; clip anything that reaches past it so
+     nothing spills over the ring. */
+  overflow: hidden;
+}
+
+/* All five scenes are mounted and stacked; only the active one shows.
+   Keeping them mounted means no layout work on every section change. */
+.scroll-dial__scene {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+.scroll-dial__scene[data-active="true"] {
+  opacity: 1;
+}
+
+/* Transform origins for the animated scene parts. SVG elements default to
+   a viewport reference box, so these must be stated explicitly or the
+   rotations swing around the wrong point.
+     view-box → rotate about the 60x60 scene centre (orbits, cube)
+     fill-box → scale/translate about the shape's own centre (pixels) */
+.scroll-dial__scene [data-orbit],
+.scroll-dial__scene [data-cube],
+.scroll-dial__scene [data-sharingan],
+.scroll-dial__scene [data-car-orbit] {
+  transform-box: view-box;
+  transform-origin: center;
+}
+.scroll-dial__scene [data-pixel] {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* -- shared scene primitives -- */
+.scroll-dial__ink {
+  fill: var(--brand);
+}
+.scroll-dial__ink--alt {
+  fill: var(--brand-2);
+}
+/* Punched-out shapes — the Sharingan's pupil and tomoe read as holes in
+   the iris, so they take the stage background rather than a colour. */
+.scroll-dial__ink--hole {
+  fill: var(--surface);
+}
+.scroll-dial__line {
+  fill: none;
+  stroke: var(--brand);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.scroll-dial__line--alt {
+  stroke: var(--brand-2);
+}
+.scroll-dial__line--faint {
+  opacity: 0.3;
+  stroke-width: 1;
+}
+
+/* Dashed lap line under the car, so the circle it drives reads as a track
+   rather than the car floating. */
+.scroll-dial__track-ring {
+  stroke-dasharray: 3 5;
+}
+
+/* -- section label under the dial -- */
+.scroll-dial__label {
+  position: absolute;
+  left: 50%;
+  bottom: -18px;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.scroll-dial__label-num {
+  color: var(--brand);
+}
+
+/* Without motion the arcs still fill — that's information, not
+   decoration. Only the looping centre scenes are suppressed, and the
+   scene swap becomes instant. See scroll-dial.tsx, which skips
+   building the loops when the same query matches. */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-dial__scene {
+    transition-duration: 1ms;
+  }
+}

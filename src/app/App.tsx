@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router";
 import { Header } from "./components/header";
 import { Hero } from "./components/hero";
@@ -8,28 +7,13 @@ import { Work } from "./components/work";
 import { Extras } from "./components/extras";
 import { Contact } from "./components/contact";
 import { Footer } from "./components/footer";
-import { BoostGauge } from "./components/boost-gauge";
+import { ScrollDial } from "./components/scroll-dial";
 import { ResumePage } from "./components/resume";
 import { BlogPage } from "./components/blog";
 
 function HomePage() {
-  const [boost, setBoost] = useState(0);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
-      setBoost(pct);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
-
+  // No scroll listener here: ScrollDial drives itself off anime.js
+  // ScrollObservers, which write to the DOM without re-rendering React.
   return (
     <div className="page-shell min-h-screen w-full">
       <Header />
@@ -42,7 +26,7 @@ function HomePage() {
         <Contact />
       </main>
       <Footer />
-      <BoostGauge value={boost} />
+      <ScrollDial />
     </div>
   );
 }

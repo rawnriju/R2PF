@@ -101,7 +101,24 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
     const palette = resolvePalette();
     const ballColor = (orange: boolean) => (orange ? palette.accent2 : palette.accent);
 
+    // The loop is only scheduled while the canvas is actually on screen —
+    // the hero sits at the top of a long page, so without this the whole
+    // simulation keeps running while the visitor reads the sections below it.
+    // Safe to stop and resume because the sim is frame-stepped, not
+    // delta-timed: pausing freezes it and resuming continues from the same
+    // state, with no jump.
     let raf = 0;
+    let running = false;
+    const start = () => {
+      if (running) return;
+      running = true;
+      raf = requestAnimationFrame(render);
+    };
+    const stop = () => {
+      running = false;
+      cancelAnimationFrame(raf);
+    };
+
     // Cap the backing-store scale — dpr 3 phones repaint ~2x the pixels of dpr 2
     // for near-invisible quality gain, so clamp to 2.
     let dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -442,12 +459,28 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
         ctx.restore();
       }
 
-      raf = requestAnimationFrame(render);
+      if (running) raf = requestAnimationFrame(render);
     };
-    render();
+
+    const io = new IntersectionObserver(
+      ([entry]) => (entry.isIntersecting ? start() : stop()),
+      // Spin up just before it scrolls into view, so it's already live by the
+      // time the first pixel shows.
+      { rootMargin: "200px" },
+    );
+    io.observe(canvas);
+
+    // Browsers already throttle rAF in background tabs, so this is insurance
+    // rather than the actual win — don't treat it as load-bearing.
+    const onVisibility = () => {
+      if (document.hidden) stop();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
-      cancelAnimationFrame(raf);
+      stop();
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
       window.removeEventListener("resize", resize);
       window.removeEventListener("mouseup", launch);
       window.removeEventListener("blur", onWindowBlurOrScroll);
