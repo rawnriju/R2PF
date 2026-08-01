@@ -39,3 +39,35 @@
 .site-header__link-num {
   color: var(--brand);
 }
+
+/* -- hamburger toggle; plain brand-colored glyph, no chip background/border.
+   display/layout stays in Tailwind classes (not here) so the responsive
+   variants keep winning the cascade instead of fighting this rule's
+   specificity. -- */
+.site-header__burger {
+  color: var(--brand);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 200ms ease;
+}
+.site-header__burger:hover {
+  opacity: 1;
+}
+
+/* -- mobile drawer holding the nav links once they collapse out of the
+   center row below 1105px; matches the bar's own glass/hairline look -- */
+.site-header__menu {
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--hairline);
+  backdrop-filter: blur(12px);
+  padding: 4px 24px 16px;
+}
+.site-header__link--mobile {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.site-header__link--mobile:last-child {
+  border-bottom: none;
+}
