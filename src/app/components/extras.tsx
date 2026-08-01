@@ -20,7 +20,7 @@ export function Extras() {
   return (
     <section id="extras" className="mx-auto max-w-[1200px] px-6 py-24">
       <div className="mb-12">
-        <p className="section-eyebrow font-mono mb-3">03 // EXTRAS</p>
+        <p className="section-eyebrow font-mono mb-3">04 // EXTRAS</p>
         <h2 className="section-title">SIDE QUESTS</h2>
       </div>
 

@@ -4,6 +4,7 @@ import { Hero } from "./components/hero";
 import { StatsBar } from "./components/stats-bar";
 import { About } from "./components/about";
 import { Work } from "./components/work";
+import { Journey } from "./components/journey";
 import { Extras } from "./components/extras";
 import { Contact } from "./components/contact";
 import { Footer } from "./components/footer";
@@ -22,6 +23,7 @@ function HomePage() {
         <StatsBar />
         <About />
         <Work />
+        <Journey />
         <Extras />
         <Contact />
       </main>

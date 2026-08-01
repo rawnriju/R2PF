@@ -1,14 +1,15 @@
-import { animate, createScope, stagger, utils, type Scope } from "animejs";
+import { animate, createScope, stagger, svg, utils, type Scope } from "animejs";
 import { useEffect, useRef, useState } from "react";
 import "./scroll-dial.css";
 
 /**
- * Section progress dial. Five arcs, one per page section, filling strictly in
+ * Section progress dial. One arc per page section, filling strictly in
  * sequence as you scroll; the centre plays a themed scene for whichever
  * section currently owns the viewport.
  *
  * Nothing here re-renders on scroll — arc progress is written straight to the
- * DOM, and React state changes only when the active section does (5× a page).
+ * DOM, and React state changes only when the active section does (once per
+ * section).
  */
 
 interface Section {
@@ -40,11 +41,13 @@ const SECTIONS: Section[] = [
   { id: "hero", num: "00", label: "HERO" },
   { id: "about", num: "01", label: "ABOUT" },
   { id: "work", num: "02", label: "WORK" },
-  { id: "extras", num: "03", label: "EXTRAS" },
-  { id: "contact", num: "04", label: "CONTACT" },
+  { id: "journey", num: "03", label: "JOURNEY" },
+  { id: "extras", num: "04", label: "EXTRAS" },
+  { id: "contact", num: "05", label: "CONTACT" },
 ];
 
-// Ring geometry. 5 arcs of 72°, minus a gap, drawn from 12 o'clock.
+// Ring geometry. arcPath() divides evenly by SECTIONS.length, minus a gap,
+// drawn from 12 o'clock.
 const CENTER = 48;
 const RADIUS = 40;
 const GAP_DEG = 10;
@@ -237,7 +240,54 @@ function CarScene() {
   );
 }
 
-/** 03 EXTRAS — rotating wireframe cube, for the AR side quest. */
+/**
+ * 03 JOURNEY — a comet travelling a zigzag path top to bottom (echoing the
+ * timeline's own reading direction), like a heartbeat-monitor blip without
+ * the monitor line. The path itself stays in the DOM — svg.createMotionPath
+ * in the effect below needs its geometry to compute the comet's translate
+ * values — but is never painted (see .scroll-dial__pulse-path).
+ *
+ * The tail is several more pixels following the same motion path with a
+ * per-element start delay (see PULSE_TRAIL_STAGGER_MS below): a pixel
+ * delayed by N ms is always exactly where the head was N ms ago, which is
+ * what actually draws the trailing effect — the pixels never animate
+ * relative to each other directly.
+ */
+const PULSE_PATH = "M 30 6 L 30 16 L 12 26 L 48 34 L 30 44 L 30 54";
+const PULSE_TRAIL_STAGGER_MS = 90;
+// Head first (leads, brightest, biggest), tapering back from there.
+const PULSE_TRAIL = [
+  { size: 6.4, opacity: 1 },
+  { size: 4.8, opacity: 0.65 },
+  { size: 3.3, opacity: 0.4 },
+  { size: 2.8, opacity: 0.22 },
+  { size: 1.3, opacity: 0.1 },
+];
+
+function PulseScene() {
+  return (
+    <>
+      <path className="scroll-dial__pulse-path" data-pulse-path d={PULSE_PATH} />
+      {PULSE_TRAIL.map((p, i) => (
+        <rect
+          key={i}
+          className={`scroll-dial__ink scroll-dial__pulse-pixel${i === 0 ? " scroll-dial__pulse-pixel--head" : ""}`}
+          data-pulse-trail
+          x={-p.size / 2}
+          y={-p.size / 2}
+          width={p.size}
+          height={p.size}
+          // fill-opacity is the pixel's fixed place in the taper; plain
+          // opacity is left free for the fade-in/out envelope the effect
+          // below animates, so the two don't fight over the same value.
+          fillOpacity={p.opacity}
+        />
+      ))}
+    </>
+  );
+}
+
+/** 04 EXTRAS — rotating wireframe cube, for the AR side quest. */
 function CubeScene() {
   return (
     <g data-cube>
@@ -247,7 +297,7 @@ function CubeScene() {
   );
 }
 
-/** 04 CONTACT — pulsing pixelated heart. */
+/** 05 CONTACT — pulsing pixelated heart. */
 const HEART = [
   ".XX..XX.",
   "XXXXXXXX",
@@ -262,7 +312,7 @@ function HeartScene() {
   return <>{pixels(HEART, 5, "scroll-dial__ink scroll-dial__ink--alt", "data-pixel")}</>;
 }
 
-const SCENES = [OrbitScene, SharinganScene, CarScene, CubeScene, HeartScene];
+const SCENES = [OrbitScene, SharinganScene, CarScene, PulseScene, CubeScene, HeartScene];
 
 export function ScrollDial() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -320,7 +370,43 @@ export function ScrollDial() {
               }),
             ],
             [
-              animate(sceneEls[3].querySelectorAll("[data-cube]"), {
+              // createMotionPath reads the (invisible) path's own geometry
+              // and returns translateX/translateY value functions that
+              // trace it; every pixel in the trail uses the *same* pair, so
+              // they all trace the same path — only stagger() below (per
+              // Note in the comment above PulseScene) makes them trail.
+              ...(() => {
+                const path = sceneEls[3].querySelector<SVGPathElement>("[data-pulse-path]");
+                if (!path) return [];
+                const { translateX, translateY } = svg.createMotionPath(path);
+                const anim = animate(sceneEls[3].querySelectorAll("[data-pulse-trail]"), {
+                  translateX,
+                  translateY,
+                  // Motion-path progress resets 0→1 instantly at the loop
+                  // boundary (bottom snaps back to top) — six even keyframes
+                  // (same "no explicit duration" idiom as the heart's scale
+                  // above) fade it out over the last sixth of the path and
+                  // back in over the first, so the snap lands while
+                  // invisible instead of reading as a jump.
+                  opacity: [
+                    { to: 1 },
+                    { to: 1 },
+                    { to: 1 },
+                    { to: 1 },
+                    { to: 1 },
+                    { to: 0 },
+                  ],
+                  delay: stagger(PULSE_TRAIL_STAGGER_MS),
+                  ease: "linear",
+                  duration: 1800,
+                  loop: true,
+                  autoplay: false,
+                });
+                return [anim];
+              })(),
+            ],
+            [
+              animate(sceneEls[4].querySelectorAll("[data-cube]"), {
                 rotate: 360,
                 duration: 4600,
                 ease: "linear",
@@ -329,7 +415,7 @@ export function ScrollDial() {
               }),
             ],
             [
-              animate(sceneEls[4].querySelectorAll("[data-pixel]"), {
+              animate(sceneEls[5].querySelectorAll("[data-pixel]"), {
                 scale: [{ to: 1.18 }, { to: 1 }],
                 duration: 900,
                 delay: stagger(22, { from: "center" }),

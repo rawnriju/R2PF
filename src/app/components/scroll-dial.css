@@ -43,7 +43,7 @@
 
 /* The last arc lands on the secondary accent, so reaching the bottom of
    the page reads as an arrival rather than just one more segment. */
-.scroll-dial__fill[data-index="4"] {
+.scroll-dial__fill[data-index="5"] {
   stroke: var(--brand-2);
   filter: drop-shadow(0 0 4px rgba(var(--brand-2-rgb), calc(0.6 * var(--glow))));
 }
@@ -123,6 +123,19 @@
    rather than the car floating. */
 .scroll-dial__track-ring {
   stroke-dasharray: 3 5;
+}
+
+/* The journey scene's zigzag exists only for svg.createMotionPath to read
+   its geometry off — never painted. */
+.scroll-dial__pulse-path {
+  fill: none;
+  stroke: none;
+}
+/* Trail pixels fade via the inline opacity set per pixel in scroll-dial.tsx
+   (PULSE_TRAIL) — only the lead pixel gets the glow, so the tail reads as
+   dimming rather than a row of equally-lit dots. */
+.scroll-dial__pulse-pixel--head {
+  filter: drop-shadow(0 0 4px rgba(var(--brand-rgb), calc(0.6 * var(--glow))));
 }
 
 /* -- section label under the dial -- */

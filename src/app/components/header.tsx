@@ -6,8 +6,9 @@ import "./header.css";
 const NAV = [
   { id: "01", label: "ABOUT", href: "#about" },
   { id: "02", label: "WORK", href: "#work" },
-  { id: "03", label: "EXTRAS", href: "#extras" },
-  { id: "04", label: "CONTACT", href: "#contact" },
+  { id: "03", label: "JOURNEY", href: "#journey" },
+  { id: "04", label: "EXTRAS", href: "#extras" },
+  { id: "05", label: "CONTACT", href: "#contact" },
 ]; // #about targets the Technical/Personal panels section (about.tsx), which
    // sits above #work on the page even though the nav lists WORK first.
 

@@ -36,7 +36,7 @@ export function Contact() {
   return (
     <section id="contact" className="mx-auto max-w-[1200px] px-6 py-24">
       <div className="mb-12">
-        <p className="section-eyebrow font-mono mb-3">04 // CONTACT</p>
+        <p className="section-eyebrow font-mono mb-3">05 // CONTACT</p>
         <h2 className="section-title">GET IN TOUCH</h2>
         <p className="contact-intro mt-4 max-w-[520px]">
           Open to fullstack roles, interesting problems, and good conversation. The
