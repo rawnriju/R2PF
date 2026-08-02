@@ -52,6 +52,22 @@ const CENTER = 48;
 const RADIUS = 40;
 const GAP_DEG = 10;
 
+/**
+ * Converts a "clock angle" (0° = 12 o'clock / straight up, increasing
+ * clockwise — the way people naturally read a dial) into an (x, y) pixel
+ * point sitting on the ring.
+ *
+ * Math.cos/Math.sin work in the *standard* math convention instead: 0°
+ * points right (3 o'clock) and angles increase counter-clockwise. Subtracting
+ * 90° before converting to radians rotates our clock-angle into that
+ * standard convention (so 0° clock-angle correctly lands at the top), and
+ * `* Math.PI / 180` is just the fixed conversion factor from degrees to
+ * radians, which is what the trig functions require as input.
+ *
+ * Once `a` is in the right convention, the classic parametric-circle formula
+ * takes over: any point on a circle of radius R around a center (CENTER,
+ * CENTER) is (CENTER + R·cos(a), CENTER + R·sin(a)) for some angle a.
+ */
 function polar(angleDeg: number) {
   const a = ((angleDeg - 90) * Math.PI) / 180;
   return {
@@ -62,11 +78,24 @@ function polar(angleDeg: number) {
 
 /** Arc path for segment `i`. Sweep is always < 180°, so large-arc is 0. */
 function arcPath(i: number) {
+  // Split the full 360° circle evenly across however many sections exist —
+  // e.g. 6 sections means each gets a 60° slice.
   const span = 360 / SECTIONS.length;
+  // This segment's slice runs from i*span to (i+1)*span, but we shrink it in
+  // by half the gap on *each* side (GAP_DEG / 2), so neighboring arcs don't
+  // touch — leaving a small visible gap between them.
   const start = i * span + GAP_DEG / 2;
   const end = (i + 1) * span - GAP_DEG / 2;
+  // Convert the segment's start/end angles into actual (x, y) points on the
+  // ring using the helper above.
   const s = polar(start);
   const e = polar(end);
+  // Build an SVG path string: "M x y" moves the pen to the start point
+  // without drawing, then "A rx ry x-axis-rotation large-arc-flag
+  // sweep-flag x y" draws an arc of radius (RADIUS, RADIUS) to the end
+  // point. The "0 1" means: never take the long way around (large-arc-flag
+  // 0 — every one of our slices is well under 180°, so this is always
+  // correct) and always sweep clockwise (sweep-flag 1).
   return `M ${s.x.toFixed(2)} ${s.y.toFixed(2)} A ${RADIUS} ${RADIUS} 0 0 1 ${e.x.toFixed(2)} ${e.y.toFixed(2)}`;
 }
 
@@ -84,10 +113,28 @@ function arcPath(i: number) {
  */
 function measureWindows(): [number, number][] {
   const doc = document.documentElement;
+  // maxScroll is the furthest window.scrollY can ever reach: the full page
+  // height minus one viewport's worth (because once the bottom of the page
+  // touches the bottom of the screen, you can't scroll any further). Clamped
+  // to at least 1 so we never divide by zero below on a very short page.
   const maxScroll = Math.max(1, doc.scrollHeight - window.innerHeight);
+  // Total document height, also floored at 1 for the same divide-by-zero reason.
   const total = Math.max(1, doc.scrollHeight);
+  // offsetTop of each section = how far down the *document* that section
+  // starts (not how far down the viewport — this doesn't change as you scroll).
   const tops = SECTIONS.map((s) => document.getElementById(s.id)?.offsetTop ?? 0);
+  // Here's the actual trick: each section's document position (0..total) is
+  // rescaled proportionally onto the scrollable range (0..maxScroll). E.g. a
+  // section starting 50% of the way down a document that's twice as tall as
+  // the scrollable range would land at 50% of maxScroll. This guarantees the
+  // first section's window starts at scrollY 0 and the last section's window
+  // ends exactly at maxScroll — the full scrollable range gets covered with
+  // no gaps and no leftover, regardless of how tall any individual section is.
   const bounds = [...tops, total].map((v) => (v / total) * maxScroll);
+  // Turn the list of boundary points into paired [start, end] windows — the
+  // scroll range "owned" by each section — and make sure every window has at
+  // least 1px of span (Math.max(bounds[i] + 1, ...)) so a section that
+  // somehow computes to zero height still gets a valid, non-degenerate window.
   return SECTIONS.map((_, i) => [bounds[i], Math.max(bounds[i] + 1, bounds[i + 1])]);
 }
 
@@ -98,10 +145,23 @@ function measureWindows(): [number, number][] {
 
 /** Small helper for the pixel-art scenes: render a grid mask as rects. */
 function pixels(mask: string[], cell: number, cls: string, tag?: string) {
+  // `mask` is a grid of text rows, where "X" means "draw a pixel here" and
+  // "." means "leave empty" — a simple ASCII-art sprite format. Total pixel
+  // width/height of the whole sprite = number of columns/rows times each
+  // cell's pixel size.
   const w = mask[0].length * cell;
   const h = mask.length * cell;
+  // The scene's viewBox is 60x60 (see the <svg viewBox="0 0 60 60"> usage),
+  // so to center the sprite inside it we offset it by half of the leftover
+  // space: (60 - spriteWidth) / 2 pushes it right/down just enough that
+  // equal empty space remains on both sides.
   const x0 = (60 - w) / 2;
   const y0 = (60 - h) / 2;
+  // Walk every row (r) and every character in that row (q); for each "X"
+  // emit one SVG <rect> positioned at that grid cell. flatMap is used
+  // because each row produces multiple rects (or nulls, which React skips)
+  // and they all need to end up in one single flat list rather than nested
+  // per-row arrays.
   return mask.flatMap((row, r) =>
     row.split("").map((c, q) =>
       c === "X" ? (
@@ -111,6 +171,9 @@ function pixels(mask: string[], cell: number, cls: string, tag?: string) {
           className={cls}
           x={x0 + q * cell}
           y={y0 + r * cell}
+          // Slightly shrinking each cell (cell - 0.5) leaves a hairline gap
+          // between adjacent pixels so the grid reads as distinct squares
+          // instead of one solid blob.
           width={cell - 0.5}
           height={cell - 0.5}
         />
@@ -157,6 +220,11 @@ const IRIS = [
 
 function SharinganScene() {
   // Tomoe sit on a ring inside the iris; the group spins as one.
+  // Same clock-angle-to-point idea as the polar() helper above: 90°, 210°,
+  // and 330° are evenly spaced 120° apart around the circle (three-way
+  // symmetry), the -90 shifts from "0° = right" (math convention) to
+  // "0° = top" (clock convention), and 30 + cos/sin*11 places each point on
+  // a ring of radius 11 centered at (30, 30) — the middle of the 60x60 scene.
   const tomoe = [90, 210, 330].map((deg) => {
     const a = ((deg - 90) * Math.PI) / 180;
     const cx = 30 + Math.cos(a) * 11;
@@ -426,8 +494,17 @@ export function ScrollDial() {
             ],
           ];
 
+      // The [start, end] scroll ranges computed above — one per section —
+      // recomputed whenever the layout changes (see onResize below).
       let windows = measureWindows();
+      // Which section's bar/scene was showing last time we painted; starts
+      // at -1 (an impossible index) so the very first paint always counts
+      // as "changed" and runs its one-time setup (setActive, starting the
+      // right animation loop).
       let shown = -1;
+      // A simple "already have a paint scheduled" flag, used right below to
+      // avoid stacking up multiple redundant animation-frame requests if
+      // several scroll events fire before the browser gets a chance to paint.
       let ticking = false;
 
       const paint = () => {
@@ -435,13 +512,38 @@ export function ScrollDial() {
         const y = window.scrollY;
         let current = 0;
         windows.forEach(([from, to], i) => {
+          // How far through *this section's* window the current scroll
+          // position is, as a fraction: 0 at the window's start, 1 at its
+          // end. (y - from) is how far we've scrolled into the window;
+          // dividing by (to - from), the window's total length, converts
+          // that into a 0..1 fraction. Math.max(0, ...) and Math.min(1, ...)
+          // clamp it so sections not yet reached read as 0 and sections
+          // already passed read as 1, instead of going negative or over 1.
           const p = Math.min(1, Math.max(0, (y - from) / (to - from)));
+          // SVG stroke-dasharray/dashoffset trick: each fill path has its
+          // pathLength normalized to exactly 1 (see pathLength={1} in the
+          // JSX below), so a strokeDashoffset of 1 hides the entire stroke
+          // and 0 reveals all of it. Setting it to (1 - p) means as p grows
+          // from 0 to 1 (scrolling through the section), the offset shrinks
+          // from 1 to 0 and the arc visibly fills in, animating scroll
+          // progress purely through a DOM property write (no React render).
           utils.set(fills[i], { strokeDashoffset: 1 - p });
+          // The "current" section is simply the last one whose window we've
+          // scrolled *past the start of* — since windows are visited in
+          // order, whichever one wins this comparison last is the furthest
+          // one reached.
           if (y >= from) current = i;
         });
+        // Only touch React state / restart animations when the active
+        // section actually changes, not on every scroll pixel — this is
+        // what keeps the component from re-rendering 60 times a second.
         if (current !== shown) {
           shown = current;
           setActive(current);
+          // Restart the newly active section's animation loop(s) from the
+          // beginning (so it always starts its cycle fresh when you arrive)
+          // and pause every other section's loop so only one scene's
+          // animation is ever actually running/consuming CPU at a time.
           loops.forEach((group, j) =>
             group.forEach((l) => (j === current ? l.restart() : l.pause())),
           );
@@ -449,11 +551,16 @@ export function ScrollDial() {
       };
 
       const onScrollTick = () => {
+        // Debounce to once per animation frame: scroll events can fire far
+        // more often than the screen can actually repaint, so if a paint is
+        // already queued for the next frame, skip scheduling another one.
         if (ticking) return;
         ticking = true;
         requestAnimationFrame(paint);
       };
       const onResize = () => {
+        // Section positions/heights may have changed, so the scroll windows
+        // need to be recalculated from scratch before the next paint.
         windows = measureWindows();
         onScrollTick();
       };
