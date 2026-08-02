@@ -1,4 +1,5 @@
 import { ProjectCard, type Project } from "./project-card";
+import { Volunteering } from "./volunteering";
 
 const SIDE_PROJECTS: Project[] = [
   {
@@ -8,7 +9,7 @@ const SIDE_PROJECTS: Project[] = [
     desc: "An Augmented Reality crime-solving game built for Excel 2018, a techno-managerial event at Govt. Model Engineering College with 50+ participants.",
     tags: ["UNITY3D", "VUFORIA", "AR"],
     accent: "var(--brand-2)",
-    span: "md:col-span-1",
+    span: "",
   },
 ];
 
@@ -24,21 +25,20 @@ export function Extras() {
         <h2 className="section-title">SIDE QUESTS</h2>
       </div>
 
-      <SubHeading>Side Projects</SubHeading>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-16">
-        {SIDE_PROJECTS.map((p) => (
-          <ProjectCard key={p.id} project={p} href="#extras" />
-        ))}
-      </div>
-
-      <SubHeading>Volunteering</SubHeading>
-      <div className="hairline-list flex flex-col gap-px">
-        {[1, 2].map((i) => (
-          <div key={i} className="hairline-row flex items-baseline gap-5 p-5">
-            <span className="soon-row__tag font-mono shrink-0">SOON</span>
-            <span className="soon-row__bar animate-pulse" />
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-10">
+        <div className="md:col-span-3">
+          <SubHeading>Side Projects</SubHeading>
+          <div className="grid grid-cols-1 gap-5">
+            {SIDE_PROJECTS.map((p) => (
+              <ProjectCard key={p.id} project={p} href="#extras" />
+            ))}
           </div>
-        ))}
+        </div>
+
+        <div className="md:col-span-2">
+          <SubHeading>Volunteering</SubHeading>
+          <Volunteering />
+        </div>
       </div>
     </section>
   );
