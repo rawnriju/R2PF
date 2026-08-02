@@ -107,3 +107,36 @@
     transition: background-color 200ms ease, color 200ms ease;
   }
 }
+
+/* -- page scrollbar: thin square brand rail, same treatment as
+   about-panel's list scrollbar (see about.css). Chrome/Safari only,
+   and deliberately without scrollbar-width/scrollbar-color on the
+   element: setting either makes Chrome ignore these pseudo-elements
+   and fall back to the native scrollbar, bringing back the stepper
+   arrows. */
+html::-webkit-scrollbar {
+  width: 8px;
+}
+html::-webkit-scrollbar-track {
+  background: var(--hairline);
+}
+html::-webkit-scrollbar-thumb {
+  background: var(--brand);
+  border-radius: 0;
+}
+html::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+html::-webkit-scrollbar-corner {
+  background: transparent;
+}
+/* Firefox has no ::-webkit- pseudos; give it the nearest native match.
+   It draws no stepper arrows, so nothing to hide here. */
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--brand) var(--hairline);
+  }
+}
