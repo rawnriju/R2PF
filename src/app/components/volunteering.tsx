@@ -42,7 +42,7 @@ const VOLUNTEER_ENTRIES: VolunteerEntry[] = [
     link: "https://www.instagram.com/kochi.overboard/",
     linkLabel: "@kochi.overboard",
     photo: kobPhoto,
-    caption: "With the KochiOverboard team",
+    caption: "Recognised as a part of the KoB team",
   },
 ];
 
