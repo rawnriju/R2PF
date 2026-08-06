@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import mindtrekPhoto from "../../assets/MindtrekPic.jpeg";
-import kobPhoto from "../../assets/KOBpic.jpeg";
+import kobPhoto from "../../assets/KOB.png";
 import "./volunteering.css";
 
 interface VolunteerEntry {
@@ -15,6 +15,7 @@ interface VolunteerEntry {
   linkLabel: string;
   photo: string;
   caption: string;
+  modalMaxWidth?: string;
 }
 
 const VOLUNTEER_ENTRIES: VolunteerEntry[] = [
@@ -36,13 +37,14 @@ const VOLUNTEER_ENTRIES: VolunteerEntry[] = [
     index: "VOL_02",
     title: "Kochi Overboard",
     org: "Kochi, India",
-    desc: "Helped out a social community for fun in Kochi called KochiOverboard, supporting events and programs run for people across the city from assisting with logistics to being there on the ground during events.",
+    desc: "Was part of a social community for fun in Kochi called KochiOverboard, it was started by my friend and I helped out organising events and managing logistics and other things. It was my first time feeling part of a community and knowing what it means to give back and create a fun space for society.",
     tags: ["COMMUNITY", "KOCHI"],
     accent: "var(--brand-2)",
     link: "https://www.instagram.com/kochi.overboard/",
     linkLabel: "@kochi.overboard",
     photo: kobPhoto,
-    caption: "Recognised as a part of the KoB team",
+    caption: "A collection of photos from my time at Kochi Overboard",
+    modalMaxWidth: "640px",
   },
 ];
 
@@ -109,7 +111,12 @@ export function Volunteering() {
             aria-modal="true"
             aria-label={openEntry.caption}
             onClick={(e) => e.stopPropagation()}
-            style={{ "--card-accent": openEntry.accent } as React.CSSProperties}
+            style={
+              {
+                "--card-accent": openEntry.accent,
+                "--modal-max-width": openEntry.modalMaxWidth ?? "440px",
+              } as React.CSSProperties
+            }
           >
             <button
               type="button"

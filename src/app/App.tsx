@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router";
 import { Header } from "./components/header";
 import { Hero } from "./components/hero";
@@ -9,8 +10,13 @@ import { Extras } from "./components/extras";
 import { Contact } from "./components/contact";
 import { Footer } from "./components/footer";
 import { ScrollDial } from "./components/scroll-dial";
-import { ResumePage } from "./components/resume";
-import { BlogPage } from "./components/blog";
+
+const ResumePage = lazy(() =>
+  import("./components/resume").then((m) => ({ default: m.ResumePage }))
+);
+const BlogPage = lazy(() =>
+  import("./components/blog").then((m) => ({ default: m.BlogPage }))
+);
 
 function HomePage() {
   // No scroll listener here: ScrollDial drives itself off anime.js
@@ -35,10 +41,12 @@ function HomePage() {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/resume" element={<ResumePage />} />
-      <Route path="/blog" element={<BlogPage />} />
-    </Routes>
+    <Suspense fallback={null}>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/resume" element={<ResumePage />} />
+        <Route path="/blog" element={<BlogPage />} />
+      </Routes>
+    </Suspense>
   );
 }
