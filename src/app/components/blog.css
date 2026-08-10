@@ -18,7 +18,7 @@
 /* -- RAWN.DEV wordmark -- */
 .blog-header__wordmark {
   color: var(--fg);
-  font-weight: 700;
+  font-weight: 400;
   font-size: 15px;
 }
 
@@ -63,6 +63,13 @@
   color: var(--text-muted);
 }
 
+/* The date is reused inside a post's meta row (BlogPostPage), but only
+   that placement reverts to the old default monospace — the list view's
+   date stays on the sitewide font-mono (Circuit Forem Regular). */
+.blog-post__meta .blog-row__date {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
 .blog-row__excerpt {
   font-family: 'Inter', sans-serif;
   font-size: 13px;
@@ -71,7 +78,12 @@
   max-width: 560px;
 }
 
+/* Deliberately left off the sitewide font-mono → Circuit Forem Regular
+   swap; back to the browser's own default monospace stack. Shared with the
+   post-detail meta row (BlogPostPage reuses this class), so this covers
+   both. */
 .blog-row__tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 10px;
   letter-spacing: 0.1em;
   color: var(--text-muted);
@@ -88,6 +100,7 @@
 
 /* -- individual post page -- */
 .blog-post__close {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 15px;
   line-height: 1;
   color: var(--brand);

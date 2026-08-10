@@ -60,7 +60,7 @@
   color: var(--brand);
 }
 .about-panel__strip-txt {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Circuit Forem Regular', monospace;
   font-size: 11px;
   letter-spacing: 0.15em;
   color: var(--text-muted);
@@ -141,7 +141,7 @@
 /* -- panel heading, plus its RGB-split glitch on switch -- */
 .about-panel__label {
   position: relative;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Circuit Forem Regular', monospace;
   font-size: 12px;
   letter-spacing: 0.2em;
   color: var(--brand);
@@ -171,7 +171,7 @@
   gap: 20px;
 }
 .about-panel__tag {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Circuit Forem Regular', monospace;
   font-size: 10px;
   letter-spacing: 0.15em;
   color: var(--text-muted);

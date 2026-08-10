@@ -60,7 +60,7 @@ export function Work() {
         </span>
       </div>
 
-      <h3 className="section-subtitle mb-8">TECHNICAL ARSENAL</h3>
+      <h3 className="section-subtitle mb-8">TECHNICAL STACK</h3>
       <div className="hairline-list flex flex-col gap-px mb-16">
         {CAPABILITIES.map((c) => (
           <div key={c.k} className="hairline-row flex items-baseline gap-5 p-5">

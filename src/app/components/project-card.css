@@ -54,8 +54,11 @@
   color: var(--text-muted);
 }
 
-/* -- tech tags -- */
+/* -- tech tags --
+   Deliberately left off the sitewide font-mono → Circuit Forem Regular
+   swap; back to the browser's own default monospace stack. */
 .project-card__tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 10px;
   letter-spacing: 0.1em;
   color: var(--text-muted);

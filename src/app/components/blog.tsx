@@ -8,17 +8,17 @@ function BlogHeader() {
   return (
     <header className="blog-header sticky top-0 z-40 backdrop-blur-md">
       <div className="mx-auto max-w-[1200px] px-6 h-16 flex items-center justify-between">
-        <Link
-          to="/"
-          className="blog-header__back font-mono transition-colors duration-200 hover:text-[var(--brand)]"
-        >
-          ← BACK TO HOME
-        </Link>
+        <span className="blog-header__wordmark font-mono tracking-wide">
+          RAWN.DEV
+        </span>
         <div className="flex items-center gap-4">
           <ThemeToggle />
-          <span className="blog-header__wordmark font-mono tracking-wide">
-            RAWN.DEV
-          </span>
+          <Link
+            to="/"
+            className="blog-header__back font-mono transition-colors duration-200 hover:text-[var(--brand)]"
+          >
+            ← BACK TO HOME
+          </Link>
         </div>
       </div>
     </header>

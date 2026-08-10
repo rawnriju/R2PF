@@ -3,7 +3,7 @@
 
    Rows reuse the shared .hairline-list/.hairline-row pattern
    (see src/styles/components.css) — same visual weight as
-   work.tsx's TECHNICAL ARSENAL list. Clicking a row opens a
+   work.tsx's TECHNICAL STACK list. Clicking a row opens a
    modal with the entry's photo.
    ============================================================ */
 
@@ -34,12 +34,17 @@
 }
 
 .volunteer-row__org {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
   font-size: 11px;
   letter-spacing: 0.08em;
   color: var(--text-muted);
 }
 
+/* Deliberately left off the sitewide font-mono → Circuit Forem Regular
+   swap; back to the browser's own default monospace stack. */
 .volunteer-row__tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 10px;
   letter-spacing: 0.1em;
   color: var(--text-muted);

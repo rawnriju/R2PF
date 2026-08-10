@@ -79,6 +79,10 @@
 }
 
 @theme inline {
+  /* Backs every `font-mono` utility class site-wide — nav links, HUD labels,
+     stat chips, section eyebrows, etc. — from one place instead of each
+     component declaring its own font-family. */
+  --font-mono: 'Circuit Forem Regular', monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

@@ -1,1 +1,42 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap');
+/* Self-hosted — all three typefaces load from src/assets. Sddystopian and
+   Circuit Forem Regular are custom single-weight files with no bold/italic
+   variants, so headings/labels using them request font-weight: 400 rather
+   than the browser synthesizing a fake bold. */
+
+/* Kept on the Google Fonts CDN, scoped to what's still actually used — the
+   blog page (list titles, post titles/headings, code blocks) and project
+   card / volunteering titles were deliberately left out of the sitewide
+   Sddystopian/Circuit Forem swap, so it isn't worth self-hosting whole
+   extra families for a handful of selectors. */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400&display=swap');
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../assets/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('../assets/Inter-Italic-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sddystopian';
+  src: url('../assets/Sddystopiandemo-GO7xa.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Circuit Forem Regular';
+  src: url('../assets/CircuitForemRegular-zr2n1.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
