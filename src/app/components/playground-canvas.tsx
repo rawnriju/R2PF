@@ -255,12 +255,6 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
       resetSignalRef.current += 1;
     };
 
-    const onContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
-      const { x, y } = getPos(e);
-      doReset(x, y);
-    };
-
     // --- Touch support ---
     // One finger charges & launches (like left-click); two fingers = Kawarimi reset.
     // touchStart/touchScrolled below exist to tell a deliberate tap-and-hold
@@ -269,8 +263,25 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
     // past the hero on mobile would fire a ball on every swipe.
     const touchStartRef = { x: 0, y: 0 };
     let touchScrolled = false;
+    // Mobile browsers (notably Chrome/Android) synthesize a "contextmenu"
+    // event after ~500ms of a held touch, to emulate long-press = right-
+    // click. Without this flag, that synthetic event hit onContextMenu below
+    // and reset the play area mid-charge — so holding to aim looked like it
+    // wiped the scene, and releasing never launched (the charge was gone).
+    // Touch already has its own reset gesture (two-finger tap), so any
+    // contextmenu firing during an active touch is that emulation, not a
+    // real right-click, and should be ignored.
+    let touchActive = false;
+
+    const onContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+      if (touchActive) return;
+      const { x, y } = getPos(e);
+      doReset(x, y);
+    };
 
     const onTouchStart = (e: TouchEvent) => {
+      touchActive = true;
       if (e.touches.length >= 2) {
         const t0 = e.touches[0];
         const t1 = e.touches[1];
@@ -314,6 +325,12 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
       chargingRef.current = null;
       sharedPointerRef.current.active = false;
       touchScrolled = false;
+      // The synthetic contextmenu (and any ghost mouse events) mobile
+      // browsers emulate from a long-press typically land right around or
+      // just after touchend, not mid-hold — so clearing the guard
+      // synchronously here let them slip through and reset the scene right
+      // as the ball should have launched. Keep it up a beat longer instead.
+      window.setTimeout(() => { touchActive = false; }, 700);
     };
 
     canvas.addEventListener("mousedown", onMouseDown);
