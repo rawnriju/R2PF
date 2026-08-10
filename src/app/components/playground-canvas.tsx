@@ -113,6 +113,10 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
     // state, with no jump.
     let raf = 0;
     let running = false;
+    // Tracked separately from `running` so a visibilitychange resume knows
+    // whether it's even supposed to restart the loop — IntersectionObserver
+    // won't re-fire just because the tab became visible again.
+    let isIntersecting = false;
     const start = () => {
       if (running) return;
       running = true;
@@ -136,6 +140,24 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
     };
     resize();
     window.addEventListener("resize", resize);
+
+    // Chrome can silently reclaim a 2D canvas's GPU-backed backing store
+    // after it's sat hidden/idle for a long stretch (mobile especially, to
+    // reclaim memory). Draw calls keep "succeeding" afterward but paint
+    // nothing until the context is restored — so without this, the whole
+    // game would look frozen/blank after a long idle period even though
+    // score/physics state keeps advancing normally (they live outside the
+    // canvas). See https://developer.chrome.com/blog/canvas2d-context-loss
+    const onContextLost = (e: Event) => {
+      e.preventDefault();
+      stop();
+    };
+    const onContextRestored = () => {
+      resize();
+      if (isIntersecting && !document.hidden) start();
+    };
+    canvas.addEventListener("contextlost", onContextLost);
+    canvas.addEventListener("contextrestored", onContextRestored);
 
     // Pre-rendered smoke sprite — drawing this scaled is far cheaper than
     // building a radial gradient per puff per frame.
@@ -500,17 +522,24 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
     };
 
     const io = new IntersectionObserver(
-      ([entry]) => (entry.isIntersecting ? start() : stop()),
+      ([entry]) => {
+        isIntersecting = entry.isIntersecting;
+        if (isIntersecting) start();
+        else stop();
+      },
       // Spin up just before it scrolls into view, so it's already live by the
       // time the first pixel shows.
       { rootMargin: "200px" },
     );
     io.observe(canvas);
 
-    // Browsers already throttle rAF in background tabs, so this is insurance
-    // rather than the actual win — don't treat it as load-bearing.
+    // Also resume on tab-visible, not just on-screen: IntersectionObserver
+    // only fires on actual scroll-driven enter/exit, so if the hero was
+    // already in view before the tab was backgrounded, coming back would
+    // otherwise leave the loop stopped forever with nothing to restart it.
     const onVisibility = () => {
       if (document.hidden) stop();
+      else if (isIntersecting) start();
     };
     document.addEventListener("visibilitychange", onVisibility);
 
@@ -518,6 +547,8 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
       stop();
       io.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
+      canvas.removeEventListener("contextlost", onContextLost);
+      canvas.removeEventListener("contextrestored", onContextRestored);
       window.removeEventListener("resize", resize);
       window.removeEventListener("mouseup", launch);
       window.removeEventListener("blur", onWindowBlurOrScroll);
