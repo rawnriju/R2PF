@@ -33,8 +33,6 @@
   --brand-2-rgb: 217, 74, 0;
   --on-brand: #ffffff;
 
-  --online: #16a34a;
-
   /* Glows read as haze on a light background, so scale every bloom down. */
   --glow: 0.45;
 
@@ -78,8 +76,6 @@
   --brand-2: #ff5500;
   --brand-2-rgb: 255, 85, 0;
   --on-brand: #090b10;
-
-  --online: #22c55e;
 
   --glow: 1;
 

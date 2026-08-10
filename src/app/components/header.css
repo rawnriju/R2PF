@@ -17,19 +17,6 @@
   font-size: 15px;
 }
 
-/* -- `[ ONLINE ]` status, with its pinging dot -- */
-.site-header__status {
-  font-size: 10px;
-  color: var(--text-muted);
-  letter-spacing: 0.1em;
-}
-.site-header__dot {
-  background: var(--online);
-}
-.site-header__dot--lit {
-  box-shadow: 0 0 8px var(--online);
-}
-
 /* -- `01 // ABOUT` anchor nav; the number takes the accent -- */
 .site-header__link {
   font-size: 12px;

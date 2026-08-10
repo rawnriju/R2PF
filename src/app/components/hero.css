@@ -72,6 +72,16 @@
   color: var(--brand-2);
 }
 
+/* Narrow screens: both HUD pills (score readout, controls banner) run
+   smaller/tighter so they read as a compact chip instead of eating vertical
+   space that's already scarce on a phone viewport. */
+@media (max-width: 640px) {
+  .hero-hud {
+    font-size: 9px;
+    letter-spacing: 0.04em;
+  }
+}
+
 /* ------------------------------------------------------------
    Headline stack
    ------------------------------------------------------------ */

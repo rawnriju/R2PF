@@ -24,13 +24,6 @@ export function Header() {
           <span className="site-header__wordmark font-mono tracking-wide">
             RAWN.DEV
           </span>
-          <span className="site-header__status flex items-center gap-1.5 font-mono">
-            <span className="relative flex h-2 w-2">
-              <span className="site-header__dot absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping" />
-              <span className="site-header__dot site-header__dot--lit relative inline-flex rounded-full h-2 w-2" />
-            </span>
-            [ ONLINE ]
-          </span>
         </div>
 
         {/* Center slot: a flexible middle child, so its content sits centered

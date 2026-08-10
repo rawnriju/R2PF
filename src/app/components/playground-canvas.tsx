@@ -40,6 +40,10 @@ interface Props {
 const MAX_CHARGE_R = 46;
 const MIN_CHARGE_R = 6;
 const CHARGE_GROW = 0.9; // radius gained per frame while held
+// How far (in px) a touch has to drift from its start point before it's
+// treated as a scroll swipe instead of an aimed shot. Below this, tiny
+// finger jitter during a hold still counts as a deliberate tap.
+const TOUCH_SCROLL_THRESHOLD = 12;
 
 interface Pixel {
   x: number; y: number; vx: number; vy: number; size: number; orange: boolean; life: number;
@@ -259,17 +263,28 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
 
     // --- Touch support ---
     // One finger charges & launches (like left-click); two fingers = Kawarimi reset.
+    // touchStart/touchScrolled below exist to tell a deliberate tap-and-hold
+    // apart from a swipe-to-scroll gesture that merely happens to start on
+    // the canvas (which covers the whole hero) — without this, scrolling
+    // past the hero on mobile would fire a ball on every swipe.
+    const touchStartRef = { x: 0, y: 0 };
+    let touchScrolled = false;
+
     const onTouchStart = (e: TouchEvent) => {
       if (e.touches.length >= 2) {
         const t0 = e.touches[0];
         const t1 = e.touches[1];
         const { x, y } = getPosXY((t0.clientX + t1.clientX) / 2, (t0.clientY + t1.clientY) / 2);
         chargingRef.current = null;
+        touchScrolled = false;
         doReset(x, y);
         return;
       }
       const t = e.touches[0];
       const { x, y } = getPosXY(t.clientX, t.clientY);
+      touchStartRef.x = x;
+      touchStartRef.y = y;
+      touchScrolled = false;
       startCharge(x, y);
     };
 
@@ -282,11 +297,23 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
       sharedPointerRef.current.x = x;
       sharedPointerRef.current.y = y;
       sharedPointerRef.current.active = true;
+
+      if (!touchScrolled && chargingRef.current) {
+        const dist = Math.hypot(x - touchStartRef.x, y - touchStartRef.y);
+        if (dist > TOUCH_SCROLL_THRESHOLD) {
+          // Drifted too far to be a held aim — this is a scroll. Abandon
+          // the charge silently so lifting the finger later doesn't launch.
+          touchScrolled = true;
+          chargingRef.current = null;
+        }
+      }
     };
 
     const onTouchEnd = () => {
-      launch();
+      if (!touchScrolled) launch();
+      chargingRef.current = null;
       sharedPointerRef.current.active = false;
+      touchScrolled = false;
     };
 
     canvas.addEventListener("mousedown", onMouseDown);

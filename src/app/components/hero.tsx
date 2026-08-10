@@ -399,9 +399,9 @@ export function Hero() {
           headline, so it moves inward with it on wide screens instead of
           staying pinned to the raw viewport edge */}
       {score > 0 && (
-        <div className="pointer-events-none absolute inset-x-0 top-72 z-30">
+        <div className="pointer-events-none absolute inset-x-0 top-20 sm:top-72 z-30">
           <div className="relative mx-auto max-w-[1200px] px-6">
-            <div className="hero-hud absolute right-0 top-0 backdrop-blur-md font-mono flex items-center gap-2 px-4 py-2 rounded-full">
+            <div className="hero-hud absolute right-0 top-0 backdrop-blur-md font-mono flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full">
               [ SCORE: <span className="hero-hud__brand">{score}</span> ]
             </div>
           </div>
@@ -450,12 +450,17 @@ export function Hero() {
        Hey there! I'm Rawn, and I like to learn, build, and question things. I'm a full-stack software engineer with nearly 5 years of professional experience, specializing in data visualization and building accessible, user-friendly experiences. </p>
       </div>
 
-      {/* HUD control banner */}
-      <div className="pointer-events-none absolute bottom-8 inset-x-0 z-30 flex justify-center px-6">
-        <div className="hero-hud backdrop-blur-md font-mono flex flex-wrap items-center justify-center gap-x-4 gap-y-1 px-5 py-3 rounded-full">
-          <span>[ 🖱️ HOLD LEFT-CLICK: <span className="hero-hud__brand">CHARGE & AIM BALL</span> ]</span>
-          <span className="dot-sep">•</span>
-          <span>[ 🖱️ RIGHT-CLICK: <span className="hero-hud__brand-2">KAWARIMI RESET</span> ]</span>
+      {/* HUD control banner — separate copy for touch vs. mouse, since the
+          gestures (and the space to explain them) differ on mobile. */}
+      <div className="pointer-events-none absolute bottom-4 sm:bottom-8 inset-x-0 z-30 flex justify-center px-6">
+        <div className="hero-hud backdrop-blur-md font-mono flex flex-wrap items-center justify-center gap-x-2 sm:gap-x-4 gap-y-1 px-3 py-1.5 sm:px-5 sm:py-3 rounded-full">
+          <span className="sm:hidden">[ 👆 HOLD: <span className="hero-hud__brand">AIM & LAUNCH</span> ]</span>
+          <span className="dot-sep sm:hidden">•</span>
+          <span className="sm:hidden">[ ✌️ 2-FINGER TAP: <span className="hero-hud__brand-2">RESET</span> ]</span>
+
+          <span className="hidden sm:inline">[ 🖱️ HOLD LEFT-CLICK: <span className="hero-hud__brand">CHARGE & AIM BALL</span> ]</span>
+          <span className="dot-sep hidden sm:inline">•</span>
+          <span className="hidden sm:inline">[ 🖱️ RIGHT-CLICK: <span className="hero-hud__brand-2">KAWARIMI RESET</span> ]</span>
         </div>
       </div>
     </section>
