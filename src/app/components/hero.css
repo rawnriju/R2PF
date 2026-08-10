@@ -16,6 +16,13 @@
   display: inline;
 }
 
+/* Groups a word's letters into one non-wrapping unit, so the line only
+   ever breaks between words (at the space), never in the middle of one. */
+.hero-scatter__word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
 /* Each character is its own inline-block so it can be transformed
    independently; the animation loop writes transform on these
    directly, hence the will-change hint. */

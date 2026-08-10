@@ -291,23 +291,38 @@ function ScatterText({
     return () => cancelAnimationFrame(raf);
   }, [animate]);
 
-  const chars = text.split("");
+  // Split on spaces but keep them as their own tokens (capturing group),
+  // so each word's letters can be grouped into a single non-wrapping unit
+  // below — without this, every letter is an independent wrap point and a
+  // long word (e.g. "ABRAHAM") can break mid-word on narrow screens.
+  const tokens = text.split(/( )/);
+  let i = 0;
 
   return (
     <span ref={containerRef} className={`hero-scatter ${className ?? ""}`}>
-      {chars.map((char, i) =>
-        char === " " ? (
-          <span key={i} className="hero-scatter__space">&nbsp;</span>
-        ) : (
-          <span
-            key={i}
-            ref={(el) => { charRefsRef.current[i] = el; }}
-            className="hero-scatter__char"
-          >
-            {char}
+      {tokens.map((token, ti) => {
+        if (token === "") return null;
+        if (token === " ") {
+          const spaceIndex = i++;
+          return <span key={spaceIndex} className="hero-scatter__space">&nbsp;</span>;
+        }
+        return (
+          <span key={ti} className="hero-scatter__word">
+            {token.split("").map((char) => {
+              const charIndex = i++;
+              return (
+                <span
+                  key={charIndex}
+                  ref={(el) => { charRefsRef.current[charIndex] = el; }}
+                  className="hero-scatter__char"
+                >
+                  {char}
+                </span>
+              );
+            })}
           </span>
-        )
-      )}
+        );
+      })}
     </span>
   );
 }
