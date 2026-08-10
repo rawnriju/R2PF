@@ -1,15 +1,18 @@
 import { Github, Linkedin } from "lucide-react";
+import { useState } from "react";
+import { getRandomQuote } from "../lib/quotes";
 import "./footer.css";
 
 // The #contact anchor belongs to the Contact section (contact.tsx), not here.
 export function Footer() {
   const toTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  const [quote] = useState(() => getRandomQuote());
 
   return (
     <footer className="site-footer">
       <div className="mx-auto max-w-[1200px] px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
         <span className="site-footer__copy font-mono">
-          © 2026 RAWN ABRAHAM RIJU — ALL SYSTEMS OPERATIONAL
+          © 2026 RAWN ABRAHAM RIJU — {quote}
         </span>
 
         <div className="flex items-center gap-6 md:pr-32">

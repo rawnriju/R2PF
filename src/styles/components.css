@@ -85,14 +85,28 @@
    ------------------------------------------------------------ */
 
 /* -- `[ LABEL: value ]` stat: stats-bar, work ×3 --
-   The wrapper is muted; only the value opts into the accent. */
+   The wrapper is muted; only the value opts into the accent.
+   white-space: nowrap keeps the bracketed unit atomic — the parent's
+   flex-wrap already lets a whole `[ ... ]` chip drop to its own line, but
+   without nowrap the browser would instead break *inside* the brackets on
+   narrow screens (e.g. "D3.JS ]" stranded alone), which reads as broken.
+   The mobile media query below is what keeps that nowrap text actually
+   narrow enough to fit rather than overflowing. */
 .stat-span {
   font-size: 11px;
   letter-spacing: 0.1em;
   color: var(--text-muted);
+  white-space: nowrap;
 }
 .stat-span__value {
   color: var(--brand);
+}
+
+@media (max-width: 480px) {
+  .stat-span {
+    font-size: 9px;
+    letter-spacing: 0.03em;
+  }
 }
 
 /* -- separator bullet between stats: stats-bar, work ×2, hero -- */
