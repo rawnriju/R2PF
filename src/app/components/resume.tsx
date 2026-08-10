@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { getEmail } from "../lib/email";
 import { ThemeToggle } from "./theme-toggle";
 import "./resume.css";
 
@@ -143,8 +144,7 @@ export function Resume() {
             </p>
           </div>
           <div className="text-[13px] print:text-[14.5px] text-[var(--ink-3)] space-y-1 print:space-y-0.5 md:text-right print:text-right md:pt-3 print:pt-1">
-            <p>rawnriju@gmail.com</p>
-            <p>041 499 4257</p>
+            <p>{getEmail()}</p>
             <p>Tampere, Finland</p>
             <a href="https://www.linkedin.com/in/rawn-riju-b5b199183/" target="_blank" rel="noopener noreferrer" className={`${accent} hover:underline block`}>linkedin.com/in/rawn-riju</a>
             <a href="https://github.com/rawnriju" target="_blank" rel="noopener noreferrer" className={`${accent} hover:underline block`}>github.com/rawnriju</a>

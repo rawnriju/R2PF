@@ -1,17 +1,9 @@
 import { Github, Linkedin, Mail } from "lucide-react";
 import type { CSSProperties } from "react";
+import { getEmail, getMailtoHref } from "../lib/email";
 import "./contact.css";
 
 const CHANNELS = [
-  {
-    id: "email",
-    tag: "EMAIL",
-    label: "rawnriju@gmail.com",
-    href: "mailto:rawnriju@gmail.com",
-    Icon: Mail,
-    accent: "var(--brand)",
-    external: false,
-  },
   {
     id: "github",
     tag: "GITHUB",
@@ -33,6 +25,19 @@ const CHANNELS = [
 ];
 
 export function Contact() {
+  const channels = [
+    {
+      id: "email",
+      tag: "EMAIL",
+      label: getEmail(),
+      href: getMailtoHref(),
+      Icon: Mail,
+      accent: "var(--brand)",
+      external: false,
+    },
+    ...CHANNELS,
+  ];
+
   return (
     <section id="contact" className="mx-auto max-w-[1200px] px-6 py-24">
       <div className="mb-12">
@@ -45,7 +50,7 @@ export function Contact() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {CHANNELS.map(({ id, tag, label, href, Icon, accent, external }) => (
+        {channels.map(({ id, tag, label, href, Icon, accent, external }) => (
           <a
             key={id}
             href={href}
