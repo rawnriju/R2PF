@@ -85,7 +85,7 @@ export function Volunteering() {
             style={{ "--card-accent": entry.accent } as React.CSSProperties}
           >
             <span className="volunteer-row__index font-mono shrink-0">{entry.index}</span>
-            <div className="volunteer-row__main min-w-0">
+            <div className="volunteer-row__main min-w-0 flex-1">
               <div className="flex items-baseline gap-2 flex-wrap">
                 <h4 className="volunteer-row__title">{entry.title}</h4>
                 <span className="volunteer-row__org font-mono">{entry.org}</span>

@@ -17,6 +17,9 @@ const ResumePage = lazy(() =>
 const BlogPage = lazy(() =>
   import("./components/blog").then((m) => ({ default: m.BlogPage }))
 );
+const BlogPostPage = lazy(() =>
+  import("./components/blog").then((m) => ({ default: m.BlogPostPage }))
+);
 
 function HomePage() {
   // No scroll listener here: ScrollDial drives itself off anime.js
@@ -46,6 +49,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/resume" element={<ResumePage />} />
         <Route path="/blog" element={<BlogPage />} />
+        <Route path="/blog/:slug" element={<BlogPostPage />} />
       </Routes>
     </Suspense>
   );

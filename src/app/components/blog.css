@@ -29,3 +29,189 @@
   line-height: 1.65;
   color: var(--text-muted);
 }
+
+/* -- post list row, same shape as volunteering.tsx's .volunteer-row -- */
+.blog-row {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.blog-row:hover,
+.blog-row:focus-visible {
+  background: var(--chip-bg);
+}
+.blog-row:focus-visible {
+  outline: 2px solid var(--card-accent);
+  outline-offset: -2px;
+}
+
+.blog-row__index {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--card-accent);
+}
+
+.blog-row__title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--fg);
+}
+
+.blog-row__date {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.blog-row__excerpt {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  max-width: 560px;
+}
+
+.blog-row__tag {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  padding: 4px 8px;
+  border: 1px solid var(--hairline);
+}
+
+.blog-row__view {
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--card-accent);
+  white-space: nowrap;
+}
+
+/* -- individual post page -- */
+.blog-post__close {
+  font-size: 15px;
+  line-height: 1;
+  color: var(--brand);
+  transition: opacity 0.2s ease;
+}
+.blog-post__close:hover {
+  opacity: 0.7;
+}
+
+
+.blog-post__title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(28px, 4vw, 40px);
+  color: var(--fg);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.blog-post__meta {
+  color: var(--text-muted);
+}
+
+.blog-post__body {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--fg);
+}
+
+.blog-post__body > * + * {
+  margin-top: 1.2em;
+}
+
+.blog-post__body h1,
+.blog-post__body h2,
+.blog-post__body h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  color: var(--fg);
+  line-height: 1.25;
+  margin-top: 1.8em;
+}
+
+.blog-post__body h1 { font-size: 26px; }
+.blog-post__body h2 { font-size: 21px; }
+.blog-post__body h3 { font-size: 17px; }
+
+/* -- brand-logo images peppered through the article, sitting directly
+   on the page background rather than in a boxed panel -- */
+.blog-post__body .blog-figure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  width: 100%;
+  padding: 16px 0;
+}
+.blog-post__body .blog-figure img {
+  height: 56px;
+  width: auto;
+}
+.blog-post__body .blog-figure--row img {
+  height: 44px;
+}
+
+/* some brand logos (Angular) are near-black and disappear against the
+   dark theme's background, so give every logo a thin white rim there */
+.dark .blog-post__body .blog-figure img {
+  filter:
+    drop-shadow(1px 0 0 #fff)
+    drop-shadow(-1px 0 0 #fff)
+    drop-shadow(0 1px 0 #fff)
+    drop-shadow(0 -1px 0 #fff);
+}
+
+/* -- references list: give the title more breathing room than the
+   default heading-to-paragraph gap (only h2 in this doc followed by a
+   list is "References") -- */
+.blog-post__body h2:has(+ ul) + ul {
+  margin-top: 2.2em;
+}
+
+.blog-post__body p {
+  color: var(--text-muted);
+}
+
+.blog-post__body a {
+  color: var(--brand);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.blog-post__body ul,
+.blog-post__body ol {
+  color: var(--text-muted);
+  padding-left: 1.4em;
+}
+.blog-post__body li + li {
+  margin-top: 0.4em;
+}
+
+.blog-post__body blockquote {
+  border-left: 2px solid var(--hairline-strong);
+  padding-left: 1em;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.blog-post__body code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+  background: var(--chip-bg);
+  padding: 0.15em 0.4em;
+  border-radius: 2px;
+}
+
+.blog-post__body pre {
+  background: var(--chip-bg);
+  padding: 16px;
+  overflow-x: auto;
+  border: 1px solid var(--hairline);
+}
+.blog-post__body pre code {
+  background: none;
+  padding: 0;
+}
