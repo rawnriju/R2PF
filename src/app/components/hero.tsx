@@ -428,7 +428,7 @@ export function Hero() {
 
       <div className="pointer-events-none relative z-10 mx-auto w-full max-w-[1200px] px-6 py-24">
         <p className="section-eyebrow font-mono mb-6">
-          // SENIOR FULLSTACK SOFTWARE ENGINEER
+          // SENIOR FRONTEND SOFTWARE ENGINEER
         </p>
 
         <h1 className="hero-title">
@@ -455,14 +455,14 @@ export function Hero() {
 
         <p className="hero-subtitle mt-6">
           <ScatterText
-            text="FULLSTACK SOFTWARE ENGINEER & MSC STUDENT"
+            text="FRONTEND SOFTWARE ENGINEER & MSC STUDENT"
             ballsRef={sharedBallsRef}
             resetSignalRef={resetSignalRef}
           />
         </p>
 
         <p className="hero-blurb mt-8 max-w-[800px]">
-       Hey there! I'm Rawn, and I like to learn, build, and question things. I'm a full-stack software engineer with nearly 5 years of professional experience, specializing in data visualization and building accessible, user-friendly experiences. </p>
+       Hey there! I'm Rawn, and I like to learn, build, and question things. I'm a frontend software engineer with nearly 5 years of professional experience, specializing in data visualization and building accessible, user-friendly experiences. </p>
       </div>
 
       {/* HUD control banner — separate copy for touch vs. mouse, since the

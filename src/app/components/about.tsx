@@ -26,10 +26,10 @@ const TECHNICAL: PanelData = {
     },
     {
       tag: "CAREER — VIEW26",
-      text: "Before moving to Finland, I spent almost five years at View26 GmbH (Actiotech LLP), where I left as a Senior Full-Stack Software Engineer. During my time there, I led development on a Scrum management app that went on to win 2nd place in Atlassian's Codegeist 2021 hackathon. I also built data visualization tools used by over 1,000 customers on the Atlassian Marketplace and contributed to the company's core proprietary charting library, helping maintain and expand one of the key pieces of technology behind several of our products.",
+      text: "Before moving to Finland, I spent almost five years at View26 GmbH (Actiotech LLP), where I left as a Senior Frontend Software Engineer. During my time there, I led development on a Scrum management app that went on to win 2nd place in Atlassian's Codegeist 2021 hackathon. I also built data visualization tools used by over 1,000 customers on the Atlassian Marketplace and contributed to the company's core proprietary charting library, helping maintain and expand one of the key pieces of technology behind several of our products.",
       highlight: [
         "View26 GmbH (Actiotech LLP)",
-        "Senior Full-Stack Software Engineer",
+        "Senior Frontend Software Engineer",
         "2nd place in Atlassian's Codegeist 2021 hackathon",
         "over 1,000 customers on the Atlassian Marketplace",
       ],

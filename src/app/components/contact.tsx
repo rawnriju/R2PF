@@ -44,7 +44,7 @@ export function Contact() {
         <p className="section-eyebrow font-mono mb-3">05 // CONTACT</p>
         <h2 className="section-title">GET IN TOUCH</h2>
         <p className="contact-intro mt-4 max-w-[520px]">
-          Open to fullstack roles, interesting problems, and good conversation. The
+          Open to frontend roles, interesting problems, and good conversation. The
           fastest way through is email but the rest are always open too.
         </p>
       </div>

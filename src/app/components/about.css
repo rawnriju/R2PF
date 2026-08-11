@@ -142,8 +142,8 @@
 .about-panel__label {
   position: relative;
   font-family: 'Circuit Forem Regular', monospace;
-  font-size: 12px;
-  letter-spacing: 0.2em;
+  font-size: 14px;
+  letter-spacing: 0.13em;
   color: var(--brand);
   margin-bottom: 20px;
 }
@@ -173,9 +173,11 @@
 .about-panel__tag {
   font-family: 'Circuit Forem Regular', monospace;
   font-size: 10px;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.1em;
   color: var(--text-muted);
   margin-bottom: 6px;
+  font-weight: 600;
+  
 }
 .about-panel__text {
   font-family: 'Inter', sans-serif;

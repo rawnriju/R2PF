@@ -52,7 +52,7 @@ export function Work() {
         </span>
         <span className="dot-sep hidden sm:inline">•</span>
         <span className="stat-span font-mono">
-          [ ROLE: <span className="stat-span__value">Senior Full-Stack Software Engineer</span> ]
+          [ ROLE: <span className="stat-span__value">Senior Frontend Software Engineer</span> ]
         </span>
         <span className="dot-sep hidden sm:inline">•</span>
         <span className="stat-span font-mono">

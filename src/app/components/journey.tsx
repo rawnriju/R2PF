@@ -26,7 +26,7 @@ const MILESTONES: Milestone[] = [
   {
     id: "senior",
     period: "2023",
-    title: "Senior Full-Stack Software Engineer",
+    title: "Senior Frontend Software Engineer",
     org: "View26 GmbH (Actiotech LLP)",
     desc: "Grew into mentoring, code review, and product strategy alongside engineering — the role that closed out almost five years at View26.",
     kind: "promotion",
@@ -34,7 +34,7 @@ const MILESTONES: Milestone[] = [
   {
     id: "view26",
     period: "Sept 2020",
-    title: "Full-Stack Software Engineer",
+    title: "Frontend Software Engineer",
     org: "View26 GmbH (Actiotech LLP)",
     desc: "Joined to build the Scrum management app that went on to place 2nd at Atlassian's Codegeist 2021, plus the company's charting and reporting tools.",
     kind: "work",
@@ -70,7 +70,7 @@ export function Journey() {
           <div key={m.id} className="journey-row" data-kind={m.kind}>
             <span className="journey-dot" aria-hidden="true" />
             <div className="journey-content">
-              <span className="journey-period font-mono">{m.period}</span>
+              <span className="journey-period">{m.period}</span>
               <p className="journey-title">{m.title}</p>
               <p className="journey-org font-mono">{m.org}</p>
               <p className="journey-desc">{m.desc}</p>
