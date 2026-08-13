@@ -1,0 +1,98 @@
+/* ============================================================
+   project-modal.tsx — case-study detail modal for project cards
+
+   Reuses the same surface/hairline/chamfer language as
+   project-card.css; the card is effectively the modal's trigger,
+   so they need to read as one object opening rather than two
+   unrelated surfaces.
+   ============================================================ */
+
+.project-modal__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 50;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .project-modal__overlay[data-state="open"] {
+    animation: project-modal-fade 200ms ease;
+  }
+}
+
+.project-modal__content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 51;
+  width: calc(100% - 2.5rem);
+  max-width: 640px;
+  max-height: min(80vh, 720px);
+  overflow-y: auto;
+  padding: 32px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  box-shadow: 0 0 40px calc(var(--glow) * 0.35) var(--card-accent);
+}
+.project-modal__content:focus-visible {
+  outline: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .project-modal__content[data-state="open"] {
+    animation: project-modal-in 220ms ease;
+  }
+}
+
+.project-modal__close {
+  color: var(--text-muted);
+  transition: color 200ms ease;
+}
+.project-modal__close:hover {
+  color: var(--fg);
+}
+
+.project-modal__title {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+  font-size: 26px;
+  color: var(--fg);
+  line-height: 1.15;
+  margin-top: 24px;
+}
+
+.project-modal__body-group {
+  margin-top: 20px;
+}
+.project-modal__body {
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--fg);
+}
+.project-modal__body + .project-modal__body {
+  margin-top: 14px;
+}
+
+.project-modal__highlight {
+  color: var(--card-accent);
+  font-weight: 600;
+}
+
+@keyframes project-modal-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes project-modal-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

@@ -1,5 +1,15 @@
 import type { CSSProperties } from "react";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { ProjectModal } from "./project-modal";
 import "./project-card.css";
+
+/** A single constraint → decision beat; cards render one or more of these. */
+export interface ProjectStory {
+  /** Narrative paragraphs — constraint/problem interwoven with the decision/solution. */
+  work: string[];
+  /** The retrospective callout: tradeoff made, or what I'd do differently. */
+  reflection: string;
+}
 
 export interface Project {
   id: string;
@@ -10,16 +20,13 @@ export interface Project {
   accent: string;
   /** column span for asymmetric manga layout */
   span: string;
+  /** Case-study detail shown in a modal on click. Cards without it stay plain links. */
+  story?: ProjectStory;
 }
 
-export function ProjectCard({ project, href }: { project: Project; href: string }) {
+function CardChrome({ project }: { project: Project }) {
   return (
-    <a
-      href={href}
-      className={`project-card chamfer group relative block p-7 min-h-[220px] transition-all duration-300 ${project.span}`}
-      // Feeds every accent-coloured rule in project-card.css.
-      style={{ "--card-accent": project.accent } as CSSProperties}
-    >
+    <>
       {/* corner highlight on hover */}
       <span className="project-card__corner project-card__corner--tr pointer-events-none absolute top-0 right-0 h-10 w-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       <span className="project-card__corner project-card__corner--bl pointer-events-none absolute bottom-0 left-0 h-10 w-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -41,6 +48,30 @@ export function ProjectCard({ project, href }: { project: Project; href: string 
           </span>
         ))}
       </div>
-    </a>
+    </>
+  );
+}
+
+export function ProjectCard({ project, href }: { project: Project; href: string }) {
+  const cardStyle = { "--card-accent": project.accent } as CSSProperties;
+  const cardClass = `project-card chamfer group relative block w-full cursor-pointer p-7 min-h-[220px] text-left transition-all duration-300 ${project.span}`;
+
+  if (!project.story) {
+    return (
+      <a href={href} className={cardClass} style={cardStyle}>
+        <CardChrome project={project} />
+      </a>
+    );
+  }
+
+  return (
+    <DialogPrimitive.Root>
+      <DialogPrimitive.Trigger asChild>
+        <button type="button" className={cardClass} style={cardStyle}>
+          <CardChrome project={project} />
+        </button>
+      </DialogPrimitive.Trigger>
+      <ProjectModal project={project} />
+    </DialogPrimitive.Root>
   );
 }
