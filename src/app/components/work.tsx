@@ -38,6 +38,7 @@ const PROJECTS: Project[] = [
   },
 ];
 
+// TO DO: add project description on clicking the card, or a modal with more details, or a link to the project page
 export function Work() {
   return (
     <section id="work" className="mx-auto max-w-[1200px] px-6 py-24">
