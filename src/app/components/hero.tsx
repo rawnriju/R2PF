@@ -1,4 +1,5 @@
 import { useRef, useEffect, useCallback, useState } from "react";
+import { Play, Square } from "lucide-react";
 import { PlaygroundCanvas, Ball, Pointer, ScoreLine } from "./playground-canvas";
 import "./hero.css";
 
@@ -328,6 +329,7 @@ function ScatterText({
 }
 
 export function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
   const sharedBallsRef = useRef<Ball[]>([]);
   const resetSignalRef = useRef<number>(0);
   const sharedPointerRef = useRef<Pointer>({ x: 0, y: 0, active: false });
@@ -336,31 +338,87 @@ export function Hero() {
   const [score, setScore] = useState(0);
   const [pulses, setPulses] = useState<{ id: number; x: number; y: number }[]>([]);
   const pulseIdRef = useRef(0);
+  // Ball game (charge/launch/score/HUD) stays off until the visitor opts in —
+  // only the pointer-driven letter nudge below is active out of the box.
+  const [playing, setPlaying] = useState(false);
 
-  // Runs once per goal, whenever the playground canvas tells us a ball
-  // crossed the scoring line.
-  const handleScore = useCallback(() => {
-    // Functional updater form `(s) => s + 1`: React batches state updates,
-    // so reading the *previous* value via a callback (rather than closing
-    // over `score` directly) guarantees each goal increments from the true
-    // latest count, even if several goals land in quick succession.
-    setScore((s) => s + 1);
-    const line = scoreLineRef.current;
+  // Drives the same letter-repel effect the playground canvas normally owns,
+  // but without mounting the canvas/ball game. Once `playing` is true,
+  // PlaygroundCanvas's own mousemove handler takes over this ref instead.
+  useEffect(() => {
+    if (playing) return;
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const getPos = (clientX: number, clientY: number) => {
+      const rect = section.getBoundingClientRect();
+      return { x: clientX - rect.left, y: clientY - rect.top };
+    };
+    const onMouseMove = (e: MouseEvent) => {
+      const { x, y } = getPos(e.clientX, e.clientY);
+      sharedPointerRef.current.x = x;
+      sharedPointerRef.current.y = y;
+      sharedPointerRef.current.active = true;
+    };
+    const onMouseLeave = () => {
+      sharedPointerRef.current.active = false;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!t) return;
+      const { x, y } = getPos(t.clientX, t.clientY);
+      sharedPointerRef.current.x = x;
+      sharedPointerRef.current.y = y;
+      sharedPointerRef.current.active = true;
+    };
+    const onTouchEnd = () => {
+      sharedPointerRef.current.active = false;
+    };
+
+    section.addEventListener("mousemove", onMouseMove);
+    section.addEventListener("mouseleave", onMouseLeave);
+    section.addEventListener("touchmove", onTouchMove, { passive: true });
+    section.addEventListener("touchend", onTouchEnd);
+    return () => {
+      section.removeEventListener("mousemove", onMouseMove);
+      section.removeEventListener("mouseleave", onMouseLeave);
+      section.removeEventListener("touchmove", onTouchMove);
+      section.removeEventListener("touchend", onTouchEnd);
+    };
+  }, [playing, sharedPointerRef]);
+
+  // Runs whenever the playground canvas tells us a ball scored — either the
+  // main scoring line (1 point) or a moving bonus target (worth more),
+  // reporting its own points and pulse origin so this stays generic.
+  const handleScore = useCallback((points: number, x: number, y: number) => {
+    // Functional updater form `(s) => s + points`: React batches state
+    // updates, so reading the *previous* value via a callback (rather than
+    // closing over `score` directly) guarantees each goal increments from
+    // the true latest count, even if several land in quick succession.
+    setScore((s) => s + points);
     // A simple incrementing counter used purely as a unique React `key` /
     // lookup id for each pulse, so multiple overlapping celebration pulses
     // (e.g. two goals close together) don't get confused with each other.
     const id = ++pulseIdRef.current;
-    // Spawn a new pulse centered on the scoring line: x is the line's
-    // midpoint, y is the vertical midpoint between the line's top and
-    // bottom edges — i.e. (top + bottom) / 2 is just the average of the two,
-    // which is the center point.
-    setPulses((p) => [...p, { id, x: line?.x ?? 0, y: line ? (line.top + line.bottom) / 2 : 0 }]);
+    setPulses((p) => [...p, { id, x, y }]);
     // Remove this pulse from state after its CSS animation has finished
     // playing, so the DOM node is cleaned up rather than accumulating.
     // 900ms must stay in sync with the hero-goal-pulse animation in hero.css.
     window.setTimeout(() => {
       setPulses((p) => p.filter((pu) => pu.id !== id));
     }, 900);
+  }, []);
+
+  // Kawarimi reset (right-click / 2-finger tap) clears the balls and eases
+  // the letters home — it should zero the score too, not just the scene.
+  const handleReset = useCallback(() => setScore(0), []);
+
+  // Leaves play mode and clears game state, so pressing PLAY again starts fresh.
+  const handleStop = useCallback(() => {
+    sharedBallsRef.current = [];
+    resetSignalRef.current += 1;
+    setScore(0);
+    setPlaying(false);
   }, []);
 
   // Measure the scoring line's position (canvas-local / section-relative,
@@ -390,14 +448,21 @@ export function Hero() {
   }, []);
 
   return (
-    <section id="hero" className="relative min-h-screen flex flex-col justify-center overflow-hidden pt-16">
-      <PlaygroundCanvas
-        sharedBallsRef={sharedBallsRef}
-        resetSignalRef={resetSignalRef}
-        sharedPointerRef={sharedPointerRef}
-        scoreLineRef={scoreLineRef}
-        onScore={handleScore}
-      />
+    <section
+      id="hero"
+      ref={sectionRef}
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden pt-16"
+    >
+      {playing && (
+        <PlaygroundCanvas
+          sharedBallsRef={sharedBallsRef}
+          resetSignalRef={resetSignalRef}
+          sharedPointerRef={sharedPointerRef}
+          scoreLineRef={scoreLineRef}
+          onScore={handleScore}
+          onReset={handleReset}
+        />
+      )}
 
       {/* goal celebration — glowing circle expanding outward from the score line */}
       {pulses.map((p) => (
@@ -410,18 +475,44 @@ export function Hero() {
         />
       ))}
 
-      {/* floating score bar — tracks the same centered content column as the
-          headline, so it moves inward with it on wide screens instead of
+      {/* score bar / play toggle — tracks the same centered content column as
+          the headline, so it moves inward with it on wide screens instead of
           staying pinned to the raw viewport edge */}
-      {score > 0 && (
-        <div className="pointer-events-none absolute inset-x-0 top-20 sm:top-72 z-30">
-          <div className="relative mx-auto max-w-[1200px] px-6">
-            <div className="hero-hud absolute right-0 top-0 backdrop-blur-md font-mono flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full">
-              [ SCORE: <span className="hero-hud__brand">{score}</span> ]
-            </div>
+      <div className="absolute inset-x-0 top-20 sm:top-72 z-30">
+        <div className="relative mx-auto max-w-[1200px] px-6">
+          <div className="pointer-events-auto absolute right-0 top-0 flex items-center gap-2">
+            {playing ? (
+              <button
+                type="button"
+                onClick={handleStop}
+                aria-label="Stop the interactive playground"
+                className="hero-play-btn backdrop-blur-md font-mono flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full"
+              >
+                {score > 0 && (
+                  <>
+                    <span>
+                      [ SCORE: <span className="hero-hud__brand">{score}</span> ]
+                    </span>
+                    <span className="dot-sep">•</span>
+                  </>
+                )}
+                <Square size={10} fill="currentColor" />
+                <span>STOP</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setPlaying(true)}
+                aria-label="Turn on the interactive playground"
+                className="hero-play-btn backdrop-blur-md font-mono flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full"
+              >
+                <Play size={11} fill="currentColor" />
+                <span>PLAY</span>
+              </button>
+            )}
           </div>
         </div>
-      )}
+      </div>
 
       {/* subtle accent glow backdrop */}
       <div className="hero-glow pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[520px] w-[520px] rounded-full" />
@@ -467,17 +558,19 @@ export function Hero() {
 
       {/* HUD control banner — separate copy for touch vs. mouse, since the
           gestures (and the space to explain them) differ on mobile. */}
-      <div className="pointer-events-none absolute bottom-4 sm:bottom-8 inset-x-0 z-30 flex justify-center px-6">
-        <div className="hero-hud backdrop-blur-md font-mono flex flex-wrap items-center justify-center gap-x-2 sm:gap-x-4 gap-y-1 px-3 py-1.5 sm:px-5 sm:py-3 rounded-full">
-          <span className="sm:hidden">[ 👆 HOLD: <span className="hero-hud__brand">AIM & LAUNCH</span> ]</span>
-          <span className="dot-sep sm:hidden">•</span>
-          <span className="sm:hidden">[ ✌️ 2-FINGER TAP: <span className="hero-hud__brand-2">RESET</span> ]</span>
+      {playing && (
+        <div className="pointer-events-none absolute bottom-4 sm:bottom-8 inset-x-0 z-30 flex justify-center px-6">
+          <div className="hero-hud backdrop-blur-md font-mono flex flex-wrap items-center justify-center gap-x-2 sm:gap-x-4 gap-y-1 px-3 py-1.5 sm:px-5 sm:py-3 rounded-full">
+            <span className="sm:hidden">[ 👆 HOLD: <span className="hero-hud__brand">AIM & LAUNCH</span> ]</span>
+            <span className="dot-sep sm:hidden">•</span>
+            <span className="sm:hidden">[ ✌️ 2-FINGER TAP: <span className="hero-hud__brand-2">RESET</span> ]</span>
 
-          <span className="hidden sm:inline">[ 🖱️ HOLD LEFT-CLICK: <span className="hero-hud__brand">CHARGE & AIM BALL</span> ]</span>
-          <span className="dot-sep hidden sm:inline">•</span>
-          <span className="hidden sm:inline">[ 🖱️ RIGHT-CLICK: <span className="hero-hud__brand-2">KAWARIMI RESET</span> ]</span>
+            <span className="hidden sm:inline">[ 🖱️ HOLD LEFT-CLICK: <span className="hero-hud__brand">CHARGE & AIM BALL</span> ]</span>
+            <span className="dot-sep hidden sm:inline">•</span>
+            <span className="hidden sm:inline">[ 🖱️ RIGHT-CLICK: <span className="hero-hud__brand-2">KAWARIMI RESET</span> ]</span>
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

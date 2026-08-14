@@ -33,8 +33,10 @@ interface Props {
   sharedPointerRef: React.MutableRefObject<Pointer>;
   /** Canvas-local position of the scoring line, or null until measured. */
   scoreLineRef: React.MutableRefObject<ScoreLine | null>;
-  /** Called once per ball that hits the scoring line. */
-  onScore: () => void;
+  /** Called once per ball that hits the scoring line or a moving target. */
+  onScore: (points: number, x: number, y: number) => void;
+  /** Called on every Kawarimi reset (right-click / 2-finger tap). */
+  onReset?: () => void;
 }
 
 const MAX_CHARGE_R = 46;
@@ -44,6 +46,20 @@ const CHARGE_GROW = 0.9; // radius gained per frame while held
 // treated as a scroll swipe instead of an aimed shot. Below this, tiny
 // finger jitter during a hold still counts as a deliberate tap.
 const TOUCH_SCROLL_THRESHOLD = 12;
+
+// Small bonus targets that bob up and down and are worth more than a plain
+// scoring-line goal. Positions/amplitudes are fractions of the canvas size
+// so they stay sensibly placed across viewport sizes.
+const MOVING_TARGETS = [
+  { xFrac: 0.16, yFrac: 0.6, ampFrac: 0.1, speed: 1.1, phase: 0 },
+  { xFrac: 0.5, yFrac: 0.7, ampFrac: 0.08, speed: 0.8, phase: 2.1 },
+  { xFrac: 0.84, yFrac: 0.56, ampFrac: 0.11, speed: 1.4, phase: 4.2 },
+];
+const TARGET_LENGTH = 30; // px, shorter than the main score line by design
+const TARGET_BONUS_POINTS = 3;
+// How long (ms) a target stays hidden/uncatchable after being hit, so it
+// can't just be farmed by sitting a ball on top of it.
+const TARGET_RESPAWN_MS = 650;
 
 interface Pixel {
   x: number; y: number; vx: number; vy: number; size: number; orange: boolean; life: number;
@@ -83,7 +99,7 @@ function resolvePalette(): Palette {
   };
 }
 
-export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointerRef, scoreLineRef, onScore }: Props) {
+export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointerRef, scoreLineRef, onScore, onReset }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { theme } = useTheme();
   const pulseRef = useRef<{ x: number; y: number; r: number; alpha: number }[]>([]);
@@ -93,6 +109,9 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
   // The ball currently being charged (grows while left button is held).
   // overcharge counts frames spent sitting at MAX_CHARGE_R — drives the burst-warning flash.
   const chargingRef = useRef<{ x: number; y: number; r: number; orange: boolean; overcharge: number } | null>(null);
+  // hiddenUntil: a timestamp (performance.now()) the target stays uncatchable
+  // until, so a hit target briefly disappears instead of scoring repeatedly.
+  const targetStateRef = useRef(MOVING_TARGETS.map(() => ({ hiddenUntil: 0 })));
 
   // Re-runs on theme change, which is what re-resolves the palette and rebuilds
   // the smoke sprite. The simulation itself lives in refs, so nothing is lost.
@@ -275,6 +294,7 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
       chargingRef.current = null;
       sharedPointerRef.current.active = false;
       resetSignalRef.current += 1;
+      onReset?.();
     };
 
     // --- Touch support ---
@@ -407,6 +427,30 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
         ctx.restore();
       }
 
+      // moving bonus targets — bob up and down on a sine wave; drawn every
+      // frame (skipped mid-respawn) and checked against balls below.
+      const now = performance.now();
+      const targets = MOVING_TARGETS.map((def, i) => {
+        const x = rect.width * def.xFrac;
+        const y = rect.height * def.yFrac + Math.sin(now / 1000 * def.speed + def.phase) * rect.height * def.ampFrac;
+        const hidden = now < targetStateRef.current[i].hiddenUntil;
+        return { x, y, hidden };
+      });
+      for (const t of targets) {
+        if (t.hidden) continue;
+        ctx.save();
+        ctx.shadowBlur = 16;
+        ctx.shadowColor = palette.accent2;
+        ctx.strokeStyle = palette.accent2;
+        ctx.lineWidth = 3;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(t.x, t.y - TARGET_LENGTH / 2);
+        ctx.lineTo(t.x, t.y + TARGET_LENGTH / 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
       // balls — destroyed the moment they reach the floor
       const survivors: Ball[] = [];
       for (const b of sharedBallsRef.current) {
@@ -421,10 +465,38 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
           if (lineDist < b.r) {
             // Scored — the ball is consumed; the celebration is a DOM-level
             // glowing pulse (see Hero), not a canvas particle burst.
-            onScore();
+            onScore(1, line.x, closestY);
             continue;
           }
         }
+
+        let hitTarget = false;
+        for (let i = 0; i < targets.length; i++) {
+          const t = targets[i];
+          if (t.hidden) continue;
+          const closestY = Math.min(Math.max(b.y, t.y - TARGET_LENGTH / 2), t.y + TARGET_LENGTH / 2);
+          const dist = Math.hypot(b.x - t.x, b.y - closestY);
+          if (dist < b.r) {
+            onScore(TARGET_BONUS_POINTS, t.x, t.y);
+            targetStateRef.current[i].hiddenUntil = now + TARGET_RESPAWN_MS;
+            const count = 16;
+            for (let p = 0; p < count; p++) {
+              const ang = (Math.PI * 2 * p) / count;
+              pixelsRef.current.push({
+                x: t.x,
+                y: t.y,
+                vx: Math.cos(ang) * (3 + Math.random() * 5),
+                vy: Math.sin(ang) * (3 + Math.random() * 5),
+                size: 3 + Math.random() * 4,
+                orange: true,
+                life: 1,
+              });
+            }
+            hitTarget = true;
+            break;
+          }
+        }
+        if (hitTarget) continue;
 
         if (b.y + b.r >= rect.height) {
           // Impact splash + pixel shatter where the ball vanishes.
@@ -562,7 +634,7 @@ export function PlaygroundCanvas({ sharedBallsRef, resetSignalRef, sharedPointer
       canvas.removeEventListener("touchend", onTouchEnd);
       canvas.removeEventListener("touchcancel", onTouchEnd);
     };
-  }, [sharedBallsRef, resetSignalRef, sharedPointerRef, scoreLineRef, onScore, theme]);
+  }, [sharedBallsRef, resetSignalRef, sharedPointerRef, scoreLineRef, onScore, onReset, theme]);
 
   return (
     <canvas

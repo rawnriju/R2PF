@@ -79,11 +79,27 @@
   color: var(--brand-2);
 }
 
+/* -- play toggle — sits in the score bar's slot before the game starts -- */
+.hero-play-btn {
+  background: var(--surface-glass);
+  border: 1px solid var(--hairline);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 200ms ease, border-color 200ms ease;
+}
+.hero-play-btn:hover {
+  color: var(--brand);
+  border-color: var(--hairline-strong);
+}
+
 /* Narrow screens: both HUD pills (score readout, controls banner) run
    smaller/tighter so they read as a compact chip instead of eating vertical
    space that's already scarce on a phone viewport. */
 @media (max-width: 640px) {
-  .hero-hud {
+  .hero-hud,
+  .hero-play-btn {
     font-size: 9px;
     letter-spacing: 0.04em;
   }
