@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router";
+import { CursorGlow } from "./components/cursor-glow";
 import { Header } from "./components/header";
 import { Hero } from "./components/hero";
 import { StatsBar } from "./components/stats-bar";
@@ -44,13 +45,16 @@ function HomePage() {
 
 export default function App() {
   return (
-    <Suspense fallback={null}>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/resume" element={<ResumePage />} />
-        <Route path="/blog" element={<BlogPage />} />
-        <Route path="/blog/:slug" element={<BlogPostPage />} />
-      </Routes>
-    </Suspense>
+    <>
+      <CursorGlow />
+      <Suspense fallback={null}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/resume" element={<ResumePage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
+        </Routes>
+      </Suspense>
+    </>
   );
 }

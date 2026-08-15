@@ -1,6 +1,7 @@
 import { Github, Linkedin, Mail } from "lucide-react";
 import type { CSSProperties } from "react";
 import { getEmail, getMailtoHref } from "../lib/email";
+import { useInView } from "../hooks/use-in-view";
 import "./contact.css";
 
 const CHANNELS = [
@@ -25,6 +26,9 @@ const CHANNELS = [
 ];
 
 export function Contact() {
+  const header = useInView<HTMLDivElement>();
+  const grid = useInView<HTMLDivElement>();
+
   const channels = [
     {
       id: "email",
@@ -40,7 +44,7 @@ export function Contact() {
 
   return (
     <section id="contact" className="mx-auto max-w-[1200px] px-6 py-24">
-      <div className="mb-12">
+      <div ref={header.ref} className="mb-12 reveal-up" data-inview={header.inView}>
         <p className="section-eyebrow font-mono mb-3">05 // CONTACT</p>
         <h2 className="section-title">GET IN TOUCH</h2>
         <p className="contact-intro mt-4 max-w-[520px]">
@@ -49,7 +53,11 @@ export function Contact() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div
+        ref={grid.ref}
+        className="grid grid-cols-1 md:grid-cols-3 gap-5 contact-grid"
+        data-inview={grid.inView}
+      >
         {channels.map(({ id, tag, label, href, Icon, accent, external }) => (
           <a
             key={id}

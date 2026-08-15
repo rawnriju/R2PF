@@ -1,0 +1,43 @@
+/* ============================================================
+   reveal.css — shared scroll-reveal primitive
+
+   Pairs with src/app/hooks/use-in-view.ts, which toggles
+   data-inview on the element it's given a ref to. This file only
+   owns the generic fade/slide-up look + shared timing tokens;
+   which elements get which stagger step is a per-section concern
+   and stays in that section's own co-located .css file.
+   ============================================================ */
+
+:root {
+  --reveal-duration: 650ms;
+  --reveal-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --reveal-distance: 22px;
+  --reveal-step: 80ms;
+}
+
+/* Single-element case: stats-bar, footer, section headers, etc. Apply
+   directly to the observed element. */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(var(--reveal-distance));
+  transition: opacity var(--reveal-duration) var(--reveal-ease),
+    transform var(--reveal-duration) var(--reveal-ease);
+}
+.reveal-up[data-inview="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 480px) {
+  :root {
+    --reveal-distance: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

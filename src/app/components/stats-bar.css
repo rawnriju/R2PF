@@ -8,3 +8,51 @@
   border-bottom: 1px solid var(--hairline);
   background: var(--surface);
 }
+
+/* ------------------------------------------------------------
+   Scroll-entrance: chips "type" in on a single pass, one after
+   another, terminal-style. Scoped to .stat-type (not .stat-span
+   itself, which work.tsx's infobar also uses and shouldn't gain
+   this behaviour). Width target/duration/steps/delay arrive per
+   chip as inline custom properties from StatChip in stats-bar.tsx.
+   ------------------------------------------------------------ */
+.stat-type {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  width: 0;
+  transition: width var(--type-duration, 600ms) steps(var(--type-steps, 12), jump-end)
+    var(--type-delay, 0ms);
+}
+.stats-bar[data-inview="true"] .stat-type {
+  width: var(--type-width, 100%);
+  animation: stat-caret calc(var(--type-duration, 600ms) + 400ms) linear var(--type-delay, 0ms) both;
+}
+
+@keyframes stat-caret {
+  0% { border-right: 2px solid transparent; }
+  4% { border-right: 2px solid var(--brand); }
+  85% { border-right: 2px solid var(--brand); }
+  100% { border-right: 2px solid transparent; }
+}
+
+/* -- separator dots fade in just ahead of the next chip typing -- */
+.stats-bar .dot-sep {
+  opacity: 0;
+  transition: opacity 0.3s ease var(--dot-delay, 0ms);
+}
+.stats-bar[data-inview="true"] .dot-sep {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-type {
+    width: var(--type-width, 100%) !important;
+    transition: none !important;
+    animation: none !important;
+  }
+  .stats-bar .dot-sep {
+    opacity: 1 !important;
+    transition: none !important;
+  }
+}

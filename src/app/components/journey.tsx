@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+import { useInView } from "../hooks/use-in-view";
 import "./journey.css";
 
 interface Milestone {
@@ -57,25 +59,97 @@ const MILESTONES: Milestone[] = [
   },
 ];
 
+function JourneyRow({ m }: { m: Milestone }) {
+  const { ref, inView } = useInView<HTMLDivElement>({
+    threshold: 0.35,
+    rootMargin: "-10% 0px -10% 0px",
+  });
+  return (
+    <div
+      ref={ref}
+      className="journey-row reveal-up"
+      data-inview={inView}
+      data-kind={m.kind}
+    >
+      <span className="journey-dot" aria-hidden="true" />
+      <div className="journey-content">
+        <span className="journey-period">{m.period}</span>
+        <p className="journey-title">{m.title}</p>
+        <p className="journey-org font-mono">{m.org}</p>
+        <p className="journey-desc">{m.desc}</p>
+      </div>
+    </div>
+  );
+}
+
 export function Journey() {
+  const header = useInView<HTMLDivElement>();
+  const lineRef = useRef<HTMLDivElement>(null);
+  const fillRef = useRef<HTMLSpanElement>(null);
+
+  // Draws .journey-fill in as the user scrolls through the section — same
+  // "only run near viewport" idea as playground-canvas.tsx's IntersectionObserver
+  // gate, and the same "write straight to the DOM, no per-pixel re-render" idea
+  // as scroll-dial.tsx's scroll listener.
+  useEffect(() => {
+    const line = lineRef.current;
+    const fillEl = fillRef.current;
+    if (!line || !fillEl) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      fillEl.style.setProperty("--fill-progress", "1");
+      return;
+    }
+
+    let ticking = false;
+    const paint = () => {
+      ticking = false;
+      const rect = line.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const startY = vh * 0.85;
+      const endY = vh * 0.25 - rect.height;
+      const p = Math.min(1, Math.max(0, (startY - rect.top) / (startY - endY)));
+      fillEl.style.setProperty("--fill-progress", String(p));
+    };
+    const onScrollTick = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(paint);
+    };
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          window.addEventListener("scroll", onScrollTick, { passive: true });
+          window.addEventListener("resize", onScrollTick);
+          paint();
+        } else {
+          window.removeEventListener("scroll", onScrollTick);
+          window.removeEventListener("resize", onScrollTick);
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    io.observe(line);
+
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", onScrollTick);
+      window.removeEventListener("resize", onScrollTick);
+    };
+  }, []);
+
   return (
     <section id="journey" className="mx-auto max-w-[1200px] px-6 py-24">
-      <div className="mb-12">
+      <div ref={header.ref} className="mb-12 reveal-up" data-inview={header.inView}>
         <p className="section-eyebrow font-mono mb-3">03 // JOURNEY</p>
         <h2 className="section-title">THE TIMELINE</h2>
       </div>
 
-      <div className="journey-line">
+      <div className="journey-line" ref={lineRef}>
+        <span className="journey-fill" ref={fillRef} aria-hidden="true" />
         {MILESTONES.map((m) => (
-          <div key={m.id} className="journey-row" data-kind={m.kind}>
-            <span className="journey-dot" aria-hidden="true" />
-            <div className="journey-content">
-              <span className="journey-period">{m.period}</span>
-              <p className="journey-title">{m.title}</p>
-              <p className="journey-org font-mono">{m.org}</p>
-              <p className="journey-desc">{m.desc}</p>
-            </div>
-          </div>
+          <JourneyRow key={m.id} m={m} />
         ))}
       </div>
     </section>

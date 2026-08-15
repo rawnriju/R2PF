@@ -55,3 +55,26 @@
   font-size: 15px;
   color: var(--fg);
 }
+
+/* -- scroll-reveal stagger -- */
+.contact-grid .contact-card {
+  opacity: 0;
+  transform: translateY(var(--reveal-distance));
+  transition: opacity var(--reveal-duration) var(--reveal-ease),
+    transform var(--reveal-duration) var(--reveal-ease);
+}
+.contact-grid[data-inview="true"] .contact-card {
+  opacity: 1;
+  transform: none;
+}
+.contact-grid .contact-card:nth-child(1) { transition-delay: calc(var(--reveal-step) * 1); }
+.contact-grid .contact-card:nth-child(2) { transition-delay: calc(var(--reveal-step) * 2); }
+.contact-grid .contact-card:nth-child(3) { transition-delay: calc(var(--reveal-step) * 3); }
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-grid .contact-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

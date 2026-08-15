@@ -1,16 +1,22 @@
 import { Github, Linkedin } from "lucide-react";
 import { useState } from "react";
 import { getRandomQuote } from "../lib/quotes";
+import { useInView } from "../hooks/use-in-view";
 import "./footer.css";
 
 // The #contact anchor belongs to the Contact section (contact.tsx), not here.
 export function Footer() {
   const toTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
   const [quote] = useState(() => getRandomQuote());
+  const { ref, inView } = useInView<HTMLDivElement>();
 
   return (
     <footer className="site-footer">
-      <div className="mx-auto max-w-[1200px] px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div
+        ref={ref}
+        className="mx-auto max-w-[1200px] px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-6 reveal-up"
+        data-inview={inView}
+      >
         <span className="site-footer__copy font-mono">
           © 2026 RAWN ABRAHAM RIJU — {quote}
         </span>

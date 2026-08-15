@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useInView } from "../hooks/use-in-view";
 import "./about.css";
 
 type PanelKey = "technical" | "personal";
@@ -162,6 +163,7 @@ export function About() {
   const [active, setActive] = useState<PanelKey>("technical");
   const [justSwitched, setJustSwitched] = useState(false);
   const timeoutRef = useRef<number | undefined>(undefined);
+  const { ref: sectionRef, inView } = useInView<HTMLElement>({ threshold: 0.3 });
 
   const open = useCallback((side: PanelKey) => {
     setActive((current) => {
@@ -174,10 +176,33 @@ export function About() {
     });
   }, []);
 
+  // Scroll-entrance: play the same glitch/sweep the first time the section
+  // comes into view, on whichever panel is active by default. Reuses
+  // justSwitched so this can never diverge from the click path above, and
+  // only ever fires once since useInView defaults to `once: true`.
+  useEffect(() => {
+    if (!inView) return;
+    setJustSwitched(true);
+    window.clearTimeout(timeoutRef.current);
+    timeoutRef.current = window.setTimeout(() => setJustSwitched(false), 620);
+  }, [inView]);
+
   return (
-    <section id="about" className="mx-auto max-w-[1200px] px-6 py-24">
-      <p className="section-eyebrow font-mono mb-3">01 // ABOUT</p>
-      <h2 className="section-title mb-10">THE PERSON BEHIND THE CODE</h2>
+    <section
+      ref={sectionRef}
+      id="about"
+      className="mx-auto max-w-[1200px] px-6 py-24"
+    >
+      <p className="section-eyebrow font-mono mb-3 reveal-up" data-inview={inView}>
+        01 // ABOUT
+      </p>
+      <h2
+        className="section-title mb-10 reveal-up"
+        data-inview={inView}
+        style={{ transitionDelay: "80ms" }}
+      >
+        THE PERSON BEHIND THE CODE
+      </h2>
 
       <div className="about-accordion">
         <Panel

@@ -1,0 +1,33 @@
+/* ============================================================
+   cursor-glow.tsx — very light brand-colored glow that follows
+   the pointer across the whole site. Position arrives as
+   --glow-x/--glow-y, written straight to the DOM per pointermove
+   frame by cursor-glow.tsx (no React re-render per pixel, no CSS
+   transition either — tracks the pointer 1:1 rather than easing
+   toward it, same idea as scroll-dial.tsx's scroll handling).
+   ============================================================ */
+
+.cursor-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--glow-opacity, 0);
+  transition: opacity 0.2s ease;
+  /* Deliberately not scaled by --glow (see brand.css) — that token exists
+     to tame much bigger, higher-alpha blooms (hero-goal-pulse) on the
+     light theme's bright background; applied here it rounded this
+     already-faint effect down to nothing in light mode. */
+  background: radial-gradient(
+    380px circle at var(--glow-x, 50vw) var(--glow-y, 50vh),
+    rgba(var(--brand-rgb), 0.1),
+    rgba(var(--brand-rgb), 0.04) 40%,
+    transparent 70%
+  );
+}
+
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .cursor-glow {
+    display: none;
+  }
+}

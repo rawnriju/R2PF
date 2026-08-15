@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import mindtrekPhoto from "../../assets/MindtrekPic.jpeg";
 import kobPhoto from "../../assets/KOB.png";
+import { useInView } from "../hooks/use-in-view";
 import "./volunteering.css";
 
 interface VolunteerEntry {
@@ -51,6 +52,7 @@ const VOLUNTEER_ENTRIES: VolunteerEntry[] = [
 export function Volunteering() {
   const [openId, setOpenId] = useState<string | null>(null);
   const openEntry = VOLUNTEER_ENTRIES.find((e) => e.id === openId) ?? null;
+  const { ref: listRef, inView: listInView } = useInView<HTMLDivElement>();
 
   useEffect(() => {
     if (!openEntry) return;
@@ -67,7 +69,11 @@ export function Volunteering() {
 
   return (
     <>
-      <div className="hairline-list flex flex-col gap-px">
+      <div
+        ref={listRef}
+        className="hairline-list volunteer-list flex flex-col gap-px"
+        data-inview={listInView}
+      >
         {VOLUNTEER_ENTRIES.map((entry) => (
           <div
             key={entry.id}

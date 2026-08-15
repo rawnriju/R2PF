@@ -1,3 +1,4 @@
+import { useInView } from "../hooks/use-in-view";
 import { ProjectCard, type Project } from "./project-card";
 import "./work.css";
 
@@ -66,14 +67,23 @@ const PROJECTS: Project[] = [
 ];
 
 export function Work() {
+  const header = useInView<HTMLDivElement>();
+  const infobar = useInView<HTMLDivElement>();
+  const capabilities = useInView<HTMLDivElement>();
+  const projects = useInView<HTMLDivElement>();
+
   return (
     <section id="work" className="mx-auto max-w-[1200px] px-6 py-24">
-      <div className="mb-8">
+      <div ref={header.ref} className="mb-8 reveal-up" data-inview={header.inView}>
         <p className="section-eyebrow font-mono mb-3">02 // WORK</p>
         <h2 className="section-title">EXPERIENCE</h2>
       </div>
 
-      <div className="work-infobar mb-16 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center">
+      <div
+        ref={infobar.ref}
+        className="work-infobar mb-16 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center reveal-up"
+        data-inview={infobar.inView}
+      >
         <span className="stat-span font-mono">
           [ COMPANY: <span className="stat-span__value">View26 GmbH (Actiotech LLP)</span> ]
         </span>
@@ -88,7 +98,11 @@ export function Work() {
       </div>
 
       <h3 className="section-subtitle mb-8">TECHNICAL STACK</h3>
-      <div className="hairline-list flex flex-col gap-px mb-16">
+      <div
+        ref={capabilities.ref}
+        className="hairline-list work-capabilities flex flex-col gap-px mb-16"
+        data-inview={capabilities.inView}
+      >
         {CAPABILITIES.map((c) => (
           <div key={c.k} className="hairline-row flex items-baseline gap-5 p-5">
             <span className="work-capability__key font-mono shrink-0">{c.k}</span>
@@ -97,17 +111,22 @@ export function Work() {
         ))}
       </div>
 
-      <div className="mb-8 flex items-end justify-between">
-        <h3 className="section-subtitle">SELECTED PROJECTS</h3>
-        <span className="work-entry-count font-mono hidden sm:block">
-          [ 03 ENTRIES ]
-        </span>
-      </div>
+      <div ref={projects.ref} className="work-projects-block" data-inview={projects.inView}>
+        <div className="mb-8 flex items-end justify-between">
+          <h3 className="section-subtitle">SELECTED PROJECTS</h3>
+          <span className="work-entry-count font-mono hidden sm:block">
+            [ 03 ENTRIES ]
+          </span>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {PROJECTS.map((p) => (
-          <ProjectCard key={p.id} project={p} href="#work" />
-        ))}
+        <div
+          className="grid grid-cols-1 md:grid-cols-3 gap-5 work-projects"
+          data-inview={projects.inView}
+        >
+          {PROJECTS.map((p) => (
+            <ProjectCard key={p.id} project={p} href="#work" />
+          ))}
+        </div>
       </div>
     </section>
   );

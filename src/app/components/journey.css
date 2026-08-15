@@ -23,6 +23,20 @@
   transform: translateX(-50%);
 }
 
+/* -- scroll-driven fill drawn on top of the dim ::before track -- */
+.journey-fill {
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: var(--brand);
+  transform: translateX(-50%) scaleY(var(--fill-progress, 0));
+  transform-origin: top;
+  box-shadow: 0 0 6px var(--brand);
+  pointer-events: none;
+}
+
 .journey-row {
   position: relative;
   display: grid;
@@ -105,6 +119,12 @@
   color: var(--fg);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .journey-fill {
+    transform: translateX(-50%) scaleY(1);
+  }
+}
+
 /* Single column on small screens: line moves to the left edge, every
    row's content sits to its right regardless of odd/even. */
 @media (max-width: 640px) {
@@ -114,6 +134,11 @@
   .journey-line::before {
     left: 5px;
     transform: none;
+  }
+  .journey-fill {
+    left: 5px;
+    transform: scaleY(var(--fill-progress, 0));
+    transform-origin: top;
   }
   .journey-dot {
     left: -34px;

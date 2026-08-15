@@ -1,0 +1,40 @@
+/* ============================================================
+   extras.tsx — side quests section
+   ============================================================ */
+
+/* -- scroll-reveal: side-project card grid -- */
+.extras-projects .project-card {
+  opacity: 0;
+  transform: translateY(var(--reveal-distance));
+  transition: opacity var(--reveal-duration) var(--reveal-ease),
+    transform var(--reveal-duration) var(--reveal-ease);
+}
+.extras-projects[data-inview="true"] .project-card {
+  opacity: 1;
+  transform: none;
+}
+.extras-projects .project-card:nth-child(1) { transition-delay: calc(var(--reveal-step) * 1); }
+.extras-projects .project-card:nth-child(2) { transition-delay: calc(var(--reveal-step) * 2); }
+.extras-projects .project-card:nth-child(3) { transition-delay: calc(var(--reveal-step) * 3); }
+.extras-projects .project-card:nth-child(4) { transition-delay: calc(var(--reveal-step) * 4); }
+
+/* -- scroll-reveal: volunteering column heading -- */
+.extras-volunteering-col .section-subtitle {
+  opacity: 0;
+  transform: translateY(var(--reveal-distance));
+  transition: opacity var(--reveal-duration) var(--reveal-ease),
+    transform var(--reveal-duration) var(--reveal-ease);
+}
+.extras-volunteering-col[data-inview="true"] .section-subtitle {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .extras-projects .project-card,
+  .extras-volunteering-col .section-subtitle {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
