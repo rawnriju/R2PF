@@ -1,4 +1,4 @@
-import { FileText, Menu, PenLine, X } from "lucide-react";
+import { FileText, Menu, PenLine, Waypoints, X } from "lucide-react";
 import { useState } from "react";
 import { NavChip } from "./chip";
 import { ThemeToggle } from "./theme-toggle";
@@ -65,6 +65,7 @@ export function Header() {
         <div className="flex items-center gap-2 sm:gap-3">
           <NavChip to="/resume" icon={FileText} label="RESUME" />
           <NavChip to="/blog" icon={PenLine} label="BLOG" />
+          <NavChip to="/playground" icon={Waypoints} label="PLAYGROUND" />
           <ThemeToggle />
         </div>
       </div>

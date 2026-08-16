@@ -3,3 +3,7 @@ graphify-out
 dist
 .vite
 *.log
+.env
+.env.local
+.vercel
+.env*
