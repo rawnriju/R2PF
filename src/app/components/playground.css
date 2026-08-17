@@ -36,106 +36,327 @@
   max-width: 480px;
 }
 
-/* -- shared canvas surface every viz draws its SVG into -- */
-.viz-canvas {
+/* ------------------------------------------------------------
+   Small anime vizzes — little experiments, not dashboards.
+
+   Deliberately un-bordered: the chart sits straight on the card's own
+   surface (no nested chip-bg box, no axis numbers, no legend) so the dots
+   or bars read as the whole point of the card, not an instrument panel.
+   One insight sentence and a source line are the only chrome.
+   ------------------------------------------------------------ */
+
+.mini-viz__canvas {
   width: 100%;
-  background: var(--chip-bg);
-  border: 1px solid var(--hairline);
+  height: 140px;
+  position: relative;
 }
-.viz-canvas svg {
+.mini-viz__canvas svg {
   display: block;
 }
-.viz-canvas--graph {
-  height: 320px;
+.mini-viz__canvas--scatter {
+  height: 240px;
 }
-.viz-canvas--bars {
+.mini-viz__canvas--histogram {
   height: 220px;
 }
-.viz-canvas--fingrid {
-  height: 260px;
+.mini-viz__canvas--fingrid {
+  height: 220px;
 }
 
-.viz-toy__controls {
+/* -- two vizzes sharing one card (VIZ_02), stacked full-width rather than
+   squeezed side by side -- */
+.mini-viz-panel {
   display: flex;
-  gap: 8px;
-  margin-top: 12px;
+  flex-direction: column;
+  gap: 40px;
+}
+.mini-viz-panel__col {
+  min-width: 0;
+}
+.mini-viz-panel__col:not(:first-child) {
+  padding-top: 40px;
+  border-top: 1px solid var(--hairline);
+}
+.mini-viz-panel__question {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--fg);
+  margin-bottom: 12px;
 }
 
-.viz-btn {
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  color: var(--text-muted);
-  border: 1px solid var(--hairline);
-  background: var(--surface);
-  padding: 6px 12px;
-  cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease;
+.mini-viz__insight {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--fg);
+  margin-top: 14px;
 }
-.viz-btn:hover,
-.viz-btn:focus-visible {
-  color: var(--brand);
-  border-color: var(--brand);
+
+.mini-viz__source {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  opacity: 0.7;
+  margin-top: 8px;
+}
+
+.mini-viz__hover-label {
+  position: absolute;
+  transform: translate(-50%, -130%);
+  pointer-events: none;
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--fg);
+  background: var(--surface);
+  padding: 3px 7px;
+  border: 1px solid var(--hairline);
+}
+.mini-viz__hover-label--center {
+  transform: translate(-50%, -100%);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 10px;
+}
+
+/* -- shared chart chrome: legend row above the plot, quantified axis ends
+   below it. Every card uses these same classes, so the playground reads as
+   one system rather than three separately-styled charts. -- */
+.mini-viz__legend-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+.mini-viz__key {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  opacity: 0.45;
+  flex: none;
+}
+.mini-viz__key--highlight {
+  background: var(--brand);
+  opacity: 1;
+  width: 10px;
+  height: 10px;
+}
+.mini-viz__key--square {
+  border-radius: 0;
+  width: 9px;
+  height: 9px;
+}
+.mini-viz__key--line {
+  width: 12px;
+  height: 2px;
+  border-radius: 0;
+  background: var(--brand);
+  opacity: 0.55;
+}
+.mini-viz__legend-row .mini-viz__key:not(:first-child) {
+  margin-left: 12px;
+}
+
+.mini-viz__ends {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  opacity: 0.75;
 }
 
 /* ------------------------------------------------------------
-   VIZ_01 — Skills Constellation (force-directed graph)
+   VIZ_01 — In which ways is Kerala actually unusual?
+
+   Six 1-D strip plots stacked, one per metric, every state a dot and
+   Kerala the one filled mark. Colour carries only "Kerala vs. everyone
+   else" — deliberately NOT a good/bad scale, since half these metrics
+   (fertility, growth) have no better direction.
    ------------------------------------------------------------ */
 
-.skills-graph__link {
+.kerala-strips {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.kerala-strip__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 2px;
+}
+.kerala-strip__label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--fg);
+}
+.kerala-strip__value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 11px;
+  color: var(--brand);
+  white-space: nowrap;
+}
+.kerala-strip__rank {
+  color: var(--text-muted);
+}
+
+.kerala-strip__plot {
+  position: relative;
+  width: 100%;
+}
+.kerala-strip__plot svg {
+  display: block;
+  overflow: visible;
+}
+
+.kerala-strip__axis {
+  stroke: var(--hairline);
+  stroke-width: 1px;
+}
+.kerala-strip__dot {
+  fill: var(--text-muted);
+  opacity: 0.45;
+}
+.kerala-strip__dot--highlight {
+  fill: var(--brand);
+  stroke: var(--surface);
+  stroke-width: 1.5px;
+  opacity: 1;
+}
+.kerala-strip__hit {
+  fill: transparent;
+  cursor: crosshair;
+}
+
+.kerala-strip__tip {
+  position: absolute;
+  transform: translate(-50%, -150%);
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 5;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--fg);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  padding: 3px 7px;
+}
+
+.mini-viz__caveat {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+/* -- anime-outlier-scatter -- */
+.anime-scatter-mini__baseline {
   stroke: var(--hairline-strong);
   stroke-width: 1px;
 }
-
-.skills-graph__node circle {
-  stroke: var(--bg);
-  stroke-width: 1.5px;
-  cursor: grab;
+.anime-scatter-mini__tick {
+  stroke: var(--hairline-strong);
+  stroke-width: 1px;
 }
-.skills-graph__node:active circle {
-  cursor: grabbing;
+.anime-scatter-mini__tick-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 9px;
+  fill: var(--text-muted);
+}
+.anime-scatter-mini__axis-title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  fill: var(--text-muted);
+  opacity: 0.7;
+}
+.anime-scatter-mini__point {
+  fill: var(--text-muted);
+  opacity: 0.5;
+}
+.anime-scatter-mini__point--good {
+  fill: var(--surface);
+  stroke: var(--brand);
+  stroke-width: 2px;
+  opacity: 1;
+}
+.anime-scatter-mini__point--mediocre {
+  fill: var(--surface);
+  stroke: var(--brand-2);
+  stroke-width: 2px;
+  opacity: 1;
+}
+.anime-scatter-mini__hover-dot {
+  fill: var(--brand);
+}
+.anime-scatter-mini__overlay {
+  fill: transparent;
+  cursor: crosshair;
 }
 
-.skills-graph__node--hub circle {
+/* -- always-on outlier labels: a soft halo (stroke behind fill) keeps the
+   title legible over the scatter cloud without a boxed tooltip -- */
+.anime-scatter-mini__label text {
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5px;
+  font-weight: 500;
+  fill: var(--brand);
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.anime-scatter-mini__label--mediocre text {
   fill: var(--brand-2);
 }
-.skills-graph__node--category circle {
+
+/* -- anime-length-histogram -- */
+.anime-histogram__bar {
+  fill: var(--hairline-strong);
+}
+.anime-histogram__bar--modal {
   fill: var(--brand);
 }
-.skills-graph__node--skill circle {
-  fill: var(--text-muted);
-}
-
-.skills-graph__label {
+.anime-histogram__x-label {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 10px;
-  fill: var(--text-muted);
-  pointer-events: none;
-  user-select: none;
-}
-.skills-graph__label--hub {
   font-size: 9px;
-  font-weight: 600;
-  fill: var(--on-brand);
+  fill: var(--text-muted);
+  text-anchor: middle;
 }
-
-/* ------------------------------------------------------------
-   VIZ_02 — Sortable Bars
-   ------------------------------------------------------------ */
-
-.sortable-bars__bar {
-  fill: var(--brand);
-}
-
-.sortable-bars__value {
+.anime-histogram__axis-title {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 11px;
-  fill: var(--fg);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  fill: var(--text-muted);
+  opacity: 0.7;
 }
-
-.sortable-bars__tick {
+.anime-histogram__pct-label {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 10px;
   fill: var(--text-muted);
+}
+.anime-histogram__pct-label--modal {
+  fill: var(--brand);
+  font-weight: 600;
+}
+.anime-histogram__hit {
+  fill: transparent;
+  cursor: pointer;
 }
 
 /* ------------------------------------------------------------
@@ -148,22 +369,17 @@
    instead, just for numeric alignment.
    ------------------------------------------------------------ */
 
-.fingrid-chart__status {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-}
-
+/* Liveness pip, inlined into the shared legend row — the one bit of
+   chrome unique to this card, because it's the only viz reading a live
+   feed rather than a snapshot. */
 .fingrid-chart__dot {
+  display: inline-block;
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: var(--hairline-strong);
+  margin-left: 12px;
+  flex: none;
 }
 .fingrid-chart__dot--live {
   background: var(--brand);
@@ -172,59 +388,6 @@
 
 .fingrid-chart__error {
   color: var(--brand-2);
-}
-
-/* -- hero stats: latest production/consumption + derived net flow -- */
-.fingrid-chart__stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-bottom: 14px;
-}
-
-.fingrid-chart__stat {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.fingrid-chart__stat--net {
-  padding-left: 20px;
-  border-left: 1px solid var(--hairline);
-}
-
-.fingrid-chart__stat-label {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  color: var(--text-muted);
-}
-
-.fingrid-chart__stat-value {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--fg);
-  line-height: 1.1;
-}
-
-.fingrid-chart__stat-unit {
-  font-size: 11px;
-  font-weight: 400;
-  color: var(--text-muted);
-}
-
-.fingrid-chart__stat-arrow {
-  font-size: 13px;
-}
-
-/* -- caption under the legend, translating the chart for a non-grid-engineer -- */
-.fingrid-chart__caption {
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-  line-height: 1.55;
-  color: var(--text-muted);
-  margin-top: 10px;
-  max-width: 480px;
 }
 
 .fingrid-chart__axis text {
@@ -304,32 +467,9 @@
   fill: var(--fg);
 }
 
-.fingrid-chart__legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 10px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-}
-.fingrid-chart__legend-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.fingrid-chart__legend-item--muted {
-  color: var(--text-muted);
-  opacity: 0.7;
-}
-.fingrid-chart__swatch {
-  width: 10px;
-  height: 2px;
-}
-.fingrid-chart__swatch--production {
-  background: var(--brand);
-}
-.fingrid-chart__swatch--consumption {
+/* The consumption series is the only place in the playground that needs a
+   second data colour — every other card is "highlight vs. everyone else". */
+.mini-viz__key--line-alt {
   background: var(--brand-2);
+  opacity: 1;
 }

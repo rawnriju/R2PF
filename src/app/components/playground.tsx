@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { ThemeToggle } from "./theme-toggle";
-import { SkillsGraph } from "./viz/skills-graph";
-import { SortableBars } from "./viz/sortable-bars";
+import { KeralaOutlierStrips } from "./viz/kerala-outlier-strips";
+import { AnimeLengthPanel } from "./viz/anime-length-panel";
 import { FinlandGridChart } from "./viz/finland-grid-chart";
 import "./playground.css";
 
@@ -27,27 +27,34 @@ function PlaygroundHeader() {
 interface VizEntry {
   index: string;
   title: string;
-  desc: string;
+  desc?: string;
+  wide?: boolean;
   render: () => React.ReactNode;
 }
 
+// Each entry is a small, standalone experiment — one question, one chart,
+// one sentence of insight, answered inside `render()` itself. `desc` is
+// reserved for the rare viz that needs a line explaining its data source
+// up front (see VIZ_03); the small ones let the title ask the question and
+// the chart answer it, with no restated subtitle in between. `wide` spans
+// both grid columns, for the two cards that hold a stack of related charts
+// rather than a single one-question-one-chart sketch.
 const VIZZES: VizEntry[] = [
   {
     index: "VIZ_01",
-    title: "Skills Constellation",
-    desc: "A force-directed graph (d3-force) of my tech stack. Drag any node — the simulation relaxes back around it.",
-    render: () => <SkillsGraph />,
+    title: "In which ways is Kerala actually unusual?",
+    wide: true,
+    render: () => <KeralaOutlierStrips />,
   },
   {
     index: "VIZ_02",
-    title: "Sortable Bars",
-    desc: "Keyed enter/update transitions — bars swap position by identity, not by redrawing the chart.",
-    render: () => <SortableBars />,
+    title: "Anime, by the numbers",
+    wide: true,
+    render: () => <AnimeLengthPanel />,
   },
   {
     index: "VIZ_03",
-    title: "Finland Electricity Grid",
-    desc: "Real production vs. consumption data for Finland, polled from Fingrid's open API — with a static fallback if the live call fails.",
+    title: "Does Finland make all its own electricity?",
     render: () => <FinlandGridChart />,
   },
 ];
@@ -61,17 +68,17 @@ export function PlaygroundPage() {
         <p className="section-eyebrow font-mono mb-3">05 // PLAYGROUND</p>
         <h1 className="section-title">DATA VIZ PLAYGROUND</h1>
         <p className="blog-intro mt-6 max-w-[560px]">
-          A few D3.js sketches — some playful, one wired to a real, live data source.
+          Small experiments in real data — one question, one chart, one observation each.
         </p>
 
         <div className="playground-grid mt-16 grid grid-cols-1 lg:grid-cols-2 gap-5">
           {VIZZES.map((v) => (
-            <div key={v.index} className="viz-card chamfer">
+            <div key={v.index} className={`viz-card chamfer${v.wide ? " lg:col-span-2" : ""}`}>
               <div className="flex items-center justify-between">
                 <span className="viz-card__index font-mono">{v.index}</span>
               </div>
               <h3 className="viz-card__title mt-3">{v.title}</h3>
-              <p className="viz-card__desc mt-2">{v.desc}</p>
+              {v.desc && <p className="viz-card__desc mt-2">{v.desc}</p>}
               <div className="mt-5">{v.render()}</div>
             </div>
           ))}

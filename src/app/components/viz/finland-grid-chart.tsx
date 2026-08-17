@@ -34,6 +34,33 @@ export function FinlandGridChart() {
   const netMW =
     latestProduction && latestConsumption ? latestProduction.value - latestConsumption.value : undefined;
 
+  // How much of the last 24h Finland spent short of its own demand. Paired
+  // on matching timestamps rather than by index, so a series arriving one
+  // reading behind the other can't silently offset the comparison.
+  const balance = useMemo(() => {
+    const byTime = new Map(consumption.map((c) => [c.time.getTime(), c.value]));
+    let importing = 0;
+    let paired = 0;
+    let deficitSum = 0;
+    for (const p of production) {
+      const demand = byTime.get(p.time.getTime());
+      if (demand === undefined) continue;
+      paired++;
+      if (p.value < demand) {
+        importing++;
+        deficitSum += demand - p.value;
+      }
+    }
+    return { importing, paired, meanDeficit: importing > 0 ? deficitSum / importing : 0 };
+  }, [production, consumption]);
+
+  const allValues = useMemo(
+    () => [...production, ...consumption].map((d) => d.value),
+    [production, consumption],
+  );
+  const rangeLow = allValues.length ? Math.min(...allValues) : undefined;
+  const rangeHigh = allValues.length ? Math.max(...allValues) : undefined;
+
   useEffect(() => {
     const svg = svgRef.current;
     if (!svg || width === 0 || height === 0) return;
@@ -190,66 +217,60 @@ export function FinlandGridChart() {
       .on("pointerleave", leave);
   }, [production, consumption, width, height]);
 
+  const shortfallShare =
+    balance.paired > 0 ? Math.round((balance.importing / balance.paired) * 100) : 0;
+
   return (
-    <div className="viz-toy">
-      <div className="fingrid-chart__status">
+    <div className="mini-viz">
+      <p className="mini-viz__legend-row">
+        <span className="mini-viz__key mini-viz__key--line" /> produced
+        <span className="mini-viz__key mini-viz__key--line mini-viz__key--line-alt" /> consumed
         <span className={`fingrid-chart__dot${isLive ? " fingrid-chart__dot--live" : ""}`} aria-hidden="true" />
-        {isLive ? "LIVE — data.fingrid.fi" : "CACHED SNAPSHOT"}
-        {error && <span className="fingrid-chart__error"> · live fetch failed, showing last known data</span>}
-      </div>
+        {isLive ? "live" : "cached"}
+        {error && <span className="fingrid-chart__error"> · live fetch failed</span>}
+      </p>
 
-      <div className="fingrid-chart__stats">
-        <div className="fingrid-chart__stat">
-          <span className="fingrid-chart__stat-label">PRODUCTION</span>
-          <span className="fingrid-chart__stat-value">
-            {formatMW(latestProduction?.value)}
-            <span className="fingrid-chart__stat-unit"> MW</span>
-          </span>
-        </div>
-        <div className="fingrid-chart__stat">
-          <span className="fingrid-chart__stat-label">CONSUMPTION</span>
-          <span className="fingrid-chart__stat-value">
-            {formatMW(latestConsumption?.value)}
-            <span className="fingrid-chart__stat-unit"> MW</span>
-          </span>
-        </div>
-        <div className="fingrid-chart__stat fingrid-chart__stat--net">
-          <span className="fingrid-chart__stat-label">
-            {netMW !== undefined && netMW < 0 ? "NET IMPORT" : "NET EXPORT"}
-          </span>
-          <span className="fingrid-chart__stat-value">
-            <span className="fingrid-chart__stat-arrow" aria-hidden="true">
-              {netMW !== undefined && netMW < 0 ? "▼" : "▲"}
-            </span>{" "}
-            {formatMW(netMW !== undefined ? Math.abs(netMW) : undefined)}
-            <span className="fingrid-chart__stat-unit"> MW</span>
-          </span>
-        </div>
-      </div>
-
-      <div ref={measureRef} className="viz-canvas viz-canvas--fingrid">
+      <div ref={measureRef} className="mini-viz__canvas mini-viz__canvas--fingrid">
         <svg
           ref={svgRef}
           width={width}
           height={height}
           role="img"
-          aria-label="Finland electricity production versus consumption, last 24 hours"
+          aria-label="Finland electricity production versus consumption over the last 24 hours"
         />
       </div>
 
-      <div className="fingrid-chart__legend">
-        <span className="fingrid-chart__legend-item">
-          <span className="fingrid-chart__swatch fingrid-chart__swatch--production" /> PRODUCTION
+      <div className="mini-viz__ends">
+        <span>24 hours ago</span>
+        <span>
+          {formatMW(rangeLow)}–{formatMW(rangeHigh)} MW range · now
         </span>
-        <span className="fingrid-chart__legend-item">
-          <span className="fingrid-chart__swatch fingrid-chart__swatch--consumption" /> CONSUMPTION
-        </span>
-        <span className="fingrid-chart__legend-item fingrid-chart__legend-item--muted">MW · LAST 24H</span>
       </div>
 
-      <p className="fingrid-chart__caption">
-        Finland balances production and consumption in real time — the gap between the two lines is covered
-        (or absorbed) by cross-border interconnectors with neighboring Nordic and Baltic grids.
+      <p className="mini-viz__insight">
+        {balance.paired > 0 && balance.importing > 0 ? (
+          <>
+            Finland generated less power than it used for {balance.importing} of the last {balance.paired} readings
+            ({shortfallShare}% of the day), with an average shortfall of {formatMW(balance.meanDeficit)} MW made up
+            over the interconnectors.
+          </>
+        ) : (
+          <>
+            Over the last {balance.paired} readings Finland produced more than it consumed every single time,
+            sending the surplus abroad rather than importing any.
+          </>
+        )}{" "}
+        {netMW !== undefined &&
+          (netMW < 0
+            ? `Right now it is importing ${formatMW(Math.abs(netMW))} MW.`
+            : `Right now it is exporting ${formatMW(netMW)} MW.`)}
+      </p>
+      <p className="mini-viz__caveat">
+        The two lines never drift far apart because a grid has to balance every second — the gap is closed in real
+        time by interconnectors to the Nordic and Baltic grids, not by storage.
+      </p>
+      <p className="mini-viz__source">
+        Source: Fingrid open data (data.fingrid.fi) · polled every 3 minutes, falling back to a bundled snapshot.
       </p>
     </div>
   );

@@ -1,0 +1,59 @@
+{
+  "compiledOn": "2026-08-18",
+  "scope": "The 28 states as constituted at the 2011 Census, plus Telangana (formed 2014) where a post-2014 source reports it separately. Union territories are deliberately excluded — Delhi and Chandigarh are effectively city-states (97% urban) and Lakshadweep, Daman & Diu and Dadra & Nagar Haveli have populations under 350,000, so their numbers swamp the spread without describing anything comparable to a state.",
+  "sources": [
+    {
+      "id": "census2011",
+      "label": "Census of India 2011",
+      "publisher": "Office of the Registrar General & Census Commissioner, India",
+      "url": "https://www.census2011.co.in/",
+      "covers": ["literacy", "femaleLiteracy", "sexRatio", "decadalGrowth", "urbanPct"]
+    },
+    {
+      "id": "nfhs6",
+      "label": "National Family Health Survey (NFHS-6), 2023-24",
+      "publisher": "Ministry of Health & Family Welfare, Government of India",
+      "url": "https://www.nfhsiips.in/nfhsuser/assets/National%20Family%20Health%20Survey%20(NFHS-6)%202023-2024%20Fact%20Sheets.pdf",
+      "covers": ["tfr"]
+    }
+  ],
+  "fields": {
+    "literacy": "Literacy rate, % of population aged 7+ (Census 2011)",
+    "femaleLiteracy": "Female literacy rate, % (Census 2011)",
+    "sexRatio": "Females per 1,000 males (Census 2011)",
+    "decadalGrowth": "Population growth 2001-2011, % (Census 2011)",
+    "urbanPct": "Share of population living in urban areas, % (Census 2011)",
+    "tfr": "Total fertility rate, children per woman (NFHS-6, 2023-24)"
+  },
+  "states": [
+    { "state": "Kerala",            "literacy": 94.00, "femaleLiteracy": 92.07, "sexRatio": 1084, "decadalGrowth": 4.91,  "urbanPct": 47.70, "tfr": 1.8 },
+    { "state": "Uttar Pradesh",     "literacy": 67.68, "femaleLiteracy": 57.18, "sexRatio": 912,  "decadalGrowth": 20.23, "urbanPct": 22.30, "tfr": 2.2 },
+    { "state": "Maharashtra",       "literacy": 82.34, "femaleLiteracy": 75.87, "sexRatio": 929,  "decadalGrowth": 15.99, "urbanPct": 45.26, "tfr": 1.8 },
+    { "state": "Bihar",             "literacy": 61.80, "femaleLiteracy": 51.50, "sexRatio": 918,  "decadalGrowth": 25.42, "urbanPct": 11.28, "tfr": 2.7 },
+    { "state": "West Bengal",       "literacy": 76.26, "femaleLiteracy": 70.54, "sexRatio": 950,  "decadalGrowth": 13.84, "urbanPct": 31.89, "tfr": 1.6 },
+    { "state": "Andhra Pradesh",    "literacy": 67.02, "femaleLiteracy": 59.15, "sexRatio": 993,  "decadalGrowth": 10.98, "urbanPct": 33.36, "tfr": 1.8 },
+    { "state": "Madhya Pradesh",    "literacy": 69.32, "femaleLiteracy": 59.24, "sexRatio": 931,  "decadalGrowth": 20.35, "urbanPct": 27.64, "tfr": 2.1 },
+    { "state": "Tamil Nadu",        "literacy": 80.09, "femaleLiteracy": 73.44, "sexRatio": 996,  "decadalGrowth": 15.61, "urbanPct": 48.41, "tfr": 1.7 },
+    { "state": "Rajasthan",         "literacy": 66.11, "femaleLiteracy": 52.12, "sexRatio": 928,  "decadalGrowth": 21.31, "urbanPct": 24.89, "tfr": 2.1 },
+    { "state": "Karnataka",         "literacy": 75.36, "femaleLiteracy": 68.08, "sexRatio": 973,  "decadalGrowth": 15.60, "urbanPct": 38.67, "tfr": 1.8 },
+    { "state": "Gujarat",           "literacy": 78.03, "femaleLiteracy": 69.68, "sexRatio": 919,  "decadalGrowth": 19.28, "urbanPct": 42.58, "tfr": 1.9 },
+    { "state": "Odisha",            "literacy": 72.87, "femaleLiteracy": 64.01, "sexRatio": 979,  "decadalGrowth": 14.05, "urbanPct": 16.68, "tfr": 1.7 },
+    { "state": "Jharkhand",         "literacy": 66.41, "femaleLiteracy": 55.42, "sexRatio": 948,  "decadalGrowth": 22.42, "urbanPct": 24.05, "tfr": 2.2 },
+    { "state": "Assam",             "literacy": 72.19, "femaleLiteracy": 66.27, "sexRatio": 958,  "decadalGrowth": 17.07, "urbanPct": 14.08, "tfr": 1.6 },
+    { "state": "Punjab",            "literacy": 75.84, "femaleLiteracy": 70.73, "sexRatio": 895,  "decadalGrowth": 13.89, "urbanPct": 37.47, "tfr": 1.6 },
+    { "state": "Chhattisgarh",      "literacy": 70.28, "femaleLiteracy": 60.24, "sexRatio": 991,  "decadalGrowth": 22.61, "urbanPct": 23.24, "tfr": 1.9 },
+    { "state": "Haryana",           "literacy": 75.55, "femaleLiteracy": 65.94, "sexRatio": 879,  "decadalGrowth": 19.90, "urbanPct": 34.89, "tfr": 2.0 },
+    { "state": "Jammu and Kashmir", "literacy": 67.16, "femaleLiteracy": 56.43, "sexRatio": 889,  "decadalGrowth": 23.64, "urbanPct": 27.42, "tfr": 1.8 },
+    { "state": "Uttarakhand",       "literacy": 78.82, "femaleLiteracy": 70.01, "sexRatio": 963,  "decadalGrowth": 18.81, "urbanPct": 30.25, "tfr": 1.9 },
+    { "state": "Himachal Pradesh",  "literacy": 82.80, "femaleLiteracy": 75.93, "sexRatio": 972,  "decadalGrowth": 12.94, "urbanPct": 10.02, "tfr": 1.8 },
+    { "state": "Tripura",           "literacy": 87.22, "femaleLiteracy": 82.73, "sexRatio": 960,  "decadalGrowth": 14.84, "urbanPct": 26.15, "tfr": 1.7 },
+    { "state": "Meghalaya",         "literacy": 74.43, "femaleLiteracy": 72.89, "sexRatio": 989,  "decadalGrowth": 27.95, "urbanPct": 20.09, "tfr": 2.2 },
+    { "state": "Manipur",           "literacy": 76.94, "femaleLiteracy": 70.26, "sexRatio": 985,  "decadalGrowth": 24.50, "urbanPct": 29.22, "tfr": null },
+    { "state": "Nagaland",          "literacy": 79.55, "femaleLiteracy": 76.11, "sexRatio": 931,  "decadalGrowth": -0.58, "urbanPct": 28.90, "tfr": 2.0 },
+    { "state": "Goa",               "literacy": 88.70, "femaleLiteracy": 84.66, "sexRatio": 973,  "decadalGrowth": 8.23,  "urbanPct": 62.18, "tfr": 1.6 },
+    { "state": "Arunachal Pradesh", "literacy": 65.38, "femaleLiteracy": 57.70, "sexRatio": 938,  "decadalGrowth": 26.03, "urbanPct": 22.90, "tfr": 1.5 },
+    { "state": "Mizoram",           "literacy": 91.33, "femaleLiteracy": 89.27, "sexRatio": 976,  "decadalGrowth": 23.48, "urbanPct": 52.10, "tfr": 1.6 },
+    { "state": "Sikkim",            "literacy": 81.42, "femaleLiteracy": 75.61, "sexRatio": 890,  "decadalGrowth": 12.89, "urbanPct": 25.14, "tfr": 1.0 },
+    { "state": "Telangana",         "literacy": null,  "femaleLiteracy": null,  "sexRatio": null, "decadalGrowth": null,  "urbanPct": null,  "tfr": 1.9 }
+  ]
+}
