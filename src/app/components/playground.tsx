@@ -28,28 +28,27 @@ interface VizEntry {
   index: string;
   title: string;
   desc?: string;
-  wide?: boolean;
   render: () => React.ReactNode;
 }
 
-// Each entry is a small, standalone experiment — one question, one chart,
-// one sentence of insight, answered inside `render()` itself. `desc` is
-// reserved for the rare viz that needs a line explaining its data source
-// up front (see VIZ_03); the small ones let the title ask the question and
-// the chart answer it, with no restated subtitle in between. `wide` spans
-// both grid columns, for the two cards that hold a stack of related charts
-// rather than a single one-question-one-chart sketch.
+// Each entry is a small, standalone experiment — the title asks the
+// question and the chart answers it, with no restated subtitle in between.
+// `desc` is reserved for the rare viz that needs a line of framing the
+// chart itself can't carry.
+//
+// Cards stack full-width rather than sitting in a 2-up grid: every viz here
+// is either a stack of related charts (VIZ_01's six strips, VIZ_02's pair)
+// or a time series, and all of them read badly at half width. A half-width
+// card also stranded the last one alone beside an empty column.
 const VIZZES: VizEntry[] = [
   {
     index: "VIZ_01",
     title: "In which ways is Kerala actually unusual?",
-    wide: true,
     render: () => <KeralaOutlierStrips />,
   },
   {
     index: "VIZ_02",
     title: "Anime, by the numbers",
-    wide: true,
     render: () => <AnimeLengthPanel />,
   },
   {
@@ -71,9 +70,9 @@ export function PlaygroundPage() {
           Small experiments in real data — one question, one chart, one observation each.
         </p>
 
-        <div className="playground-grid mt-16 grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="playground-grid mt-16 flex flex-col gap-5">
           {VIZZES.map((v) => (
-            <div key={v.index} className={`viz-card chamfer${v.wide ? " lg:col-span-2" : ""}`}>
+            <div key={v.index} className="viz-card chamfer">
               <div className="flex items-center justify-between">
                 <span className="viz-card__index font-mono">{v.index}</span>
               </div>

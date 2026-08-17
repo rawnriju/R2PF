@@ -1,5 +1,13 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getFingridSnapshot } from "./_fingrid-data";
+// The .js extension is required, not optional: package.json sets
+// "type": "module", so Vercel compiles this function to ESM, and Node's ESM
+// resolver refuses extensionless relative imports at runtime
+// (ERR_MODULE_NOT_FOUND). TypeScript maps the .js specifier back onto
+// _fingrid-data.ts at compile time. Dropping the extension builds fine and
+// then 500s in production — `vite dev` can't catch it, because the dev
+// middleware in vite.config.ts imports this module through Vite's own
+// resolver instead of running this file.
+import { getFingridSnapshot } from "./_fingrid-data.js";
 
 /**
  * Proxies Fingrid's open-data REST API server-side so the API key never
