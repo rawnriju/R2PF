@@ -52,7 +52,7 @@ const MILESTONES: Milestone[] = [
   {
     id: "bachelors",
     period: "2016 – 2020",
-    title: "B.Sc. in Computer Science",
+    title: "B.Tech. in Computer Science",
     org: "Govt. Model Engineering College",
     desc: "Foundational years in software and systems — where the AR game Q.E.D. and the first real projects happened.",
     kind: "education",

@@ -38,7 +38,7 @@ const VOLUNTEER_ENTRIES: VolunteerEntry[] = [
     index: "VOL_02",
     title: "Kochi Overboard",
     org: "Kochi, India",
-    desc: "Was part of a social community for fun in Kochi called KochiOverboard, it was started by my friend and I helped out organising events and managing logistics and other things. It was my first time feeling part of a community and knowing what it means to give back and create a fun space for society.",
+    desc: "Was part of a social community for fun in Kochi called KochiOverboard, it was started by my friend and I helped out organising events and managing logistics and other things. It was my first time feeling part of a community and knowing what it means to give back and create a fun space for everyone.",
     tags: ["COMMUNITY", "KOCHI"],
     accent: "var(--brand-2)",
     link: "https://www.instagram.com/kochi.overboard/",
