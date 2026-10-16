@@ -33,7 +33,7 @@ export function BlogPage() {
       <BlogHeader />
 
       <main className="mx-auto max-w-[1200px] px-6 py-24">
-        <p className="section-eyebrow font-mono mb-3">04 // BLOG</p>
+        <p className="section-eyebrow font-mono mb-3"><span className="section-eyebrow__num">[06]</span>BLOG</p>
         <h1 className="section-title">WRITING</h1>
         <p className="blog-intro mt-6 max-w-[520px]">
           Posts on frontend engineering, data visualization, and whatever else I'm
@@ -106,7 +106,7 @@ export function BlogPostPage() {
           <>
             <div className="flex items-center justify-between mb-3">
               <p className="section-eyebrow font-mono">
-                POST_{String(postIndex + 1).padStart(2, "0")} // ARTICLE
+                <span className="section-eyebrow__num">POST</span>{String(postIndex + 1).padStart(2, "0")}
               </p>
               <Link
                 to="/blog"
@@ -139,7 +139,7 @@ export function BlogPostPage() {
           </>
         ) : (
           <>
-            <p className="section-eyebrow font-mono mb-3">04 // BLOG</p>
+            <p className="section-eyebrow font-mono mb-3"><span className="section-eyebrow__num">[06]</span>BLOG</p>
             <h1 className="section-title">POST NOT FOUND</h1>
             <p className="blog-intro mt-6 max-w-[520px]">
               Couldn't find a post at that address.

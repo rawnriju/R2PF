@@ -10,7 +10,7 @@
 
 /* -- BACK TO HOME link -- */
 .blog-header__back {
-  font-size: 12px;
+  font-size: 13.5px;
   letter-spacing: 0.12em;
   color: var(--text-muted);
 }
@@ -19,13 +19,13 @@
 .blog-header__wordmark {
   color: var(--fg);
   font-weight: 400;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 /* -- intro paragraph under the title -- */
 .blog-intro {
   font-family: 'Inter', sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.65;
   color: var(--text-muted);
 }
@@ -45,7 +45,7 @@
 }
 
 .blog-row__index {
-  font-size: 11px;
+  font-size: 12.5px;
   letter-spacing: 0.15em;
   color: var(--card-accent);
 }
@@ -53,12 +53,12 @@
 .blog-row__title {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 18px;
   color: var(--fg);
 }
 
 .blog-row__date {
-  font-size: 11px;
+  font-size: 12.5px;
   letter-spacing: 0.08em;
   color: var(--text-muted);
 }
@@ -72,7 +72,7 @@
 
 .blog-row__excerpt {
   font-family: 'Inter', sans-serif;
-  font-size: 13px;
+  font-size: 14.5px;
   line-height: 1.5;
   color: var(--text-muted);
   max-width: 560px;
@@ -84,7 +84,7 @@
    both. */
 .blog-row__tag {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   color: var(--text-muted);
   padding: 4px 8px;
@@ -92,7 +92,7 @@
 }
 
 .blog-row__view {
-  font-size: 11px;
+  font-size: 12.5px;
   letter-spacing: 0.05em;
   color: var(--card-accent);
   white-space: nowrap;
@@ -101,7 +101,7 @@
 /* -- individual post page -- */
 .blog-post__close {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 15px;
+  font-size: 17px;
   line-height: 1;
   color: var(--brand);
   transition: opacity 0.2s ease;
@@ -126,7 +126,7 @@
 
 .blog-post__body {
   font-family: 'Inter', sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.75;
   color: var(--fg);
 }
@@ -145,9 +145,9 @@
   margin-top: 1.8em;
 }
 
-.blog-post__body h1 { font-size: 26px; }
-.blog-post__body h2 { font-size: 21px; }
-.blog-post__body h3 { font-size: 17px; }
+.blog-post__body h1 { font-size: 29px; }
+.blog-post__body h2 { font-size: 23.5px; }
+.blog-post__body h3 { font-size: 19px; }
 
 /* -- brand-logo images peppered through the article, sitting directly
    on the page background rather than in a boxed panel -- */

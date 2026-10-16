@@ -22,11 +22,14 @@
    section: about, work, extras, contact, blog, hero.
    ------------------------------------------------------------ */
 
-/* -- `01 // ABOUT` eyebrow -- */
+/* -- `[01] ABOUT` eyebrow; the number is spaced off the label -- */
 .section-eyebrow {
-  font-size: 12px;
+  font-size: 13.5px;
   letter-spacing: 0.25em;
   color: var(--brand);
+}
+.section-eyebrow__num {
+  margin-right: 1.25em;
 }
 
 /* -- section <h2> -- */
@@ -67,7 +70,7 @@
 /* -- "SOON" placeholder row: extras' volunteering, blog's posts --
    A mono tag beside a pulsing bar standing in for the missing copy. */
 .soon-row__tag {
-  font-size: 11px;
+  font-size: 12.5px;
   letter-spacing: 0.12em;
   color: var(--brand);
   width: 72px;
@@ -93,7 +96,7 @@
    The mobile media query below is what keeps that nowrap text actually
    narrow enough to fit rather than overflowing. */
 .stat-span {
-  font-size: 11px;
+  font-size: 12.5px;
   letter-spacing: 0.1em;
   color: var(--text-muted);
   white-space: nowrap;
@@ -104,7 +107,7 @@
 
 @media (max-width: 480px) {
   .stat-span {
-    font-size: 9px;
+    font-size: 10px;
     letter-spacing: 0.03em;
   }
 }
@@ -121,7 +124,7 @@
    ------------------------------------------------------------ */
 
 .chip {
-  font-size: 11px;
+  font-size: 12.5px;
   letter-spacing: 0.12em;
   color: var(--text-muted);
   border: 1px solid var(--hairline);

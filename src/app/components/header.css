@@ -14,17 +14,18 @@
 .site-header__wordmark {
   color: var(--fg);
   font-weight: 400;
-  font-size: 15px;
+  font-size: 17px;
 }
 
-/* -- `01 // ABOUT` anchor nav; the number takes the accent -- */
+/* -- `[01] ABOUT` anchor nav; the number takes the accent -- */
 .site-header__link {
-  font-size: 12px;
+  font-size: 13.5px;
   letter-spacing: 0.12em;
   color: var(--text-muted);
 }
 .site-header__link-num {
   color: var(--brand);
+  margin-right: 0.75em;
 }
 
 /* -- hamburger toggle; plain brand-colored glyph, no chip background/border.
@@ -44,7 +45,7 @@
 }
 
 /* -- mobile drawer holding the nav links once they collapse out of the
-   center row below 1105px; matches the bar's own glass/hairline look -- */
+   center row once they no longer fit; matches the bar's own glass/hairline look -- */
 .site-header__menu {
   background: var(--header-bg);
   border-bottom: 1px solid var(--hairline);

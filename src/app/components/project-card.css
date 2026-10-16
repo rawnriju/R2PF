@@ -28,14 +28,14 @@
 
 /* -- PRJ_01 index, in the card's own accent -- */
 .project-card__index {
-  font-size: 11px;
+  font-size: 12.5px;
   letter-spacing: 0.15em;
   color: var(--card-accent);
 }
 
 /* -- the → that slides right on hover -- */
 .project-card__arrow {
-  font-size: 14px;
+  font-size: 16px;
   color: var(--text-muted);
 }
 
@@ -43,13 +43,13 @@
 .project-card__title {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 600;
-  font-size: 22px;
+  font-size: 25px;
   color: var(--fg);
   line-height: 1.15;
 }
 .project-card__desc {
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.55;
   color: var(--text-muted);
 }
@@ -59,7 +59,7 @@
    swap; back to the browser's own default monospace stack. */
 .project-card__tag {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   color: var(--text-muted);
   padding: 4px 8px;

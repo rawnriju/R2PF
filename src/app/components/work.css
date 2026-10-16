@@ -11,20 +11,20 @@
 
 /* -- technical stack rows (see .hairline-list in components.css) -- */
 .work-capability__key {
-  font-size: 11px;
+  font-size: 12.5px;
   letter-spacing: 0.12em;
   color: var(--brand);
   width: 108px;
 }
 .work-capability__value {
   font-family: 'Inter', sans-serif;
-  font-size: 15px;
+  font-size: 17px;
   color: var(--fg);
 }
 
 /* -- `[ 03 ENTRIES ]` count beside SELECTED PROJECTS -- */
 .work-entry-count {
-  font-size: 12px;
+  font-size: 13.5px;
   color: var(--text-muted);
 }
 

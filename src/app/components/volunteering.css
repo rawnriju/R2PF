@@ -21,7 +21,7 @@
 }
 
 .volunteer-row__index {
-  font-size: 11px;
+  font-size: 12.5px;
   letter-spacing: 0.15em;
   color: var(--card-accent);
 }
@@ -29,14 +29,14 @@
 .volunteer-row__title {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 18px;
   color: var(--fg);
 }
 
 .volunteer-row__org {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 600;
-  font-size: 11px;
+  font-size: 12.5px;
   letter-spacing: 0.08em;
   color: var(--text-muted);
 }
@@ -45,7 +45,7 @@
    swap; back to the browser's own default monospace stack. */
 .volunteer-row__tag {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   color: var(--text-muted);
   padding: 4px 8px;
@@ -53,7 +53,7 @@
 }
 
 .volunteer-row__view {
-  font-size: 11px;
+  font-size: 12.5px;
   letter-spacing: 0.05em;
   color: var(--card-accent);
   white-space: nowrap;
@@ -91,7 +91,7 @@
   position: absolute;
   top: 12px;
   right: 12px;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1;
   color: var(--text-muted);
   padding: 6px 8px;
@@ -112,7 +112,7 @@
 }
 
 .volunteer-modal__caption {
-  font-size: 13px;
+  font-size: 14.5px;
   letter-spacing: 0.05em;
   color: var(--fg);
   text-align: center;
@@ -120,7 +120,7 @@
 
 .volunteer-modal__desc {
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.6;
   color: var(--text-muted);
   text-align: left;
@@ -128,7 +128,7 @@
 }
 
 .volunteer-modal__link {
-  font-size: 11px;
+  font-size: 12.5px;
   letter-spacing: 0.05em;
   color: var(--card-accent);
   white-space: nowrap;

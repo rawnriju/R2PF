@@ -115,7 +115,7 @@ function SectionHeading({
 }) {
   return (
     <h2
-      className={`text-[15px] print:text-[16px] font-bold tracking-wide ${accent} mb-4 print:mb-2`}
+      className={`text-[17px] print:text-[18px] font-bold tracking-wide ${accent} mb-4 print:mb-2`}
     >
       {children}
     </h2>
@@ -137,13 +137,13 @@ export function Resume() {
             >
               Rawn Riju
             </h1>
-            <p className="text-[15px] print:text-[15.5px] text-[var(--ink-3)] leading-snug">
+            <p className="text-[17px] print:text-[17.5px] text-[var(--ink-3)] leading-snug">
               Software engineer with 4 years of experience
               building user-centric web applications with React,
               Node.js, and modern JavaScript frameworks
             </p>
           </div>
-          <div className="text-[13px] print:text-[14.5px] text-[var(--ink-3)] space-y-1 print:space-y-0.5 md:text-right print:text-right md:pt-3 print:pt-1">
+          <div className="text-[14.5px] print:text-[16.5px] text-[var(--ink-3)] space-y-1 print:space-y-0.5 md:text-right print:text-right md:pt-3 print:pt-1">
             <p>{getEmail()}</p>
             <p>Tampere, Finland</p>
             <a href="https://www.linkedin.com/in/rawn-riju-b5b199183/" target="_blank" rel="noopener noreferrer" className={`${accent} hover:underline block`}>linkedin.com/in/rawn-riju</a>
@@ -164,31 +164,31 @@ export function Resume() {
                     key={role.title}
                     className="flex flex-wrap items-baseline gap-x-2 mb-0.5"
                   >
-                    <span className="text-[15px] print:text-[15.5px] text-[var(--ink-2)]">
+                    <span className="text-[17px] print:text-[17.5px] text-[var(--ink-2)]">
                       {role.title} ·
                     </span>
-                    <span className="text-[15px] print:text-[15.5px] font-semibold text-[var(--ink)]">
+                    <span className="text-[17px] print:text-[17.5px] font-semibold text-[var(--ink)]">
                       {job.company}
                     </span>
-                    <span className="text-[12px] print:text-[14px] text-[var(--ink-4)]">
+                    <span className="text-[13.5px] print:text-[16px] text-[var(--ink-4)]">
                       {role.period}
                     </span>
                   </div>
                 ))}
-                <p className="text-[12px] print:text-[14px] text-[var(--ink-4)] mb-4 print:mb-1.5">
+                <p className="text-[13.5px] print:text-[16px] text-[var(--ink-4)] mb-4 print:mb-1.5">
                   {job.location}
                 </p>
 
                 {job.groups.map((group) => (
                   <div key={group.heading} className="mb-4 print:mb-2">
-                    <p className="text-[13px] print:text-[15px] font-semibold text-[var(--ink-2)] mb-1.5 print:mb-1">
+                    <p className="text-[14.5px] print:text-[17px] font-semibold text-[var(--ink-2)] mb-1.5 print:mb-1">
                       {group.heading}
                     </p>
                     <ul className="space-y-1.5 print:space-y-0.5">
                       {group.points.map((pt, i) => (
                         <li
                           key={i}
-                          className="flex gap-2 text-[13px] print:text-[14.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug"
+                          className="flex gap-2 text-[14.5px] print:text-[16.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug"
                         >
                           <span className={`${accent} mt-0.5`}>
                             •
@@ -198,7 +198,7 @@ export function Resume() {
                       ))}
                     </ul>
                     {group.tech && (
-                      <p className="text-[12px] print:text-[13.5px] text-[var(--ink-4)] italic mt-1.5 print:mt-1 pl-4">
+                      <p className="text-[13.5px] print:text-[15px] text-[var(--ink-4)] italic mt-1.5 print:mt-1 pl-4">
                         {group.tech}
                       </p>
                     )}
@@ -213,14 +213,14 @@ export function Resume() {
               </SectionHeading>
               {additional.map((item) => (
                 <div key={item.title} className="mb-4 print:mb-2">
-                  <p className="text-[15px] print:text-[15.5px] font-semibold text-[var(--ink)] mb-1.5 print:mb-1">
+                  <p className="text-[17px] print:text-[17.5px] font-semibold text-[var(--ink)] mb-1.5 print:mb-1">
                     {item.title}
                   </p>
                   <ul className="space-y-1.5 print:space-y-0.5">
                     {item.points.map((pt, i) => (
                       <li
                         key={i}
-                        className="flex gap-2 text-[13px] print:text-[14.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug"
+                        className="flex gap-2 text-[14.5px] print:text-[16.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug"
                       >
                         <span className={`${accent} mt-0.5`}>
                           •
@@ -241,10 +241,10 @@ export function Resume() {
               <div className="space-y-4 print:space-y-2">
                 {skills.map((s) => (
                   <div key={s.label}>
-                    <p className="text-[13px] print:text-[15px] font-semibold text-[var(--ink)] mb-1 print:mb-0.5">
+                    <p className="text-[14.5px] print:text-[17px] font-semibold text-[var(--ink)] mb-1 print:mb-0.5">
                       {s.label}
                     </p>
-                    <p className="text-[13px] print:text-[14.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug">
+                    <p className="text-[14.5px] print:text-[16.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug">
                       {s.value}
                     </p>
                   </div>
@@ -258,13 +258,13 @@ export function Resume() {
                 {projects.map((p) => (
                   <div key={p.name}>
                     {p.url ? (
-                      <a href={p.url} target="_blank" rel="noopener noreferrer" className="text-[13px] print:text-[15px] font-semibold text-[var(--ink)] hover:underline mb-1 print:mb-0.5 block">
+                      <a href={p.url} target="_blank" rel="noopener noreferrer" className="text-[14.5px] print:text-[17px] font-semibold text-[var(--ink)] hover:underline mb-1 print:mb-0.5 block">
                         {p.name}
                       </a>
                     ) : (
-                      <p className="text-[13px] print:text-[15px] font-semibold text-[var(--ink)] mb-1 print:mb-0.5">{p.name}</p>
+                      <p className="text-[14.5px] print:text-[17px] font-semibold text-[var(--ink)] mb-1 print:mb-0.5">{p.name}</p>
                     )}
-                    <p className="text-[13px] print:text-[14.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug">
+                    <p className="text-[14.5px] print:text-[16.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug">
                       {p.desc}
                     </p>
                   </div>
@@ -277,16 +277,16 @@ export function Resume() {
               <div className="space-y-4 print:space-y-2">
                 {education.map((e) => (
                   <div key={e.school}>
-                    <p className="text-[13px] print:text-[15px] font-semibold text-[var(--ink)]">
+                    <p className="text-[14.5px] print:text-[17px] font-semibold text-[var(--ink)]">
                       {e.school}
                     </p>
-                    <p className="text-[12px] print:text-[14px] text-[var(--ink-4)] mb-1 print:mb-0.5">
+                    <p className="text-[13.5px] print:text-[16px] text-[var(--ink-4)] mb-1 print:mb-0.5">
                       {e.period}
                     </p>
-                    <p className="text-[13px] print:text-[14.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug">
+                    <p className="text-[14.5px] print:text-[16.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug">
                       {e.degree}
                     </p>
-                    <p className="text-[12px] print:text-[14px] text-[var(--ink-4)]">
+                    <p className="text-[13.5px] print:text-[16px] text-[var(--ink-4)]">
                       {e.place}
                     </p>
                   </div>
@@ -296,7 +296,7 @@ export function Resume() {
 
             <section>
               <SectionHeading>Interests</SectionHeading>
-              <p className="text-[13px] print:text-[14.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug">
+              <p className="text-[14.5px] print:text-[16.5px] text-[var(--ink-3)] leading-relaxed print:leading-snug">
                 {interests}
               </p>
             </section>
@@ -312,20 +312,22 @@ export function ResumePage() {
     <div className="min-h-screen print:min-h-0 w-full bg-[var(--paper-bg)]">
       <div className="resume-toolbar print:hidden sticky top-0 z-10">
         <div className="mx-auto max-w-[900px] px-4 py-3 flex items-center justify-between">
-          <Link
-            to="/"
-            className="font-mono text-[12px] tracking-[0.12em] text-[var(--text-muted)] hover:text-[var(--brand)] transition-colors duration-200"
+          <button
+            onClick={() => window.print()}
+            className="font-mono text-[13.5px] tracking-[0.12em] text-[var(--brand)] border border-[var(--brand)] px-3 py-1.5 cursor-pointer hover:bg-[var(--brand)] hover:text-[var(--on-brand)] transition-colors duration-200"
           >
-            ← BACK TO HOME
-          </Link>
-          <div className="flex items-center gap-3">
+            PRINT / SAVE PDF
+          </button>
+          {/* Theme toggle + back link on the right, matching the blog and
+              playground headers. */}
+          <div className="flex items-center gap-4">
             <ThemeToggle />
-            <button
-              onClick={() => window.print()}
-              className="font-mono text-[12px] tracking-[0.12em] text-[var(--brand)] border border-[var(--brand)] px-3 py-1.5 cursor-pointer hover:bg-[var(--brand)] hover:text-[var(--on-brand)] transition-colors duration-200"
+            <Link
+              to="/"
+              className="font-mono text-[13.5px] tracking-[0.12em] text-[var(--text-muted)] hover:text-[var(--brand)] transition-colors duration-200"
             >
-              PRINT / SAVE PDF
-            </button>
+              ← BACK TO HOME
+            </Link>
           </div>
         </div>
       </div>

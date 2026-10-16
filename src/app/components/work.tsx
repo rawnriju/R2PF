@@ -75,7 +75,7 @@ export function Work() {
   return (
     <section id="work" className="mx-auto max-w-[1200px] px-6 py-24">
       <div ref={header.ref} className="mb-8 reveal-up" data-inview={header.inView}>
-        <p className="section-eyebrow font-mono mb-3">02 // WORK</p>
+        <p className="section-eyebrow font-mono mb-3"><span className="section-eyebrow__num">[02]</span>WORK</p>
         <h2 className="section-title">EXPERIENCE</h2>
       </div>
 

@@ -45,7 +45,7 @@ export function Contact() {
   return (
     <section id="contact" className="mx-auto max-w-[1200px] px-6 py-24">
       <div ref={header.ref} className="mb-12 reveal-up" data-inview={header.inView}>
-        <p className="section-eyebrow font-mono mb-3">05 // CONTACT</p>
+        <p className="section-eyebrow font-mono mb-3"><span className="section-eyebrow__num">[05]</span>CONTACT</p>
         <h2 className="section-title">GET IN TOUCH</h2>
         <p className="contact-intro mt-4 max-w-[520px]">
           Open to frontend roles, interesting problems, and good conversation. The

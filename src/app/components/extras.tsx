@@ -27,7 +27,7 @@ export function Extras() {
   return (
     <section id="extras" className="mx-auto max-w-[1200px] px-6 py-24">
       <div ref={header.ref} className="mb-12 reveal-up" data-inview={header.inView}>
-        <p className="section-eyebrow font-mono mb-3">04 // EXTRAS</p>
+        <p className="section-eyebrow font-mono mb-3"><span className="section-eyebrow__num">[04]</span>EXTRAS</p>
         <h2 className="section-title">SIDE QUESTS</h2>
       </div>
 

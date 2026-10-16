@@ -142,7 +142,7 @@ export function Journey() {
   return (
     <section id="journey" className="mx-auto max-w-[1200px] px-6 py-24">
       <div ref={header.ref} className="mb-12 reveal-up" data-inview={header.inView}>
-        <p className="section-eyebrow font-mono mb-3">03 // JOURNEY</p>
+        <p className="section-eyebrow font-mono mb-3"><span className="section-eyebrow__num">[03]</span>JOURNEY</p>
         <h2 className="section-title">THE TIMELINE</h2>
       </div>
 

@@ -17,14 +17,15 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       aria-label={`Switch to ${goingTo} mode`}
       aria-pressed={theme === "light"}
       title={`Switch to ${goingTo} mode`}
-      className={`${CHIP_CLASS} ${className}`}
+      // Icon-only, so stretch to the row's height to stay level with the
+      // labelled chips beside it.
+      className={`${CHIP_CLASS} self-stretch ${className}`}
     >
       {theme === "dark" ? (
         <Sun size={13} strokeWidth={2} aria-hidden="true" />
       ) : (
         <Moon size={13} strokeWidth={2} aria-hidden="true" />
       )}
-      <span className="hidden sm:inline">{theme === "dark" ? "LIGHT" : "DARK"}</span>
     </button>
   );
 }

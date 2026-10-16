@@ -83,6 +83,11 @@
      stat chips, section eyebrows, etc. — from one place instead of each
      component declaring its own font-family. */
   --font-mono: 'Circuit Forem Regular', monospace;
+  /* Tailwind's text scale, bumped ~12.5% over its defaults for readability. */
+  --text-xs: 0.84375rem;
+  --text-sm: 0.984375rem;
+  --text-base: 1.125rem;
+  --text-lg: 1.265625rem;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

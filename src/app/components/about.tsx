@@ -194,7 +194,7 @@ export function About() {
       className="mx-auto max-w-[1200px] px-6 py-24"
     >
       <p className="section-eyebrow font-mono mb-3 reveal-up" data-inview={inView}>
-        01 // ABOUT
+        <span className="section-eyebrow__num">[01]</span>ABOUT
       </p>
       <h2
         className="section-title mb-10 reveal-up"

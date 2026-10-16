@@ -519,7 +519,7 @@ export function Hero() {
 
       <div className="pointer-events-none relative z-10 mx-auto w-full max-w-[1200px] px-6 py-24">
         <p className="section-eyebrow font-mono mb-6">
-          // SENIOR FRONTEND SOFTWARE ENGINEER
+          SENIOR FRONTEND SOFTWARE ENGINEER
         </p>
 
         <h1 className="hero-title">

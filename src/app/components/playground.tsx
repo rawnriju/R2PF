@@ -64,7 +64,7 @@ export function PlaygroundPage() {
       <PlaygroundHeader />
 
       <main className="mx-auto max-w-[1200px] px-6 py-24">
-        <p className="section-eyebrow font-mono mb-3">05 // PLAYGROUND</p>
+        <p className="section-eyebrow font-mono mb-3"><span className="section-eyebrow__num">[07]</span>PLAYGROUND</p>
         <h1 className="section-title">DATA VIZ PLAYGROUND</h1>
         <p className="blog-intro mt-6 max-w-[560px]">
           Small experiments in real data — one question, one chart, one observation each.

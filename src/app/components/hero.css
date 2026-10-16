@@ -68,7 +68,7 @@
 .hero-hud {
   background: var(--surface-glass);
   border: 1px solid var(--hairline);
-  font-size: 11px;
+  font-size: 12.5px;
   letter-spacing: 0.08em;
   color: var(--text-muted);
 }
@@ -83,7 +83,7 @@
 .hero-play-btn {
   background: var(--surface-glass);
   border: 1px solid var(--hairline);
-  font-size: 11px;
+  font-size: 12.5px;
   letter-spacing: 0.08em;
   color: var(--text-muted);
   cursor: pointer;
@@ -100,7 +100,7 @@
 @media (max-width: 640px) {
   .hero-hud,
   .hero-play-btn {
-    font-size: 9px;
+    font-size: 10px;
     letter-spacing: 0.04em;
   }
 }
@@ -156,7 +156,7 @@
 
 .hero-blurb {
   font-family: 'Inter', sans-serif;
-  font-size: 17px;
+  font-size: 19px;
   line-height: 1.6;
   color: var(--text-muted);
 }

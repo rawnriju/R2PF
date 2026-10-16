@@ -15,7 +15,7 @@
 }
 
 .viz-card__index {
-  font-size: 11px;
+  font-size: 12.5px;
   letter-spacing: 0.15em;
   color: var(--brand);
 }
@@ -23,14 +23,14 @@
 .viz-card__title {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 22.5px;
   color: var(--fg);
   line-height: 1.15;
 }
 
 .viz-card__desc {
   font-family: 'Inter', sans-serif;
-  font-size: 13px;
+  font-size: 14.5px;
   line-height: 1.55;
   color: var(--text-muted);
   max-width: 480px;
@@ -80,14 +80,14 @@
 .mini-viz-panel__question {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 16px;
   color: var(--fg);
   margin-bottom: 12px;
 }
 
 .mini-viz__insight {
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.5;
   color: var(--fg);
   margin-top: 14px;
@@ -95,7 +95,7 @@
 
 .mini-viz__source {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.06em;
   color: var(--text-muted);
   opacity: 0.7;
@@ -108,7 +108,7 @@
   pointer-events: none;
   white-space: nowrap;
   font-family: 'Inter', sans-serif;
-  font-size: 11px;
+  font-size: 12.5px;
   color: var(--fg);
   background: var(--surface);
   padding: 3px 7px;
@@ -117,7 +117,7 @@
 .mini-viz__hover-label--center {
   transform: translate(-50%, -100%);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 /* -- shared chart chrome: legend row above the plot, quantified axis ends
@@ -129,7 +129,7 @@
   gap: 6px;
   margin-bottom: 10px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.06em;
   color: var(--text-muted);
 }
@@ -170,7 +170,7 @@
   gap: 12px;
   margin-top: 4px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.04em;
   color: var(--text-muted);
   opacity: 0.75;
@@ -201,12 +201,12 @@
 .kerala-strip__label {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 14.5px;
   color: var(--fg);
 }
 .kerala-strip__value {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 11px;
+  font-size: 12.5px;
   color: var(--brand);
   white-space: nowrap;
 }
@@ -249,7 +249,7 @@
   white-space: nowrap;
   z-index: 5;
   font-family: 'Inter', sans-serif;
-  font-size: 11px;
+  font-size: 12.5px;
   color: var(--fg);
   background: var(--surface);
   border: 1px solid var(--hairline);
@@ -258,7 +258,7 @@
 
 .mini-viz__caveat {
   font-family: 'Inter', sans-serif;
-  font-size: 12px;
+  font-size: 13.5px;
   line-height: 1.55;
   color: var(--text-muted);
   margin-top: 8px;
@@ -275,12 +275,12 @@
 }
 .anime-scatter-mini__tick-label {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 9px;
+  font-size: 10px;
   fill: var(--text-muted);
 }
 .anime-scatter-mini__axis-title {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 8px;
+  font-size: 9px;
   letter-spacing: 0.1em;
   fill: var(--text-muted);
   opacity: 0.7;
@@ -313,7 +313,7 @@
    title legible over the scatter cloud without a boxed tooltip -- */
 .anime-scatter-mini__label text {
   font-family: 'Inter', sans-serif;
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 500;
   fill: var(--brand);
   paint-order: stroke;
@@ -334,20 +334,20 @@
 }
 .anime-histogram__x-label {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 9px;
+  font-size: 10px;
   fill: var(--text-muted);
   text-anchor: middle;
 }
 .anime-histogram__axis-title {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 8px;
+  font-size: 9px;
   letter-spacing: 0.1em;
   fill: var(--text-muted);
   opacity: 0.7;
 }
 .anime-histogram__pct-label {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 10px;
+  font-size: 11px;
   fill: var(--text-muted);
 }
 .anime-histogram__pct-label--modal {
@@ -392,7 +392,7 @@
 
 .fingrid-chart__axis text {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 9px;
+  font-size: 10px;
   fill: var(--text-muted);
 }
 .fingrid-chart__axis path,
@@ -446,7 +446,7 @@
 
 .fingrid-chart__tooltip-time {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.08em;
   fill: var(--text-muted);
 }
@@ -463,7 +463,7 @@
 
 .fingrid-chart__tooltip-row {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 10px;
+  font-size: 11px;
   fill: var(--fg);
 }
 

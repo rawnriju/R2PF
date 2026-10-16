@@ -10,7 +10,7 @@
 
 /* -- copyright line -- */
 .site-footer__copy {
-  font-size: 12px;
+  font-size: 13.5px;
   color: var(--text-muted);
   letter-spacing: 0.08em;
 }
@@ -24,7 +24,7 @@
    Its own 8px chamfer on the opposite corners from the 18px
    .chamfer the cards use; deliberately not shared. */
 .site-footer__top {
-  font-size: 12px;
+  font-size: 13.5px;
   letter-spacing: 0.1em;
 }
 .site-footer__top-face {
