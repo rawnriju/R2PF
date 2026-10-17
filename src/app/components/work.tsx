@@ -14,7 +14,7 @@ const PROJECTS: Project[] = [
     id: "p1",
     index: "PRJ_01",
     title: "Scrum Manager App",
-    desc: "Lead Developer & Product Owner for a scrum management app — daily ceremonies, estimation planning, and sprint retrospectives. Took 2nd place at Atlassian's Codegeist 2021 Hackathon. Shipped a companion Slack app and Chrome extension, and cut load times to improve performance by 20%.",
+    desc: "Lead Developer & Product Owner for a scrum management app: daily ceremonies, estimation planning, and sprint retrospectives. Took 2nd place at Atlassian's Codegeist 2021 Hackathon. Shipped a companion Slack app and Chrome extension, and cut load times to improve performance by 20%.",
     tags: ["REACT", "RECOIL.JS", "NODE.JS", "MONGODB", "FIREBASE"],
     accent: "var(--brand)",
     span: "md:col-span-1",
