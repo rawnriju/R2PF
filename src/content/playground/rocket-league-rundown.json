@@ -1,0 +1,17 @@
+{
+  "source": "Rocket League Rundown (rocketleague.com/rundown), last season, entered by hand",
+  "matches": 194,
+  "wins": 101,
+  "winPct": 52.1,
+  "hours": 16,
+  "mvpPct": 22.7,
+  "shootingPct": 41.2,
+  "demosPerMatch": 0.32,
+  "totals": { "goals": 254, "shots": 617, "saves": 319, "assists": 109, "mvps": 44, "demos": 63 },
+  "perMatch": [
+    { "key": "goals", "label": "Goals", "you": 1.31, "community": 1.68 },
+    { "key": "shots", "label": "Shots", "you": 3.18, "community": 3.83 },
+    { "key": "saves", "label": "Saves", "you": 1.64, "community": 1.36 },
+    { "key": "assists", "label": "Assists", "you": 0.56, "community": 0.47 }
+  ]
+}

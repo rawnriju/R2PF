@@ -111,6 +111,21 @@
   display: block;
 }
 
+/* -- several photos in one row; each img's flex-grow is its aspect ratio
+   (set inline), which makes every photo in the row the same height -- */
+.volunteer-modal__photos {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+.volunteer-modal__photos-item {
+  flex-basis: 0;
+  min-width: 0;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
 .volunteer-modal__caption {
   font-size: 14.5px;
   letter-spacing: 0.05em;

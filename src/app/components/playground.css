@@ -37,7 +37,7 @@
 }
 
 /* ------------------------------------------------------------
-   Small anime vizzes — little experiments, not dashboards.
+   Small playground vizzes — little experiments, not dashboards.
 
    Deliberately un-bordered: the chart sits straight on the card's own
    surface (no nested chip-bg box, no axis numbers, no legend) so the dots
@@ -264,101 +264,6 @@
   margin-top: 8px;
 }
 
-/* -- anime-outlier-scatter -- */
-.anime-scatter-mini__baseline {
-  stroke: var(--hairline-strong);
-  stroke-width: 1px;
-}
-.anime-scatter-mini__tick {
-  stroke: var(--hairline-strong);
-  stroke-width: 1px;
-}
-.anime-scatter-mini__tick-label {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 10px;
-  fill: var(--text-muted);
-}
-.anime-scatter-mini__axis-title {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  fill: var(--text-muted);
-  opacity: 0.7;
-}
-.anime-scatter-mini__point {
-  fill: var(--text-muted);
-  opacity: 0.5;
-}
-.anime-scatter-mini__point--good {
-  fill: var(--surface);
-  stroke: var(--brand);
-  stroke-width: 2px;
-  opacity: 1;
-}
-.anime-scatter-mini__point--mediocre {
-  fill: var(--surface);
-  stroke: var(--brand-2);
-  stroke-width: 2px;
-  opacity: 1;
-}
-.anime-scatter-mini__hover-dot {
-  fill: var(--brand);
-}
-.anime-scatter-mini__overlay {
-  fill: transparent;
-  cursor: crosshair;
-}
-
-/* -- always-on outlier labels: a soft halo (stroke behind fill) keeps the
-   title legible over the scatter cloud without a boxed tooltip -- */
-.anime-scatter-mini__label text {
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  fill: var(--brand);
-  paint-order: stroke;
-  stroke: var(--surface);
-  stroke-width: 3px;
-  stroke-linejoin: round;
-}
-.anime-scatter-mini__label--mediocre text {
-  fill: var(--brand-2);
-}
-
-/* -- anime-length-histogram -- */
-.anime-histogram__bar {
-  fill: var(--hairline-strong);
-}
-.anime-histogram__bar--modal {
-  fill: var(--brand);
-}
-.anime-histogram__x-label {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 10px;
-  fill: var(--text-muted);
-  text-anchor: middle;
-}
-.anime-histogram__axis-title {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  fill: var(--text-muted);
-  opacity: 0.7;
-}
-.anime-histogram__pct-label {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 11px;
-  fill: var(--text-muted);
-}
-.anime-histogram__pct-label--modal {
-  fill: var(--brand);
-  font-weight: 600;
-}
-.anime-histogram__hit {
-  fill: transparent;
-  cursor: pointer;
-}
-
 /* ------------------------------------------------------------
    VIZ_03 — Finland Electricity Grid (live Fingrid data)
 
@@ -472,4 +377,229 @@
 .mini-viz__key--line-alt {
   background: var(--brand-2);
   opacity: 1;
+}
+
+/* ------------------------------------------------------------
+   VIZ_02 — Am I actually climbing in Rocket League?
+
+   Rating per session for the two ranked playlists, 3v3 in the primary
+   brand hue (it's the headline), 2v2 in brand-2, plus a dashed reference
+   for the all-time 2v2 peak. Rank tiles above carry the percentiles.
+   ------------------------------------------------------------ */
+
+.mini-viz__canvas--rl {
+  height: 260px;
+}
+
+.rl-ranks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.rl-rank {
+  border: 1px solid var(--hairline);
+  border-left-width: 3px;
+  padding: 12px 14px;
+}
+.rl-rank--primary {
+  border-left-color: var(--brand);
+}
+.rl-rank--secondary {
+  border-left-color: var(--brand-2);
+}
+.rl-rank__mode {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+.rl-rank__pct {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1.1;
+  color: var(--fg);
+  margin-top: 4px;
+}
+.rl-rank__tier {
+  font-family: 'Inter', sans-serif;
+  font-size: 14.5px;
+  color: var(--fg);
+  margin-top: 2px;
+}
+.rl-rank__meta {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.mini-viz__key.rl-key--primary {
+  background: var(--brand);
+  opacity: 1;
+}
+.mini-viz__key.rl-key--secondary {
+  background: var(--brand-2);
+  opacity: 1;
+}
+.mini-viz__key.rl-key--peak {
+  background: none;
+  border-top: 2px dashed var(--hairline-strong);
+  opacity: 1;
+}
+
+.rl-chart__axis text {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 10px;
+  fill: var(--text-muted);
+}
+.rl-chart__axis path,
+.rl-chart__axis line {
+  stroke: var(--hairline);
+}
+
+.rl-chart__peak {
+  stroke: var(--hairline-strong);
+  stroke-width: 1.5px;
+  stroke-dasharray: 5 4;
+}
+.rl-chart__peak-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  fill: var(--text-muted);
+}
+
+.rl-chart__line {
+  fill: none;
+  stroke-width: 2px;
+}
+.rl-chart__line--primary {
+  stroke: var(--brand);
+}
+.rl-chart__line--secondary {
+  stroke: var(--brand-2);
+}
+.rl-chart__point {
+  stroke: var(--surface);
+  stroke-width: 1.5px;
+}
+.rl-chart__point--primary {
+  fill: var(--brand);
+}
+.rl-chart__point--secondary {
+  fill: var(--brand-2);
+}
+.rl-chart__end-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 11px;
+  fill: var(--fg);
+}
+
+.rl-chart__overlay {
+  fill: transparent;
+  cursor: crosshair;
+}
+.rl-chart__hover {
+  pointer-events: none;
+}
+.rl-chart__hover-dot {
+  stroke: var(--bg);
+  stroke-width: 2px;
+}
+.rl-chart__tooltip-bg {
+  fill: var(--surface);
+  stroke: var(--hairline-strong);
+  stroke-width: 1px;
+}
+.rl-chart__tooltip-time {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  fill: var(--text-muted);
+}
+.rl-chart__tooltip-key {
+  stroke-width: 2px;
+}
+.rl-chart__tooltip-row {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 11px;
+  fill: var(--fg);
+}
+
+/* -- VIZ_02, second half: last season vs the community average -- */
+.rl-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-bottom: 20px;
+}
+
+.rl-diverge {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.rl-diverge__row {
+  display: grid;
+  grid-template-columns: 72px 1fr 150px;
+  align-items: center;
+  gap: 12px;
+}
+.rl-diverge__label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--fg);
+}
+.rl-diverge__track {
+  position: relative;
+  height: 14px;
+}
+/* centre line = the community average */
+.rl-diverge__track::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  bottom: -4px;
+  width: 1px;
+  background: var(--hairline-strong);
+}
+.rl-diverge__bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: var(--brand);
+  border-radius: 2px;
+}
+.rl-diverge__value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.rl-diverge__diff {
+  color: var(--fg);
+  font-size: 12.5px;
+}
+/* line the axis-end captions up under the bar track, not the full row */
+.rl-diverge__ends {
+  margin-left: 84px;
+  margin-right: 162px;
+}
+
+@media (max-width: 480px) {
+  .rl-diverge__row {
+    grid-template-columns: 60px 1fr 96px;
+    gap: 8px;
+  }
+  .rl-diverge__value {
+    white-space: normal;
+  }
+  .rl-diverge__ends {
+    margin-left: 68px;
+    margin-right: 104px;
+  }
 }

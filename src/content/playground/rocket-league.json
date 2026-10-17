@@ -1,0 +1,227 @@
+{
+  "player": "JasterRogue21",
+  "platform": "epic",
+  "season": 38,
+  "exportedAt": "2026-10-16T23:51:45.7342958+00:00",
+  "current": {
+    "2v2": {
+      "rating": 1202,
+      "tier": "Champion II",
+      "division": "Division I",
+      "seasonMatches": 69,
+      "seasonPeak": 1202,
+      "percentileTop": 2.31
+    },
+    "3v3": {
+      "rating": 1259,
+      "tier": "Champion II",
+      "division": "Division III",
+      "seasonMatches": 16,
+      "seasonPeak": 1272,
+      "percentileTop": 0.84
+    }
+  },
+  "allTimePeak": {
+    "2v2": {
+      "rating": 1340,
+      "tier": "Champion III",
+      "season": 36
+    },
+    "3v3": {
+      "rating": 1272,
+      "tier": "Champion II",
+      "season": 38
+    }
+  },
+  "percentileSource": "end of Season 22 rank distribution",
+  "lifetime": {
+    "wins": 5668,
+    "goals": 12954,
+    "mvps": 2393,
+    "saves": 14788,
+    "assists": 6229,
+    "shots": 29940
+  },
+  "history": [
+    {
+      "mode": "2v2",
+      "time": "2026-07-13T14:27:43.332561+00:00",
+      "rating": 1131,
+      "matches": 3
+    },
+    {
+      "mode": "3v3",
+      "time": "2026-07-13T14:27:43.332561+00:00",
+      "rating": 1128,
+      "matches": 7
+    },
+    {
+      "mode": "3v3",
+      "time": "2026-07-16T21:30:01.932926+00:00",
+      "rating": 1126,
+      "matches": 10
+    },
+    {
+      "mode": "2v2",
+      "time": "2026-07-19T11:32:59.937611+00:00",
+      "rating": 1124,
+      "matches": 1
+    },
+    {
+      "mode": "3v3",
+      "time": "2026-07-19T11:32:59.937611+00:00",
+      "rating": 1126,
+      "matches": 4
+    },
+    {
+      "mode": "2v2",
+      "time": "2026-08-05T10:59:45.919327+00:00",
+      "rating": 1088,
+      "matches": 12
+    },
+    {
+      "mode": "3v3",
+      "time": "2026-08-05T10:59:45.919327+00:00",
+      "rating": 1172,
+      "matches": 13
+    },
+    {
+      "mode": "2v2",
+      "time": "2026-08-06T17:33:48.653707+00:00",
+      "rating": 1087,
+      "matches": 14
+    },
+    {
+      "mode": "3v3",
+      "time": "2026-08-06T17:33:48.653707+00:00",
+      "rating": 1163,
+      "matches": 1
+    },
+    {
+      "mode": "2v2",
+      "time": "2026-08-12T15:21:58.993332+00:00",
+      "rating": 1096,
+      "matches": 1
+    },
+    {
+      "mode": "3v3",
+      "time": "2026-08-12T15:21:58.993332+00:00",
+      "rating": 1181,
+      "matches": 4
+    },
+    {
+      "mode": "2v2",
+      "time": "2026-08-15T21:37:34.773757+00:00",
+      "rating": 1096,
+      "matches": 4
+    },
+    {
+      "mode": "3v3",
+      "time": "2026-08-15T21:37:34.773757+00:00",
+      "rating": 1182,
+      "matches": 2
+    },
+    {
+      "mode": "2v2",
+      "time": "2026-08-26T14:06:11.13005+00:00",
+      "rating": 1097,
+      "matches": 2
+    },
+    {
+      "mode": "3v3",
+      "time": "2026-08-26T14:06:11.13005+00:00",
+      "rating": 1201,
+      "matches": 2
+    },
+    {
+      "mode": "2v2",
+      "time": "2026-09-06T11:50:02.299112+00:00",
+      "rating": 1118,
+      "matches": 4
+    },
+    {
+      "mode": "2v2",
+      "time": "2026-09-16T12:26:43.367506+00:00",
+      "rating": 1137,
+      "matches": 7
+    },
+    {
+      "mode": "2v2",
+      "time": "2026-09-19T20:17:30.891083+00:00",
+      "rating": 1129,
+      "matches": 1
+    },
+    {
+      "mode": "2v2",
+      "time": "2026-09-22T17:20:38.332925+00:00",
+      "rating": 1136,
+      "matches": 6
+    },
+    {
+      "mode": "3v3",
+      "time": "2026-09-22T17:20:38.332925+00:00",
+      "rating": 1210,
+      "matches": 3
+    },
+    {
+      "mode": "2v2",
+      "time": "2026-09-22T17:49:21.311127+00:00",
+      "rating": 1145,
+      "matches": 1
+    },
+    {
+      "mode": "3v3",
+      "time": "2026-09-22T17:49:21.311127+00:00",
+      "rating": 1219,
+      "matches": 1
+    },
+    {
+      "mode": "3v3",
+      "time": "2026-09-23T20:47:06.032929+00:00",
+      "rating": 1189,
+      "matches": 1
+    },
+    {
+      "mode": "2v2",
+      "time": "2026-09-24T19:43:31.914692+00:00",
+      "rating": 1156,
+      "matches": 7
+    },
+    {
+      "mode": "3v3",
+      "time": "2026-09-24T19:43:31.914692+00:00",
+      "rating": 1221,
+      "matches": 4
+    },
+    {
+      "mode": "2v2",
+      "time": "2026-10-15T17:25:58.830166+00:00",
+      "rating": 1163,
+      "matches": 52
+    },
+    {
+      "mode": "3v3",
+      "time": "2026-10-15T17:25:58.830166+00:00",
+      "rating": 1272,
+      "matches": 10
+    },
+    {
+      "mode": "2v2",
+      "time": "2026-10-16T22:07:40.824755+00:00",
+      "rating": 1174,
+      "matches": 7
+    },
+    {
+      "mode": "3v3",
+      "time": "2026-10-16T22:07:40.824755+00:00",
+      "rating": 1259,
+      "matches": 1
+    },
+    {
+      "mode": "2v2",
+      "time": "2026-10-16T23:37:49.468614+00:00",
+      "rating": 1202,
+      "matches": 3
+    }
+  ]
+}

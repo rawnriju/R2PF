@@ -1,8 +1,18 @@
 import { useEffect, useState } from "react";
 import mindtrekPhoto from "../../assets/MindtrekPic.jpeg";
 import kobPhoto from "../../assets/KOB.png";
+import ecerPhoto from "../../assets/RawnECERPhoto.jpg";
+import ecerTeamPhoto from "../../assets/Volunteer_Team6-1200.jpg";
 import { useInView } from "../hooks/use-in-view";
 import "./volunteering.css";
+
+interface VolunteerPhoto {
+  src: string;
+  alt: string;
+  // width / height. Only matters when an entry has several photos: they sit
+  // in one row with flex-grow proportional to this, so they share a height.
+  aspect?: number;
+}
 
 interface VolunteerEntry {
   id: string;
@@ -14,7 +24,7 @@ interface VolunteerEntry {
   accent: string;
   link: string;
   linkLabel: string;
-  photo: string;
+  photos: VolunteerPhoto[];
   caption: string;
   modalMaxWidth?: string;
 }
@@ -30,7 +40,7 @@ const VOLUNTEER_ENTRIES: VolunteerEntry[] = [
     accent: "var(--brand)",
     link: "https://www.mindtrek.org/",
     linkLabel: "mindtrek.org",
-    photo: mindtrekPhoto,
+    photos: [{ src: mindtrekPhoto, alt: "Volunteering at Mindtrek, Tampere" }],
     caption: "Volunteering at Mindtrek, Tampere",
   },
   {
@@ -43,9 +53,26 @@ const VOLUNTEER_ENTRIES: VolunteerEntry[] = [
     accent: "var(--brand-2)",
     link: "https://www.instagram.com/kochi.overboard/",
     linkLabel: "@kochi.overboard",
-    photo: kobPhoto,
+    photos: [{ src: kobPhoto, alt: "A collection of photos from Kochi Overboard events" }],
     caption: "A collection of photos from my time at Kochi Overboard",
     modalMaxWidth: "640px",
+  },
+  {
+    id: "ecer",
+    index: "VOL_03",
+    title: "ECER 2026",
+    org: "Tampere, Finland",
+    desc: "Volunteered as a conference assistant at ECER 2026, the European Conference on Educational Research, hosted by Tampere University from 18 to 21 August. I worked alongside a big team of fellow volunteers to keep the conference running for researchers who had travelled from all over Europe.",
+    tags: ["ACADEMIC CONFERENCE", "CONFERENCE ASSISTANT", "TAMPERE"],
+    accent: "var(--brand)",
+    link: "https://eera-ecer.de/",
+    linkLabel: "eera-ecer.de",
+    photos: [
+      { src: ecerTeamPhoto, alt: "The ECER 2026 volunteer team", aspect: 1920 / 1440 },
+      { src: ecerPhoto, alt: "Me with my ECER 2026 conference assistant badge", aspect: 800 / 1422 },
+    ],
+    caption: "Conference assistant at ECER 2026, Tampere University",
+    modalMaxWidth: "760px",
   },
 ];
 
@@ -80,7 +107,7 @@ export function Volunteering() {
             className="hairline-row volunteer-row flex items-center gap-4 p-5"
             role="button"
             tabIndex={0}
-            aria-label={`${entry.title} — view photo`}
+            aria-label={`${entry.title} — view photo${entry.photos.length > 1 ? "s" : ""}`}
             onClick={() => setOpenId(entry.id)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
@@ -132,11 +159,25 @@ export function Volunteering() {
             >
               ✕
             </button>
-            <img
-              src={openEntry.photo}
-              alt={openEntry.caption}
-              className="volunteer-modal__photo"
-            />
+            {openEntry.photos.length === 1 ? (
+              <img
+                src={openEntry.photos[0].src}
+                alt={openEntry.photos[0].alt}
+                className="volunteer-modal__photo"
+              />
+            ) : (
+              <div className="volunteer-modal__photos">
+                {openEntry.photos.map((p) => (
+                  <img
+                    key={p.src}
+                    src={p.src}
+                    alt={p.alt}
+                    className="volunteer-modal__photos-item"
+                    style={{ flexGrow: p.aspect ?? 1, aspectRatio: p.aspect }}
+                  />
+                ))}
+              </div>
+            )}
             <p className="volunteer-modal__caption font-mono">{openEntry.caption}</p>
             <p className="volunteer-modal__desc">{openEntry.desc}</p>
             <a

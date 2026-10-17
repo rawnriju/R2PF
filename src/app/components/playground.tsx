@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { ThemeToggle } from "./theme-toggle";
 import { KeralaOutlierStrips } from "./viz/kerala-outlier-strips";
-import { AnimeLengthPanel } from "./viz/anime-length-panel";
+import { RocketLeaguePanel } from "./viz/rocket-league-panel";
 import { FinlandGridChart } from "./viz/finland-grid-chart";
 import "./playground.css";
 
@@ -43,13 +43,13 @@ interface VizEntry {
 const VIZZES: VizEntry[] = [
   {
     index: "VIZ_01",
-    title: "In which ways is Kerala actually unusual?",
+    title: "How is Kerala Unusual?",
     render: () => <KeralaOutlierStrips />,
   },
   {
     index: "VIZ_02",
-    title: "Anime, by the numbers",
-    render: () => <AnimeLengthPanel />,
+    title: "How good am I at Rocket League?",
+    render: () => <RocketLeaguePanel />,
   },
   {
     index: "VIZ_03",
